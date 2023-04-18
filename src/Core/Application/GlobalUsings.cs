@@ -1,0 +1,17 @@
+global using Ardalis.Specification;
+global using FluentValidation;
+global using RAFFLE.WebApi.Application.Common.Events;
+global using RAFFLE.WebApi.Application.Common.Exceptions;
+global using RAFFLE.WebApi.Application.Common.FileStorage;
+global using RAFFLE.WebApi.Application.Common.Interfaces;
+global using RAFFLE.WebApi.Application.Common.Models;
+global using RAFFLE.WebApi.Application.Common.Persistence;
+global using RAFFLE.WebApi.Application.Common.Specification;
+global using RAFFLE.WebApi.Application.Common.Validation;
+global using RAFFLE.WebApi.Domain.Catalog;
+global using RAFFLE.WebApi.Domain.Common;
+global using RAFFLE.WebApi.Domain.Common.Contracts;
+global using RAFFLE.WebApi.Shared.Notifications;
+global using MediatR;
+global using Microsoft.Extensions.Localization;
+global using Microsoft.Extensions.Logging;
