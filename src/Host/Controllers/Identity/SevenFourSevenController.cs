@@ -15,15 +15,12 @@ public class SevenFourSevenController : VersionNeutralApiController
 {
     private readonly IUserService _userService;
 
-    private readonly IRepositoryWithEvents<AppUser> _repositoryAppUser;
-
     private readonly IConfiguration _config;
 
-    public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repositoryAppUser)
+    public SevenFourSevenController(IUserService userService, IConfiguration config)
     {
         _userService = userService;
         _config = config;
-        _repositoryAppUser = repositoryAppUser;
     }
 
     /*
@@ -36,7 +33,7 @@ public class SevenFourSevenController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public async Task<BridgeHierarchyResponse> BridgeUserAsync([FromBody] BridgeRequest bridgeRequest)
     {
-        using (var client = new HttpClient())
+        using (HttpClient? client = new HttpClient())
         {
             client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Brdge:BaseUrl").Value!);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -187,28 +184,6 @@ public class SevenFourSevenController : VersionNeutralApiController
                 // successfully created
                 if (updatedOrcreatedUser != default)
                 {
-                    // TODO: AppUser is not application used
-                    //       maybe on refactor
-                    // AppUser? appUser = new AppUser(
-                    //    applicationUserId: updatedOrcreatedUser.Id.ToString(),
-                    //    homeAddress: default,
-                    //    homeCity: default,
-                    //    homeRegion: default,
-                    //    homeCountry: default,
-                    //    longitude: default,
-                    //    latitude: default,
-                    //    isVerified: false,
-                    //    addressStatus: false,
-                    //    roleId: string.Empty,
-                    //    roleName: string.Empty,
-                    //    firstName: string.Empty,
-                    //    lastName: string.Empty,
-                    //    email: string.Empty,
-                    //    phoneNumber: string.Empty,
-                    //    imageUrl: string.Empty);
-
-                    // await _repositoryAppUser.AddAsync(appUser);
-
                     return new GenericResponse
                     {
                         ErorrCode = 0,
