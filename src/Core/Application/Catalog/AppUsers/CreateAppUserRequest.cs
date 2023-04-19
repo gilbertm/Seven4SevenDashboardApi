@@ -35,7 +35,7 @@ public class CreateAppUserRequestHandler : IRequestHandler<CreateAppUserRequest,
 
     public async Task<Guid> Handle(CreateAppUserRequest request, CancellationToken cancellationToken)
     {
-        var appUser = new AppUser(applicationUserId: request.ApplicationUserId, homeAddress: request.HomeAddress ?? default, homeCity: request.HomeCity ?? default, homeRegion: request.HomeRegion ?? default, homeCountry: request.HomeCountry ?? default, longitude: request.Longitude ?? default, latitude: request.Latitude ?? default, isVerified: request.IsVerified ?? false, addressStatus: request.AddressStatus,  roleId: request.RoleId, roleName: request.RoleName, firstName: request.FirstName, lastName: request.LastName, email: request.Email, phoneNumber: request.PhoneNumber, imageUrl: request.ImageUrl);
+        AppUser? appUser = new AppUser(applicationUserId: request.ApplicationUserId, homeAddress: request.HomeAddress ?? default, homeCity: request.HomeCity ?? default, homeRegion: request.HomeRegion ?? default, homeCountry: request.HomeCountry ?? default, longitude: request.Longitude ?? default, latitude: request.Latitude ?? default, isVerified: request.IsVerified ?? false, addressStatus: request.AddressStatus,  roleId: request.RoleId, roleName: request.RoleName, firstName: request.FirstName, lastName: request.LastName, email: request.Email, phoneNumber: request.PhoneNumber, imageUrl: request.ImageUrl);
 
         await _repository.AddAsync(appUser, cancellationToken);
 

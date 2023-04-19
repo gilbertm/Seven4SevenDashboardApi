@@ -111,7 +111,7 @@ internal class TokenService : ITokenService
         new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id),
-            new(ClaimTypes.Email, user.Email),
+            new(ClaimTypes.Email, user.Email!),
             new(RAFFLEClaims.Fullname, $"{user.FirstName} {user.LastName}"),
             new(ClaimTypes.Name, user.FirstName ?? string.Empty),
             new(ClaimTypes.Surname, user.LastName ?? string.Empty),

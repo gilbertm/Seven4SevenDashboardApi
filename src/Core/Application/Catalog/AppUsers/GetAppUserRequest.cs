@@ -18,7 +18,7 @@ public class GetAppUserRequestHandler : IRequestHandler<GetAppUserRequest, AppUs
 
     public async Task<AppUserDto> Handle(GetAppUserRequest request, CancellationToken cancellationToken)
     {
-        return await _repository.GetBySpecAsync(
+        return await _repository.FirstOrDefaultAsync(
            (ISpecification<AppUser, AppUserDto>)new AppUserByIdSpec(request.Id), cancellationToken) ?? throw new NotFoundException(_t["AppUser Id: {0} Not Found.", request.Id]);
     }
 }

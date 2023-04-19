@@ -1,9 +1,13 @@
+using RAFFLE.WebApi.Application.Common.Persistence;
 using RAFFLE.WebApi.Application.Identity.Users;
 using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
 using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
+using RAFFLE.WebApi.Domain.Catalog;
+using RAFFLE.WebApi.Domain.Common;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 
 namespace RAFFLE.WebApi.Host.Controllers.Identity;
 
@@ -11,12 +15,15 @@ public class SevenFourSevenController : VersionNeutralApiController
 {
     private readonly IUserService _userService;
 
+    private readonly IRepositoryWithEvents<AppUser> _repositoryAppUser;
+
     private readonly IConfiguration _config;
 
-    public SevenFourSevenController(IUserService userService, IConfiguration config)
+    public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repositoryAppUser)
     {
         _userService = userService;
         _config = config;
+        _repositoryAppUser = repositoryAppUser;
     }
 
     /*
@@ -65,7 +72,7 @@ public class SevenFourSevenController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public async Task<GetUserInfoResponse> RaffleUserInfoAsync([FromBody] GetUserInfoRequest getUserInfoRequest)
     {
-        using (var client = new HttpClient())
+        using (HttpClient? client = new HttpClient())
         {
             client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -81,7 +88,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadFromJsonAsync<GetUserInfoResponse>();
+                GetUserInfoResponse? result = await response.Content.ReadFromJsonAsync<GetUserInfoResponse>();
 
                 if (result is { })
                 {
@@ -147,7 +154,7 @@ public class SevenFourSevenController : VersionNeutralApiController
             // recheck if player in the raffle system, after operation
             isPlayerInRaffleSystem = await IsPlayerInRaffleSystemAsync(new CheckUserRequest
             {
-                AuthCode =_config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
+                AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
                 Email = registerUserRequest.Email,
                 Phone = registerUserRequest.Phone,
                 UserId747 = registerUserRequest.Info747.UserId747,
@@ -175,12 +182,32 @@ public class SevenFourSevenController : VersionNeutralApiController
                     PhoneNumber = registerUserRequest.Phone
                 };
 
-                string createUser = await _userService.CreateSevenFourSevenAsync(createUserRequest, GetOriginFromRequest());
+                UserDetailsDto? updatedOrcreatedUser = await _userService.CreateSevenFourSevenAsync(createUserRequest, string.Empty, GetOriginFromRequest());
 
                 // successfully created
-                if (createUser != string.Empty)
+                if (updatedOrcreatedUser != default)
                 {
+                    // TODO: AppUser is not application used
+                    //       maybe on refactor
+                    // AppUser? appUser = new AppUser(
+                    //    applicationUserId: updatedOrcreatedUser.Id.ToString(),
+                    //    homeAddress: default,
+                    //    homeCity: default,
+                    //    homeRegion: default,
+                    //    homeCountry: default,
+                    //    longitude: default,
+                    //    latitude: default,
+                    //    isVerified: false,
+                    //    addressStatus: false,
+                    //    roleId: string.Empty,
+                    //    roleName: string.Empty,
+                    //    firstName: string.Empty,
+                    //    lastName: string.Empty,
+                    //    email: string.Empty,
+                    //    phoneNumber: string.Empty,
+                    //    imageUrl: string.Empty);
 
+                    // await _repositoryAppUser.AddAsync(appUser);
 
                     return new GenericResponse
                     {
@@ -189,7 +216,6 @@ public class SevenFourSevenController : VersionNeutralApiController
                     };
                 }
             }
-
         }
         else
         {

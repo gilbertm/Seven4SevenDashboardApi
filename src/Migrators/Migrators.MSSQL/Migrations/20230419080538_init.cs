@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Migrators.MSSQL.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -78,70 +78,6 @@ namespace Migrators.MSSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Brand",
-                schema: "Catalog",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TenantId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Brand", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Categories",
-                schema: "Catalog",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "InputOutputResources",
-                schema: "Catalog",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReferenceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ResourceType = table.Column<short>(type: "smallint", nullable: false),
-                    ResourceDocumentType = table.Column<short>(type: "smallint", nullable: false),
-                    ResourceStatusType = table.Column<short>(type: "smallint", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_InputOutputResources", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Roles",
                 schema: "Identity",
                 columns: table => new
@@ -190,37 +126,6 @@ namespace Migrators.MSSQL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Product",
-                schema: "Catalog",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(2048)", maxLength: 2048, nullable: true),
-                    BrandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TenantId = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Product", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Product_Brand_BrandId",
-                        column: x => x.BrandId,
-                        principalSchema: "Catalog",
-                        principalTable: "Brand",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -349,12 +254,6 @@ namespace Migrators.MSSQL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_BrandId",
-                schema: "Catalog",
-                table: "Product",
-                column: "BrandId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
                 schema: "Identity",
                 table: "RoleClaims",
@@ -420,18 +319,6 @@ namespace Migrators.MSSQL.Migrations
                 schema: "Auditing");
 
             migrationBuilder.DropTable(
-                name: "Categories",
-                schema: "Catalog");
-
-            migrationBuilder.DropTable(
-                name: "InputOutputResources",
-                schema: "Catalog");
-
-            migrationBuilder.DropTable(
-                name: "Product",
-                schema: "Catalog");
-
-            migrationBuilder.DropTable(
                 name: "RoleClaims",
                 schema: "Identity");
 
@@ -450,10 +337,6 @@ namespace Migrators.MSSQL.Migrations
             migrationBuilder.DropTable(
                 name: "UserTokens",
                 schema: "Identity");
-
-            migrationBuilder.DropTable(
-                name: "Brand",
-                schema: "Catalog");
 
             migrationBuilder.DropTable(
                 name: "Roles",

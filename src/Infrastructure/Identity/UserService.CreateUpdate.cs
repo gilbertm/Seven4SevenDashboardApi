@@ -113,7 +113,7 @@ internal partial class UserService
             IsActive = true
         };
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+        IdentityResult? result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
         {
             throw new InternalServerException(_t["Validation Errors Occurred."], result.GetErrors(_t));
@@ -121,7 +121,7 @@ internal partial class UserService
 
         await _userManager.AddToRoleAsync(user, RAFFLERoles.Basic);
 
-        var messages = new List<string> { string.Format(_t["User {0} Registered."], user.UserName) };
+        List<string>? messages = new List<string> { string.Format(_t["User {0} Registered."], user.UserName) };
 
         if (_securitySettings.RequireConfirmedAccount && !string.IsNullOrEmpty(user.Email))
         {
@@ -133,7 +133,7 @@ internal partial class UserService
                 UserName = user.UserName,
                 Url = emailVerificationUri
             };
-            var mailRequest = new MailRequest(
+            MailRequest? mailRequest = new MailRequest(
                 new List<string> { user.Email },
                 _t["Confirm Registration"],
                 _templateService.GenerateEmailTemplate("email-confirmation", eMailModel));
@@ -146,37 +146,80 @@ internal partial class UserService
         return string.Join(Environment.NewLine, messages);
     }
 
-    public async Task<string> CreateSevenFourSevenAsync(CreateUserRequest request, string origin)
+    public async Task<UserDetailsDto> CreateSevenFourSevenAsync(CreateUserRequest request, string userId, string origin)
     {
-        var user = new ApplicationUser
+        ApplicationUser? user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user is { })
         {
-            Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
-            UserName = request.UserName,
-            PhoneNumber = request.PhoneNumber,
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+            string phoneNumber = await _userManager.GetPhoneNumberAsync(user) ?? default!;
+            if (request.PhoneNumber != phoneNumber)
+            {
+                await _userManager.SetPhoneNumberAsync(user, request.PhoneNumber);
+            }
+
+            IdentityResult? result = await _userManager.UpdateAsync(user);
+
+            string? resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            if (resetToken != default)
+            {
+                _ = await _userManager.ResetPasswordAsync(user, resetToken, request.Password);
+            }
+
+            await _signInManager.RefreshSignInAsync(user);
+
+            await _events.PublishAsync(new ApplicationUserUpdatedEvent(user.Id));
+
+            if (!result.Succeeded)
+            {
+                throw new InternalServerException(_t["Update profile failed"], result.GetErrors(_t));
+            }
+        }
+        else
+        {
+            user = new ApplicationUser
+            {
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                UserName = request.UserName,
+                PhoneNumber = request.PhoneNumber,
+                IsActive = true,
+                EmailConfirmed = true
+            };
+
+            IdentityResult? result = await _userManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+            {
+                throw new InternalServerException(_t["Validation Errors Occurred."], result.GetErrors(_t));
+            }
+
+            await _userManager.AddToRoleAsync(user, RAFFLERoles.Basic);
+
+            await _events.PublishAsync(new ApplicationUserCreatedEvent(user.Id));
+
+        }
+
+        return new UserDetailsDto
+        {
+            Id = Guid.Parse(user.Id),
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            UserName = user.UserName,
+            PhoneNumber = user.PhoneNumber,
             IsActive = true,
             EmailConfirmed = true
         };
-
-        var result = await _userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
-        {
-            throw new InternalServerException(_t["Validation Errors Occurred."], result.GetErrors(_t));
-        }
-
-        await _userManager.AddToRoleAsync(user, RAFFLERoles.Basic);
-
-        var messages = new List<string> { string.Format(_t["User {0} Registered."], user.UserName) };
-
-        await _events.PublishAsync(new ApplicationUserCreatedEvent(user.Id));
-
-        return string.Join(Environment.NewLine, messages);
     }
 
     public async Task UpdateAsync(UpdateUserRequest request, string userId)
     {
-        var user = await _userManager.FindByIdAsync(userId);
+        ApplicationUser? user = await _userManager.FindByIdAsync(userId);
 
         _ = user ?? throw new NotFoundException(_t["User Not Found."]);
 
@@ -194,13 +237,13 @@ internal partial class UserService
         user.FirstName = request.FirstName;
         user.LastName = request.LastName;
         user.PhoneNumber = request.PhoneNumber;
-        string phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+        string phoneNumber = await _userManager.GetPhoneNumberAsync(user) ?? default!;
         if (request.PhoneNumber != phoneNumber)
         {
             await _userManager.SetPhoneNumberAsync(user, request.PhoneNumber);
         }
 
-        var result = await _userManager.UpdateAsync(user);
+        IdentityResult? result = await _userManager.UpdateAsync(user);
 
         await _signInManager.RefreshSignInAsync(user);
 

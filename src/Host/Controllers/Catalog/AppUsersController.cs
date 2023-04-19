@@ -1,4 +1,5 @@
-﻿using RAFFLE.WebApi.Application.Catalog.AppUsers;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using RAFFLE.WebApi.Application.Catalog.AppUsers;
 using RAFFLE.WebApi.Domain.Catalog;
 
 namespace RAFFLE.WebApi.Host.Controllers.Catalog;
@@ -50,8 +51,10 @@ public class AppUsersController : VersionedApiController
     [HttpGet("{id}")]
     [MustHavePermission(RAFFLEAction.View, RAFFLEResource.AppUsers)]
     [OpenApiOperation("Get an app user details using appuser id", "")]
-    public Task<AppUserDto> GetAsync(Guid id)
+    public async Task<ActionResult<AppUserDto>> GetAsync(Guid id)
     {
-        return Mediator.Send(new GetAppUserRequest(id));
+        GetAppUserRequest? getAppUserRequest = new GetAppUserRequest(id);
+
+        return getAppUserRequest is null ? BadRequest() : Ok(await Mediator.Send(getAppUserRequest));
     }
 }

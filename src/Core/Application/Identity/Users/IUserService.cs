@@ -38,6 +38,6 @@ public interface IUserService : ITransientService
     Task ChangePasswordAsync(ChangePasswordRequest request, string userId);
 
     // specifics
-    Task<string> CreateSevenFourSevenAsync(CreateUserRequest request, string origin);
+    Task<UserDetailsDto> CreateSevenFourSevenAsync(CreateUserRequest request, string userId, string origin);
     
 }
