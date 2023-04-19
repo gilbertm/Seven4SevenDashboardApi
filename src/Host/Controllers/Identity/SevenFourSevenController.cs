@@ -15,12 +15,15 @@ public class SevenFourSevenController : VersionNeutralApiController
 {
     private readonly IUserService _userService;
 
+    private readonly IRepositoryWithEvents<AppUser> _repoAppUser;
+
     private readonly IConfiguration _config;
 
-    public SevenFourSevenController(IUserService userService, IConfiguration config)
+    public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser)
     {
         _userService = userService;
         _config = config;
+        _repoAppUser = repoAppUser;
     }
 
     /*
@@ -79,7 +82,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
             string json = JsonSerializer.Serialize(getUserInfoRequest);
 
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:GetUserInfoUrl").Value!}", data);
 
@@ -165,7 +168,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
                 // the user is successfully registered on our raffle system
                 // it is safe to give him access to the dashboard now
-                var createUserRequest = new CreateUserRequest
+                CreateUserRequest? createUserRequest = new CreateUserRequest
                 {
                     Email = registerUserRequest.Email,
                     FirstName = registerUserRequest.Name,
@@ -180,6 +183,20 @@ public class SevenFourSevenController : VersionNeutralApiController
                 };
 
                 UserDetailsDto? updatedOrcreatedUser = await _userService.CreateSevenFourSevenAsync(createUserRequest, string.Empty, GetOriginFromRequest());
+
+                if (updatedOrcreatedUser is { } && updatedOrcreatedUser.Id != default)
+                {
+                    AppUser? appUser = await _repoAppUser.GetByIdAsync(updatedOrcreatedUser.Id);
+
+                    if (appUser is { } && appUser.ApplicationUserId != default)
+                    {
+                        await _repoAppUser.UpdateAsync(new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), homeAddress: default, homeCity: default, homeRegion: default, homeCountry:default, roleId: default, roleName: default, raffleUserId:default, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747));
+
+                    } else
+                    {
+                        AppUser? addAppUser = await _repoAppUser.AddAsync(new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), homeAddress: default, homeCity: default, homeRegion: default, homeCountry: default, roleId: default, roleName: default, raffleUserId: default, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747));
+                    }
+                }
 
                 // successfully created
                 if (updatedOrcreatedUser != default)
@@ -208,7 +225,7 @@ public class SevenFourSevenController : VersionNeutralApiController
     // phone field in request - insignificant
     private async Task<bool> IsPlayerInRaffleSystemAsync(CheckUserRequest checkUserRequest)
     {
-        using (var client = new HttpClient())
+        using (HttpClient? client = new HttpClient())
         {
             client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
             client.DefaultRequestHeaders.Accept.Clear();
@@ -255,7 +272,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
             string json = JsonSerializer.Serialize(registerUserRequest);
 
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:RegisterPlayerUrl").Value!}", data);
 
