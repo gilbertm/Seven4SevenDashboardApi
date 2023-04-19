@@ -31,7 +31,9 @@ public static class RAFFLEPermissions
 {
     private static readonly RAFFLEPermission[] _all = new RAFFLEPermission[]
     {
-        new("View Dashboard", RAFFLEAction.View, RAFFLEResource.Dashboard, IsBasic: true),
+        // admin dashboard
+        new("View Dashboard", RAFFLEAction.View, RAFFLEResource.Dashboard, IsRoot: true),
+
         new("View Hangfire", RAFFLEAction.View, RAFFLEResource.Hangfire),
         new("View Users", RAFFLEAction.View, RAFFLEResource.Users, IsBasic: true),
         new("Search Users", RAFFLEAction.Search, RAFFLEResource.Users, IsBasic: true),

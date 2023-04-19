@@ -21,15 +21,20 @@ public class CreateAppUserRequestValidator : CustomValidator<CreateAppUserReques
         RuleFor(au => au.HomeCountry)
             .MaximumLength(256);
 
-        RuleFor(au => au.Latitude)
-            .MaximumLength(256);
+        RuleFor(au => au.RoleId)
+          .MaximumLength(80);
 
-        RuleFor(au => au.Longitude)
-            .MaximumLength(256);
+        RuleFor(au => au.RoleName)
+          .MaximumLength(25);
 
-        /* RuleFor(au => au.PackageId)
-            .MustAsync(async (packageId, ct) => await packageRepository.GetByIdAsync(packageId, ct) is not null)
-            .WithMessage(_ => T["Application package details for User does not exists. Package Id is needed.", _.PackageId]); */
+        RuleFor(au => au.RaffleUserId)
+          .MaximumLength(50);
+
+        RuleFor(au => au.RaffleUserId747)
+          .MaximumLength(50);
+
+        RuleFor(au => au.RaffleUsername747)
+          .MaximumLength(50);
 
     }
 }

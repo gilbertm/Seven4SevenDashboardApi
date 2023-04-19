@@ -9,22 +9,11 @@ public class CreateAppUserRequest : IRequest<Guid>
     public string? HomeCity { get; set; }
     public string? HomeRegion { get; set; }
     public string? HomeCountry { get; set; }
-    public string? Longitude { get; set; }
-    public string? Latitude { get; set; }
-    public bool? IsVerified { get; set; }
-    public VerificationStatus AddressStatus { get; set; } = VerificationStatus.Initial;
-    public VerificationStatus DocumentsStatus { get; set; } = VerificationStatus.Initial;
-    public VerificationStatus RolePackageStatus { get; set; } = VerificationStatus.Initial;    
     public string? RoleId { get; set; }
     public string? RoleName { get; set; }
-
-    // manual propagation
-    // this is from the application user
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public string? Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? RaffleUserId { get; set; }
+    public string? RaffleUserId747 { get; set; }
+    public string? RaffleUsername747 { get; set; }
 }
 
 public class CreateAppUserRequestHandler : IRequestHandler<CreateAppUserRequest, Guid>
@@ -35,7 +24,7 @@ public class CreateAppUserRequestHandler : IRequestHandler<CreateAppUserRequest,
 
     public async Task<Guid> Handle(CreateAppUserRequest request, CancellationToken cancellationToken)
     {
-        AppUser? appUser = new AppUser(applicationUserId: request.ApplicationUserId, homeAddress: request.HomeAddress ?? default, homeCity: request.HomeCity ?? default, homeRegion: request.HomeRegion ?? default, homeCountry: request.HomeCountry ?? default, longitude: request.Longitude ?? default, latitude: request.Latitude ?? default, isVerified: request.IsVerified ?? false, addressStatus: request.AddressStatus,  roleId: request.RoleId, roleName: request.RoleName, firstName: request.FirstName, lastName: request.LastName, email: request.Email, phoneNumber: request.PhoneNumber, imageUrl: request.ImageUrl);
+        AppUser? appUser = new AppUser(applicationUserId: request.ApplicationUserId, homeAddress: request.HomeAddress ?? default, homeCity: request.HomeCity ?? default, homeRegion: request.HomeRegion ?? default, homeCountry: request.HomeCountry ?? default, roleId: request.RoleId ?? default, roleName: request.RoleName ?? default, raffleUserId: request.RaffleUserId ?? default, raffleUserId747: request.RaffleUserId747 ?? default, raffleUsername747: request.RaffleUsername747 ?? default);
 
         await _repository.AddAsync(appUser, cancellationToken);
 

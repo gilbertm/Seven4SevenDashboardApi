@@ -12,7 +12,7 @@ using RAFFLE.WebApi.Infrastructure.Persistence.Context;
 namespace Migrators.MSSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230419080538_init")]
+    [Migration("20230419131127_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -150,9 +150,6 @@ namespace Migrators.MSSQL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<byte?>("AddressStatus")
-                        .HasColumnType("tinyint");
-
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(max)");
 
@@ -168,15 +165,6 @@ namespace Migrators.MSSQL.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<byte?>("DocumentsStatus")
-                        .HasColumnType("tinyint");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HomeAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -189,28 +177,19 @@ namespace Migrators.MSSQL.Migrations
                     b.Property<string>("HomeRegion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("IsVerified")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("RaffleUserId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Latitude")
+                    b.Property<string>("RaffleUserId747")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Longitude")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("RaffleUsername747")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
@@ -218,9 +197,6 @@ namespace Migrators.MSSQL.Migrations
 
                     b.Property<string>("RoleName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte?>("RolePackageStatus")
-                        .HasColumnType("tinyint");
 
                     b.HasKey("Id");
 

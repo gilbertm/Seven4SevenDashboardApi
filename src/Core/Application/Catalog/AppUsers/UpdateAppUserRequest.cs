@@ -10,23 +10,11 @@ public class UpdateAppUserRequest : IRequest<Guid>
     public string? HomeCity { get; set; }
     public string? HomeRegion { get; set; }
     public string? HomeCountry { get; set; }
-    public string? Longitude { get; set; }
-    public string? Latitude { get; set; }
-    public bool? IsVerified { get; set; }
-    public VerificationStatus? AddressStatus { get; set; }
-    public VerificationStatus? DocumentsStatus { get; set; }
-    public VerificationStatus? RolePackageStatus { get; set; }
-
     public string? RoleId { get; set; }
     public string? RoleName { get; set; }
-
-    // manual propagation
-    // this is from the application user
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public string? Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? RaffleUserId { get; set; }
+    public string? RaffleUserId747 { get; set; }
+    public string? RaffleUsername747 { get; set; }
 }
 
 public class UpdateAppUserRequestHandler : IRequestHandler<UpdateAppUserRequest, Guid>
@@ -39,10 +27,10 @@ public class UpdateAppUserRequestHandler : IRequestHandler<UpdateAppUserRequest,
 
     public async Task<Guid> Handle(UpdateAppUserRequest request, CancellationToken cancellationToken)
     {
-        var appUser = await _repository.GetByIdAsync(request.Id, cancellationToken);
+        AppUser? appUser = await _repository.GetByIdAsync(request.Id, cancellationToken);
         _ = appUser ?? throw new NotFoundException(_t["Application user {0} details does not exist. Nothing to update.", request.Id]);
 
-        appUser.Update(applicationUserId: request.ApplicationUserId, homeAddress: request.HomeAddress ?? default, homeCity: request.HomeCity ?? default, homeRegion: request.HomeRegion ?? default, homeCountry: request.HomeCountry ?? default, longitude: request.Longitude ?? default, latitude: request.Latitude ?? default, isVerified: request.IsVerified, addressStatus: request.AddressStatus, roleId: request.RoleId, roleName: request.RoleName, firstName: request.FirstName, lastName: request.LastName, email: request.Email, phoneNumber: request.PhoneNumber, imageUrl: request.ImageUrl);
+        appUser.Update(applicationUserId: request.ApplicationUserId, homeAddress: request.HomeAddress ?? default, homeCity: request.HomeCity ?? default, homeRegion: request.HomeRegion ?? default, homeCountry: request.HomeCountry ?? default, roleId: request.RoleId ?? default, roleName: request.RoleName ?? default, raffleUserId: request.RaffleUserId ?? default, raffleUserId747: request.RaffleUserId747 ?? default, raffleUsername747: request.RaffleUsername747 ?? default);
 
         await _repository.UpdateAsync(appUser, cancellationToken);
 

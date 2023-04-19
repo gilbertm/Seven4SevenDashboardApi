@@ -39,8 +39,8 @@ public class GetStatsRequestHandler : IRequestHandler<GetStatsRequest, StatsDto>
          
         }
 
-        stats.DataEnterBarChart.Add(new ChartSeries { Name = _t["Products"], Data = productsFigure });
-        stats.DataEnterBarChart.Add(new ChartSeries { Name = _t["Brands"], Data = brandsFigure });
+        stats.DataEnterBarChart.Add(new ChartSeries { Name = _t["Entries"], Data = productsFigure });
+        stats.DataEnterBarChart.Add(new ChartSeries { Name = _t["Promotions"], Data = brandsFigure });
 
         return stats;
     }

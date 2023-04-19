@@ -8,21 +8,9 @@ public class AppUserDto : IDto
     public string? HomeCity { get; set; }
     public string? HomeRegion { get; set; }
     public string? HomeCountry { get; set; }
-    public string? Longitude { get; set; }
-    public string? Latitude { get; set; }
-    public bool IsVerified { get; set; } = false;
-    public VerificationStatus? AddressStatus { get; set; }
-    public VerificationStatus? DocumentsStatus { get; set; }
-    public VerificationStatus? RolePackageStatus { get; set; }
-
     public string? RoleId { get; set; }
     public string? RoleName { get; set; }
-
-    // manual propagation
-    // this is from the application user
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
-    public string? Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? RaffleUserId { get; set; }
+    public string? RaffleUserId747 { get; set; }
+    public string? RaffleUsername747 { get; set; }
 }
