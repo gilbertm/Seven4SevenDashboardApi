@@ -194,7 +194,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
                     } else
                     {
-                        AppUser? addAppUser = await _repoAppUser.AddAsync(new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), homeAddress: default, homeCity: default, homeRegion: default, homeCountry: default, roleId: default, roleName: default, raffleUserId: default, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747));
+                        appUser = await _repoAppUser.AddAsync(new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), homeAddress: default, homeCity: default, homeRegion: default, homeCountry: default, roleId: default, roleName: default, raffleUserId: default, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747));
                     }
                 }
 
