@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Migrators.MSSQL.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,9 @@ namespace Migrators.MSSQL.Migrations
                     FacebookUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     InstagramUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TwitterUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CanLinkAgent = table.Column<bool>(type: "bit", nullable: false),
+                    CanLinkPlayer = table.Column<bool>(type: "bit", nullable: false),
+                    SocialCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),

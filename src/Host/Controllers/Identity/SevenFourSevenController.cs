@@ -191,7 +191,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
                     if (appUser is { } && appUser.ApplicationUserId != default)
                     {
-                        appUser.Update(raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747);
+                        appUser.Update(raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, canLinkPlayer: registerUserRequest.CanLinkPlayer, canLinkAgent: registerUserRequest.CanLinkAgent, socialCode: registerUserRequest.SocialCode);
                         await _repoAppUser.UpdateAsync(appUser);
                     }
                     else
@@ -210,7 +210,7 @@ public class SevenFourSevenController : VersionNeutralApiController
                             }
                         }
 
-                        appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, isAgent: registerUserRequest.IsAgent, uniqueCode: registerUserRequest.Info747.UniqueCode);
+                        appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, isAgent: registerUserRequest.IsAgent, uniqueCode: registerUserRequest.Info747.UniqueCode,canLinkPlayer: registerUserRequest.CanLinkPlayer, canLinkAgent: registerUserRequest.CanLinkAgent, socialCode: registerUserRequest.SocialCode);
 
                         if (registerUserRequest.Info747 is { })
                         {

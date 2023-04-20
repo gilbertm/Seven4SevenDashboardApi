@@ -9,7 +9,7 @@ public class PlayerInfo
     public string? InstagramUrl { get; set; } = default!;
     public string? Username747 { get; set; } = default!;
     public long UserId747 { get; set; } = default!;
-    public string? UniqueCod { get; set; } = default!;
+    public string? UniqueCode { get; set; } = default!;
 }
 
 public class AgentInfo
@@ -19,7 +19,7 @@ public class AgentInfo
     public string? InstagramUrl { get; set; } = default!;
     public string? Username747 { get; set; } = default!;
     public long UserId747 { get; set; } = default!;
-    public string? UniqueCod { get; set; } = default!;
+    public string? UniqueCode { get; set; } = default!;
 }
 
 public class GetUserInfoResponse

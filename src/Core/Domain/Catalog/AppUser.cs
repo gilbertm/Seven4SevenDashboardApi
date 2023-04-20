@@ -16,14 +16,18 @@ public class AppUser : AuditableEntity, IAggregateRoot
     public string? RaffleUserId { get; set; }
     public string? RaffleUserId747 { get; set; }
     public string? RaffleUsername747 { get; set; }
-    public bool IsAgent { get; private set; }
-    public string? UniqueCode { get; private set; }
+    public bool IsAgent { get; set; }
+    public string? UniqueCode { get; set; }
     public string? FacebookUrl { get; set; }
     public string? InstagramUrl { get; set; }
     public string? TwitterUrl { get; set; }
+    public bool CanLinkAgent { get; set; }
+    public bool CanLinkPlayer { get; set; }
+    public string SocialCode { get; set; }
 
 
-    public AppUser(string applicationUserId, string homeAddress = default!, string homeCity = default!, string homeRegion = default!, string homeCountry = default!, string roleId = default!, string roleName = default!, string raffleUserId = default!, string raffleUserId747 = default!, string raffleUsername747 = default!, bool isAgent = false, string uniqueCode = default!, string facebookUrl = default!, string instagramUrl = default!, string twitterUrl = default!)
+
+    public AppUser(string applicationUserId, string homeAddress = default!, string homeCity = default!, string homeRegion = default!, string homeCountry = default!, string roleId = default!, string roleName = default!, string raffleUserId = default!, string raffleUserId747 = default!, string raffleUsername747 = default!, bool isAgent = false, string uniqueCode = default!, string facebookUrl = default!, string instagramUrl = default!, string twitterUrl = default!, bool canLinkPlayer = default!, bool canLinkAgent = default!, string socialCode = default!)
     {
         ApplicationUserId = applicationUserId;
         HomeAddress = homeAddress;
@@ -41,9 +45,13 @@ public class AppUser : AuditableEntity, IAggregateRoot
         FacebookUrl = facebookUrl;
         TwitterUrl = twitterUrl;
         InstagramUrl = instagramUrl;
+
+        CanLinkPlayer = canLinkPlayer;
+        CanLinkAgent = canLinkAgent;
+        SocialCode = socialCode;
     }
 
-    public AppUser Update(string applicationUserId = default!, string homeAddress = default!, string homeCity = default!, string homeRegion = default!, string homeCountry = default!, string roleId = default!, string roleName = default!, string raffleUserId = default!, string raffleUserId747 = default!, string raffleUsername747 = default!, bool isAgent = false, string uniqueCode = default!, string facebookUrl = default!, string instagramUrl = default!, string twitterUrl = default!)
+    public AppUser Update(string applicationUserId = default!, string homeAddress = default!, string homeCity = default!, string homeRegion = default!, string homeCountry = default!, string roleId = default!, string roleName = default!, string raffleUserId = default!, string raffleUserId747 = default!, string raffleUsername747 = default!, bool isAgent = false, string uniqueCode = default!, string facebookUrl = default!, string instagramUrl = default!, string twitterUrl = default!, bool canLinkPlayer = default!, bool canLinkAgent = default!, string socialCode = default!)
     {
         if (applicationUserId is not null && (ApplicationUserId == applicationUserId) is not true) ApplicationUserId = applicationUserId;
         if (homeAddress is not null && (HomeAddress == homeAddress) is not true) HomeAddress = homeAddress;
@@ -63,6 +71,11 @@ public class AppUser : AuditableEntity, IAggregateRoot
         if (facebookUrl is not null && (FacebookUrl == facebookUrl) is not true) FacebookUrl = facebookUrl;
         if (instagramUrl is not null && (InstagramUrl == instagramUrl) is not true) InstagramUrl = instagramUrl;
         if (twitterUrl is not null && (TwitterUrl == twitterUrl) is not true) TwitterUrl = twitterUrl;
+
+        if (canLinkPlayer is not false && (CanLinkPlayer == canLinkPlayer) is not true) CanLinkPlayer = canLinkPlayer;
+        if (canLinkAgent is not false && (CanLinkAgent == canLinkAgent) is not true) CanLinkAgent = canLinkAgent;
+        if (socialCode is not null && (SocialCode == socialCode) is not true) SocialCode = socialCode;
+
         return this;
     }
 }

@@ -150,6 +150,12 @@ namespace Migrators.MSSQL.Migrations
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("CanLinkAgent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanLinkPlayer")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -202,6 +208,10 @@ namespace Migrators.MSSQL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SocialCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TwitterUrl")

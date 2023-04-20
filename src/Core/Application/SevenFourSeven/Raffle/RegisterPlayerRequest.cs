@@ -39,5 +39,9 @@ public class RegisterUserRequest
     public SocialProfiles SocialProfiles { get; set; } = default!;
     public bool IsAgent { get; set; } = false;
 
+    public bool CanLinkPlayer { get; set; } = default!;
+    public bool CanLinkAgent { get; set; } = default!;
+    public string SocialCode { get; set; } = default!;
+
     public string TemporarySendgridCode { get; set; } = default!;
 }
