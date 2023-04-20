@@ -162,6 +162,9 @@ namespace Migrators.MSSQL.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FacebookUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("HomeAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -173,6 +176,12 @@ namespace Migrators.MSSQL.Migrations
 
                     b.Property<string>("HomeRegion")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InstagramUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAgent")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("uniqueidentifier");
@@ -193,6 +202,12 @@ namespace Migrators.MSSQL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TwitterUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UniqueCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

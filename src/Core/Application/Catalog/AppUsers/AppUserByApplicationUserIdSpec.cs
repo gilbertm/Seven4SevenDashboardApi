@@ -1,5 +1,5 @@
 ﻿namespace RAFFLE.WebApi.Application.Catalog.AppUsers;
-public class AppUserByApplicationUserIdSpec : Specification<AppUser, AppUserDto>
+public class AppUserByApplicationUserIdSpec : Specification<AppUser>
 {
     public AppUserByApplicationUserIdSpec(string applicationUserId) =>
         Query

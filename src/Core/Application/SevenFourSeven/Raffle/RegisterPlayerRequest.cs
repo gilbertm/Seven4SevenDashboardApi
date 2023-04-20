@@ -38,4 +38,6 @@ public class RegisterUserRequest
     public Info747 Info747 { get; set; } = default!;
     public SocialProfiles SocialProfiles { get; set; } = default!;
     public bool IsAgent { get; set; } = false;
+
+    public string TemporarySendgridCode { get; set; } = default!;
 }

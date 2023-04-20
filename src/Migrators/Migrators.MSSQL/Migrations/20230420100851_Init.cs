@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Migrators.MSSQL.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,11 @@ namespace Migrators.MSSQL.Migrations
                     RaffleUserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RaffleUserId747 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RaffleUsername747 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAgent = table.Column<bool>(type: "bit", nullable: false),
+                    UniqueCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FacebookUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    InstagramUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TwitterUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedBy = table.Column<Guid>(type: "uniqueidentifier", nullable: false),

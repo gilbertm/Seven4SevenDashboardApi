@@ -1,9 +1,10 @@
+using DocumentFormat.OpenXml.Office2010.Excel;
+using RAFFLE.WebApi.Application.Catalog.AppUsers;
 using RAFFLE.WebApi.Application.Common.Persistence;
 using RAFFLE.WebApi.Application.Identity.Users;
 using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
 using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
 using RAFFLE.WebApi.Domain.Catalog;
-using RAFFLE.WebApi.Domain.Common;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -127,6 +128,8 @@ public class SevenFourSevenController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public async Task<GenericResponse> SelfRegisterAsync([FromBody] RegisterUserRequest registerUserRequest)
     {
+        CancellationToken cancellationToken = default(CancellationToken);
+
         // we have sufficient data here to register the user
 
         // if player
@@ -163,8 +166,8 @@ public class SevenFourSevenController : VersionNeutralApiController
 
             if (isPlayerInRaffleSystem)
             {
-                string? password = $"{getValueMiddleOfCustomString(registerUserRequest.Info747.UniqueCode)}{_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}";
-                string? confirmPassword = $"{getValueMiddleOfCustomString(registerUserRequest.Info747.UniqueCode)}{_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}";
+                string? password = $"{getValueMiddleOfCustomString(registerUserRequest.TemporarySendgridCode)}{_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}";
+                string? confirmPassword = $"{getValueMiddleOfCustomString(registerUserRequest.TemporarySendgridCode)}{_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}";
 
                 // the user is successfully registered on our raffle system
                 // it is safe to give him access to the dashboard now
@@ -186,15 +189,47 @@ public class SevenFourSevenController : VersionNeutralApiController
 
                 if (updatedOrcreatedUser is { } && updatedOrcreatedUser.Id != default)
                 {
-                    AppUser? appUser = await _repoAppUser.GetByIdAsync(updatedOrcreatedUser.Id);
+                    AppUser? appUser = await _repoAppUser.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(updatedOrcreatedUser.Id.ToString()), cancellationToken);
 
                     if (appUser is { } && appUser.ApplicationUserId != default)
                     {
-                        await _repoAppUser.UpdateAsync(new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), homeAddress: default, homeCity: default, homeRegion: default, homeCountry:default, roleId: default, roleName: default, raffleUserId:default, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747));
-
-                    } else
+                        appUser.Update(raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747);
+                        await _repoAppUser.UpdateAsync(appUser);
+                    }
+                    else
                     {
-                        appUser = await _repoAppUser.AddAsync(new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), homeAddress: default, homeCity: default, homeRegion: default, homeCountry: default, roleId: default, roleName: default, raffleUserId: default, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747));
+                        string roleId = string.Empty;
+                        string roleName = string.Empty;
+                        List<UserRoleDto>? userRoles = await _userService.GetRolesAsync(updatedOrcreatedUser.Id.ToString(), cancellationToken);
+                        if (userRoles is { } && userRoles.Any())
+                        {
+                            UserRoleDto? userRole = userRoles.Where(r => r.RoleName == "Basic").FirstOrDefault();
+
+                            if (userRole is { })
+                            {
+                                roleId = userRole.RoleId!;
+                                roleName = userRole.RoleName!;
+                            }
+                        }
+
+                        appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, isAgent: registerUserRequest.IsAgent, uniqueCode: registerUserRequest.Info747.UniqueCode);
+
+                        if (registerUserRequest.Info747 is { })
+                        {
+                            appUser.RaffleUsername747 = registerUserRequest.Info747.Username747;
+                            appUser.RaffleUserId747 = registerUserRequest.Info747.UserId747;
+                        }
+
+                        if (registerUserRequest.SocialProfiles is { })
+                        {
+                            appUser.FacebookUrl = registerUserRequest.SocialProfiles.FacebookUrl;
+                            appUser.InstagramUrl = registerUserRequest.SocialProfiles.InstagramUrl;
+                            appUser.TwitterUrl = registerUserRequest.SocialProfiles.TwitterUrl;
+                        }
+
+
+                        await _repoAppUser.AddAsync(appUser);
+
                     }
                 }
 

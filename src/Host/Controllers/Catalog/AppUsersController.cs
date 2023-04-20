@@ -43,7 +43,7 @@ public class AppUsersController : VersionedApiController
     [HttpGet("application/{applicationUserId}")]
     [MustHavePermission(RAFFLEAction.View, RAFFLEResource.AppUsers)]
     [OpenApiOperation("Get an app user details. Input: string main's application user id", "")]
-    public Task<AppUserDto> GetApplicationUserAsync(string applicationUserId)
+    public Task<AppUser> GetApplicationUserAsync(string applicationUserId)
     {
         return Mediator.Send(new GetAppUserByUserApplicationRequest(applicationUserId));
     }
@@ -51,7 +51,7 @@ public class AppUsersController : VersionedApiController
     [HttpGet("{id}")]
     [MustHavePermission(RAFFLEAction.View, RAFFLEResource.AppUsers)]
     [OpenApiOperation("Get an app user details using appuser id", "")]
-    public async Task<ActionResult<AppUserDto>> GetAsync(Guid id)
+    public async Task<ActionResult<AppUser>> GetAsync(Guid id)
     {
         GetAppUserRequest? getAppUserRequest = new GetAppUserRequest(id);
 

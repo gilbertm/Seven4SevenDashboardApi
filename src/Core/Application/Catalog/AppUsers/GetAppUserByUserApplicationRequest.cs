@@ -1,24 +1,22 @@
 ﻿namespace RAFFLE.WebApi.Application.Catalog.AppUsers;
 
-public class GetAppUserByUserApplicationRequest : IRequest<AppUserDto>
+public class GetAppUserByUserApplicationRequest : IRequest<AppUser>
 {
    public string ApplicationUserId { get; set; }
 
    public GetAppUserByUserApplicationRequest(string applicationUserId) => ApplicationUserId = applicationUserId;
 }
 
-public class GetAppUserByUserApplicationRequestHandler : IRequestHandler<GetAppUserByUserApplicationRequest, AppUserDto>
+public class GetAppUserByUserApplicationRequestHandler : IRequestHandler<GetAppUserByUserApplicationRequest, AppUser>
 {
     private readonly IRepositoryWithEvents<AppUser> _repository;
-    private readonly ICurrentUser _currentUser;
     private readonly IStringLocalizer _t;
 
-    public GetAppUserByUserApplicationRequestHandler(IRepositoryWithEvents<AppUser> repository, ICurrentUser currentUser, IStringLocalizer<GetAppUserByUserApplicationRequestHandler> localizer) =>
-        (_repository, _currentUser, _t) = (repository, currentUser, localizer);
+    public GetAppUserByUserApplicationRequestHandler(IRepositoryWithEvents<AppUser> repository, IStringLocalizer<GetAppUserByUserApplicationRequestHandler> localizer) =>
+        (_repository, _t) = (repository, localizer);
 
-    public async Task<AppUserDto> Handle(GetAppUserByUserApplicationRequest request, CancellationToken cancellationToken)
+    public async Task<AppUser> Handle(GetAppUserByUserApplicationRequest request, CancellationToken cancellationToken)
     {
-        return await _repository.FirstOrDefaultAsync(
-           (ISpecification<AppUser, AppUserDto>)new AppUserByApplicationUserIdSpec(request.ApplicationUserId), cancellationToken);
+        return await _repository.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(request.ApplicationUserId), cancellationToken) ?? default!;
     }
 }

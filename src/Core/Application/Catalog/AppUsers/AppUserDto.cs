@@ -13,4 +13,11 @@ public class AppUserDto : IDto
     public string? RaffleUserId { get; set; }
     public string? RaffleUserId747 { get; set; }
     public string? RaffleUsername747 { get; set; }
+    public bool IsAgent { get; set; }
+    public string? UniqueCode { get; set; }
+
+    public string? FacebookUrl { get; set; }
+    public string? InstagramUrl { get; set; }
+    public string? TwitterUrl { get; set; }
+
 }
