@@ -1,4 +1,3 @@
-using DocumentFormat.OpenXml.Office2010.Excel;
 using RAFFLE.WebApi.Application.Catalog.AppUsers;
 using RAFFLE.WebApi.Application.Common.Persistence;
 using RAFFLE.WebApi.Application.Identity.Users;
@@ -8,7 +7,6 @@ using RAFFLE.WebApi.Domain.Catalog;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
 
 namespace RAFFLE.WebApi.Host.Controllers.Identity;
 
@@ -28,8 +26,8 @@ public class SevenFourSevenController : VersionNeutralApiController
     }
 
     /*
- * The user is a bridge player.
- */
+     * The user is a bridge player.
+     */
     [HttpPost("bridge-user")]
     [TenantIdHeader]
     [AllowAnonymous]

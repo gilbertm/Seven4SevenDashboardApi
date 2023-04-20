@@ -25,6 +25,7 @@ public static class RAFFLEResource
     public const string RoleClaims = nameof(RoleClaims);
 
     public const string AppUsers = nameof(AppUsers);
+    public const string Raffles = nameof(Raffles);
 }
 
 public static class RAFFLEPermissions
@@ -59,6 +60,13 @@ public static class RAFFLEPermissions
         new("Update AppUsers", RAFFLEAction.Update, RAFFLEResource.AppUsers, IsBasic: true),
         new("Delete AppUsers", RAFFLEAction.Delete, RAFFLEResource.AppUsers),
         new("Export AppUsers", RAFFLEAction.Export, RAFFLEResource.AppUsers),
+
+        new("View Raffles", RAFFLEAction.View, RAFFLEResource.Raffles, IsBasic: true),
+        new("Search Raffles", RAFFLEAction.Search, RAFFLEResource.Raffles, IsBasic: true),
+        new("Create Raffles", RAFFLEAction.Create, RAFFLEResource.Raffles, IsBasic: true),
+        new("Update Raffles", RAFFLEAction.Update, RAFFLEResource.Raffles, IsBasic: true),
+        new("Delete Raffles", RAFFLEAction.Delete, RAFFLEResource.Raffles),
+        new("Export Raffles", RAFFLEAction.Export, RAFFLEResource.Raffles),
     };
 
     public static IReadOnlyList<RAFFLEPermission> All { get; } = new ReadOnlyCollection<RAFFLEPermission>(_all);

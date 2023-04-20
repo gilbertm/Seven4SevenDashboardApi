@@ -1,0 +1,14 @@
+using RAFFLE.WebApi.Application.Catalog.Raffles;
+
+namespace RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
+
+public class GetEntriesResponse
+{
+    public int ErorrCode { get; set; }
+    public string Message { get; set; } = default!;
+    public int CurrentPage { get; set; }
+    public List<EntryDto> AgentEntries { get; set; } = default!;
+    public List<EntryDto> PlayerEntries { get; set; } = default!;
+    public int TotalPagesWithAgentEntries { get; set; }
+    public int TotalPagesWithPlayerEntries { get; set; }
+}
