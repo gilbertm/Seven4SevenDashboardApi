@@ -25,8 +25,6 @@ public class AppUser : AuditableEntity, IAggregateRoot
     public bool CanLinkPlayer { get; set; }
     public string SocialCode { get; set; }
 
-
-
     public AppUser(string applicationUserId, string homeAddress = default!, string homeCity = default!, string homeRegion = default!, string homeCountry = default!, string roleId = default!, string roleName = default!, string raffleUserId = default!, string raffleUserId747 = default!, string raffleUsername747 = default!, bool isAgent = false, string uniqueCode = default!, string facebookUrl = default!, string instagramUrl = default!, string twitterUrl = default!, bool canLinkPlayer = default!, bool canLinkAgent = default!, string socialCode = default!)
     {
         ApplicationUserId = applicationUserId;
