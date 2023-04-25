@@ -12,8 +12,8 @@ using RAFFLE.WebApi.Infrastructure.Persistence.Context;
 namespace Migrators.MSSQL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230420171439_init")]
-    partial class init
+    [Migration("20230422073116_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

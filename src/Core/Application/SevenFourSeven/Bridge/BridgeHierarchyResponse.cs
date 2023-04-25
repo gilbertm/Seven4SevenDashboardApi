@@ -11,5 +11,5 @@ public class BridgeHierarchyResponse
 {
     public int Status { get; set; } = default!;
     public string Message { get; set; } = default!;
-    public User User { get; set; } = default!;
+    public User? User { get; set; } = default!;
 }

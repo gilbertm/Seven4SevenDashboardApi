@@ -7,6 +7,7 @@ using RAFFLE.WebApi.Domain.Catalog;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using Twilio.TwiML.Messaging;
 
 namespace RAFFLE.WebApi.Host.Controllers.Identity;
 
@@ -37,11 +38,11 @@ public class SevenFourSevenController : VersionNeutralApiController
     {
         using (HttpClient? client = new HttpClient())
         {
-            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Brdge:BaseUrl").Value!);
+            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Bridge:BaseUrl").Value!);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            HttpResponseMessage response = await client.GetAsync($"{_config.GetSection("SevenFourSevenAPIs:Brdge:GetHierarchyUrl").Value!}?username={bridgeRequest.UserName}&isAgent={bridgeRequest.IsAgent}");
+            HttpResponseMessage response = await client.GetAsync($"{_config.GetSection("SevenFourSevenAPIs:Bridge:GetHierarchyUrl").Value!}?username={bridgeRequest.UserName}&isAgent={bridgeRequest.IsAgent}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -55,6 +56,70 @@ public class SevenFourSevenController : VersionNeutralApiController
         }
 
         return new BridgeHierarchyResponse { Status = 500, Message = "Unknown error." };
+    }
+
+    /*
+     * send an internal otp using the bridge going to 747live.net
+     * this otp will ensure the owner of the user
+     */
+    [HttpPost("bridge-user-account-ownership-verification")]
+    [TenantIdHeader]
+    [AllowAnonymous]
+    [OpenApiOperation("747 bridge checks if the user really owns the account thru internal OTP messaging", "")]
+    [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
+    public async Task<BridgeGenericResponse> BridgeAccountOwnershipVerificationUserAsync([FromBody] InternalMessageCodeRequest internalMessageCodeRequest)
+    {
+        using (HttpClient? client = new HttpClient())
+        {
+            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Bridge:BaseUrl").Value!);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            internalMessageCodeRequest.AuthToken = _config.GetSection("SevenFourSevenAPIs:Bridge:AuthToken").Value!;
+
+            // from client
+            switch (internalMessageCodeRequest.Platform)
+            {
+                // maybe there's a change in internal mapping
+                // reconciling here.
+                // agent
+                case 1: internalMessageCodeRequest.Platform = int.Parse(_config.GetSection("SevenFourSevenAPIs:Bridge:Platform:Agent").Value!);
+                    break;
+
+                // player
+                case 2:
+                    internalMessageCodeRequest.Platform = int.Parse(_config.GetSection("SevenFourSevenAPIs:Bridge:Platform:Player").Value!);
+                    break;
+            }
+
+            string json = JsonSerializer.Serialize(internalMessageCodeRequest);
+
+            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Bridge:SendMessageUrl").Value!}", data);
+
+            if (response.IsSuccessStatusCode)
+            {
+                BridgeGenericResponse? result = await response.Content.ReadFromJsonAsync<BridgeGenericResponse>();
+
+                if (result is { })
+                {
+                    if (result.Status != 0)
+                    {
+                        return new BridgeGenericResponse
+                        {
+                            Status = result.Status,
+                            Message = result.Message ?? string.Empty
+                        };
+                    }
+
+                    result.Message ??= string.Empty;
+                    return result;
+                }
+            }
+        }
+
+        return new BridgeGenericResponse { Status = 500, Message = "Unknown error." };
     }
 
     /*
@@ -210,7 +275,7 @@ public class SevenFourSevenController : VersionNeutralApiController
                             }
                         }
 
-                        appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, isAgent: registerUserRequest.IsAgent, uniqueCode: registerUserRequest.Info747.UniqueCode,canLinkPlayer: registerUserRequest.CanLinkPlayer, canLinkAgent: registerUserRequest.CanLinkAgent, socialCode: registerUserRequest.SocialCode);
+                        appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, isAgent: registerUserRequest.IsAgent, uniqueCode: registerUserRequest.Info747.UniqueCode, canLinkPlayer: registerUserRequest.CanLinkPlayer, canLinkAgent: registerUserRequest.CanLinkAgent, socialCode: registerUserRequest.SocialCode);
 
                         if (registerUserRequest.Info747 is { })
                         {
