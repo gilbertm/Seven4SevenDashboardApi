@@ -23,25 +23,25 @@ public class SendgridController : VersionNeutralApiController
 
     /// <summary>
     /// Send an email verification code from Twilio (SendGrid).
+    /// Recipient is the target user
+    /// Channel is the mode of sending. "sms", "email"
     /// </summary>
-    /// <param name="email"></param>
+    /// <param name="VerificationRequest"></param>
     /// <returns></returns>
     [HttpPost("send-code")]
     [TenantIdHeader]
     [AllowAnonymous]
     [OpenApiOperation("Send an email verification code", "")]
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
-    public VerificationResource SendCode([FromBody] string email)
+    public VerificationResource SendCode([FromBody] TwilioVerificationRequest VerificationRequest)
     {
         TwilioClient.Init(_config.GetSection("SevenFourSevenAPIs:Twilio:AccountSID").Value!, _config.GetSection("SevenFourSevenAPIs:Twilio:AuthToken").Value!);
 
-        var verification = VerificationResource.Create(
-            to: email,
-            channel: "email",
-            pathServiceSid: $"{_config.GetSection("SevenFourSevenAPIs:Twilio:ServiceId").Value!}"
-            );
+        return VerificationResource.Create(
+                    to: VerificationRequest.Recipient,
+                    channel: VerificationRequest.Channel,
+                    pathServiceSid: $"{_config.GetSection("SevenFourSevenAPIs:Twilio:ServiceId").Value!}");
 
-        return verification;
     }
 
     /// <summary>
@@ -58,8 +58,7 @@ public class SendgridController : VersionNeutralApiController
     {
         TwilioClient.Init(_config.GetSection("SevenFourSevenAPIs:Twilio:AccountSID").Value!, _config.GetSection("SevenFourSevenAPIs:Twilio:AuthToken").Value!);
 
-        var verificationCheck = VerificationCheckResource.Create(to: twilioCodeRequest.Email, code: twilioCodeRequest.Code, pathServiceSid: $"{_config.GetSection("SevenFourSevenAPIs:Twilio:ServiceId").Value!}");
+        return VerificationCheckResource.Create(to: twilioCodeRequest.Recipient, code: twilioCodeRequest.Code, pathServiceSid: $"{_config.GetSection("SevenFourSevenAPIs:Twilio:ServiceId").Value!}");
 
-        return verificationCheck;
     }
 }

@@ -1,5 +1,3 @@
-using System.Numerics;
-
 namespace RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
 
 public class GenericResponse

@@ -1,7 +1,6 @@
 using RAFFLE.WebApi.Application.Catalog.Raffles;
 
 namespace RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
-
 public class GetEntriesResponse
 {
     public int ErorrCode { get; set; }

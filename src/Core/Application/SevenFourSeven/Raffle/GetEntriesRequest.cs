@@ -1,5 +1,4 @@
 namespace RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
-
 public class GetEntriesRequest
 {
     public string AuthCode { get; set; } = default!;

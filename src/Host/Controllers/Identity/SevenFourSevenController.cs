@@ -122,6 +122,63 @@ public class SevenFourSevenController : VersionNeutralApiController
         return new BridgeGenericResponse { Status = 500, Message = "Unknown error." };
     }
 
+    // check if the user exists
+    // this can be used to check
+    // each fields can be sent and checked invidually
+    // 
+    // username
+    // email
+    // password
+    [HttpPost("check-user")]
+    [TenantIdHeader]
+    [AllowAnonymous]
+    [OpenApiOperation("747 raffle will be used to check the important fields, if the user actually owns them", "")]
+    [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
+    public async Task<CheckUserResponse> CheckUserFromRaffleImportantFields([FromBody] CheckUserRequest checkUserRequest)
+    {
+        using (HttpClient? client = new HttpClient())
+        {
+            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            checkUserRequest.AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!;
+
+            checkUserRequest.Email ??= string.Empty;
+            checkUserRequest.Phone ??= string.Empty;
+            checkUserRequest.UserName747 ??= string.Empty;
+
+            // number string Zero
+            checkUserRequest.UserId747 ??= "0";
+
+            string json = JsonSerializer.Serialize(checkUserRequest);
+
+            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = new();
+
+            bool isAgent = checkUserRequest.IsAgent ?? false;
+
+            if (isAgent)
+                response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:CheckAgentExists").Value!}", data);
+            else
+                response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:CheckPlayerExists").Value!}", data);
+
+            if (response.IsSuccessStatusCode)
+            {
+                CheckUserResponse? result = await response.Content.ReadFromJsonAsync<CheckUserResponse>();
+
+                if (result is { })
+                {
+                    return result;
+                }
+            }
+        }
+
+        return new CheckUserResponse { ErorrCode = 500, Message = "Unknown error.", ExistCount = 0 };
+    }
+
+
     /*
      * The user is a bridge player. Eligibile to be in the Raffle system.
      *

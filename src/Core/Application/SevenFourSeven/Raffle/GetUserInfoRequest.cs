@@ -1,7 +1,4 @@
-using System.Numerics;
-
 namespace RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
-
 public class GetUserInfoRequest
 {
     public string AuthCode { get; set; } = default!;
