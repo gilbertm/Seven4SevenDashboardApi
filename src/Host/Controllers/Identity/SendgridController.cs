@@ -35,12 +35,18 @@ public class SendgridController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public VerificationResource SendCode([FromBody] TwilioVerificationRequest VerificationRequest)
     {
-        TwilioClient.Init(_config.GetSection("SevenFourSevenAPIs:Twilio:AccountSID").Value!, _config.GetSection("SevenFourSevenAPIs:Twilio:AuthToken").Value!);
+        try
+        {
+            TwilioClient.Init(_config.GetSection("SevenFourSevenAPIs:Twilio:AccountSID").Value!, _config.GetSection("SevenFourSevenAPIs:Twilio:AuthToken").Value!);
 
-        return VerificationResource.Create(
-                    to: VerificationRequest.Recipient,
-                    channel: VerificationRequest.Channel,
-                    pathServiceSid: $"{_config.GetSection("SevenFourSevenAPIs:Twilio:ServiceId").Value!}");
+            return VerificationResource.Create(
+                        to: VerificationRequest.Recipient,
+                        channel: VerificationRequest.Channel,
+                        pathServiceSid: $"{_config.GetSection("SevenFourSevenAPIs:Twilio:ServiceId").Value!}");
+        } catch
+        {
+            return default!;
+        }
 
     }
 
