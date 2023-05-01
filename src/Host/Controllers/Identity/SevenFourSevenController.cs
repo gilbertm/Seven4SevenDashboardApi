@@ -178,6 +178,69 @@ public class SevenFourSevenController : VersionNeutralApiController
         return new CheckUserResponse { ErorrCode = 500, Message = "Unknown error.", ExistCount = 0 };
     }
 
+    /*
+     * Get the user info using the AuthCode during initial registration or reset. This
+     * AuthCode is normally sent Eligibile to be in the Raffle system.
+     *
+     * 1. Check the raffle user info. If true, get the info.
+     *    If false, make a record in the raffle system
+     *
+     */
+    [HttpPost("user-info-using-own-auth-code")]
+    [TenantIdHeader]
+    [AllowAnonymous]
+    [OpenApiOperation("747 dashboard checks the raffle system if the user is raffle ready. Return email", "")]
+    [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
+    public async Task<GetUserInfoResponse> RaffleUserInfoUsingOwnAuthCodeAsync([FromBody] GetUserInfoOwnAuthRequest getUserInfoOwnAuthRequest)
+    {
+        using (HttpClient? client = new HttpClient())
+        {
+            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            string json = JsonSerializer.Serialize(getUserInfoOwnAuthRequest);
+
+            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:GetUserInfoUrl").Value!}", data);
+
+            if (response.IsSuccessStatusCode)
+            {
+                GetUserInfoResponse? result = await response.Content.ReadFromJsonAsync<GetUserInfoResponse>();
+
+                if (result is { })
+                {
+                    if (result.ErorrCode != 0)
+                    {
+                        return new GetUserInfoResponse
+                        {
+                            ErorrCode = result.ErorrCode,
+                            Message = result.Message
+                        };
+                    }
+
+                    return result;
+                }
+            }
+        }
+
+        return new GetUserInfoResponse
+        {
+            ErorrCode = 1,
+            Message = "Unsuccessful request. Generic error."
+        };
+    }
+
+    [HttpPost("username")]
+    [TenantIdHeader]
+    [AllowAnonymous]
+    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Users)]
+    [OpenApiOperation("Get a user's details.", "")]
+    public async Task<UserDetailsDto> GetByUsernameAsync(string username, CancellationToken cancellationToken)
+    {
+        return await _userService.GetByUsernameAsync(username, cancellationToken) ?? new UserDetailsDto();
+    }
 
     /*
      * The user is a bridge player. Eligibile to be in the Raffle system.
@@ -286,8 +349,13 @@ public class SevenFourSevenController : VersionNeutralApiController
 
             if (isPlayerInRaffleSystem)
             {
-                string? password = $"{getValueMiddleOfCustomString(registerUserRequest.TemporarySendgridCode)}{_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}";
-                string? confirmPassword = $"{getValueMiddleOfCustomString(registerUserRequest.TemporarySendgridCode)}{_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}";
+                // TODO:// To be implemented.
+                // make it more secure 
+                // hash generated that will check the user from the server
+                // against external user
+                // This additional secret: {_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}
+                string? password = $"{getValueMiddleOfCustomString(registerUserRequest.OwnUserAuthCode)}";
+                string? confirmPassword = $"{getValueMiddleOfCustomString(registerUserRequest.OwnUserAuthCode)}";
 
                 // the user is successfully registered on our raffle system
                 // it is safe to give him access to the dashboard now

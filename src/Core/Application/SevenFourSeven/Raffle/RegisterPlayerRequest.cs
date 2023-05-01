@@ -41,5 +41,7 @@ public class RegisterUserRequest
     public bool CanLinkAgent { get; set; } = default!;
     public string SocialCode { get; set; } = default!;
 
-    public string TemporarySendgridCode { get; set; } = default!;
+    // this will be used for
+    // password authentication on the reward system
+    public string OwnUserAuthCode { get; set; } = default!;
 }
