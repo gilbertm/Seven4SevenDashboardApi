@@ -13,6 +13,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
+using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
+using static Org.BouncyCastle.Math.EC.ECCurve;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace RAFFLE.WebApi.Infrastructure.Identity;
 
@@ -23,19 +30,22 @@ internal class TokenService : ITokenService
     private readonly SecuritySettings _securitySettings;
     private readonly JwtSettings _jwtSettings;
     private readonly RAFFLETenantInfo? _currentTenant;
+    private readonly IConfiguration _config;
 
     public TokenService(
         UserManager<ApplicationUser> userManager,
         IOptions<JwtSettings> jwtSettings,
         IStringLocalizer<TokenService> localizer,
         RAFFLETenantInfo? currentTenant,
-        IOptions<SecuritySettings> securitySettings)
+        IOptions<SecuritySettings> securitySettings, 
+        IConfiguration config)
     {
         _userManager = userManager;
         _t = localizer;
         _jwtSettings = jwtSettings.Value;
         _currentTenant = currentTenant;
         _securitySettings = securitySettings.Value;
+        _config = config;
     }
 
     public async Task<TokenResponse> GetTokenAsync(TokenRequest request, string ipAddress, CancellationToken cancellationToken)
@@ -46,6 +56,12 @@ internal class TokenService : ITokenService
         {
 
             throw new UnauthorizedException(_t["Authentication Failed."]);
+        }
+
+        // check against the Raffle UI
+        if (!(await IsTokenValidInRaffleSystemUserUsingOwnCode(new GetUserInfoOwnAuthRequest { AuthCode = request.Password })))
+        {
+            throw new UnauthorizedException(_t["Auth Code is invalid. Could have expired. Please issue a token reset from the login."]);
         }
 
         if (!user.IsActive)
@@ -72,6 +88,44 @@ internal class TokenService : ITokenService
         }
 
         return await GenerateTokensAndUpdateUser(user, ipAddress);
+    }
+
+    private async Task<bool> IsTokenValidInRaffleSystemUserUsingOwnCode(GetUserInfoOwnAuthRequest getUserInfoOwnAuthRequest)
+    {
+        using (HttpClient? client = new HttpClient())
+        {
+            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            string json = JsonSerializer.Serialize(getUserInfoOwnAuthRequest);
+
+            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:GetUserInfoUrl").Value!}", data);
+
+            if (response.IsSuccessStatusCode)
+            {
+                GetUserInfoResponse? result = await response.Content.ReadFromJsonAsync<GetUserInfoResponse>();
+
+                if (result is { })
+                {
+                    if (result.ErorrCode != 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (result.AuthCode == getUserInfoOwnAuthRequest.AuthCode)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public async Task<TokenResponse> RefreshTokenAsync(RefreshTokenRequest request, string ipAddress)

@@ -26,15 +26,13 @@ public class RaffleController : VersionNeutralApiController
     [HttpPost("get-entries")]
     [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
     [OpenApiOperation("Update a ledger record.", "")]
-    public async Task<GetEntriesResponse> GetRaffleEntries([FromBody] GetEntriesRequest getEntriesRequest)
+    public async Task<GetEntriesResponse> GetRaffleEntriesAsync([FromBody] GetEntriesRequest getEntriesRequest)
     {
         using (HttpClient? client = new HttpClient())
         {
             client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            getEntriesRequest.AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!;
 
             string json = JsonSerializer.Serialize(getEntriesRequest);
 
