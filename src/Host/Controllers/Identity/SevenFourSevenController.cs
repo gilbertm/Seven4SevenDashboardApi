@@ -345,14 +345,48 @@ public class SevenFourSevenController : VersionNeutralApiController
         // create the non player/affiliated user
         if (!isUserInRaffleSystem)
         {
-            GetUserInfoResponse userInfoResponse = await RegisterUserToRaffleSystemAsync(registerUserRequest);
+            // hard code sample
+            // nothing get's pushed on the main raffle system
+            // Production TODO:// enable this.
+            // GetUserInfoResponse userInfoResponse = await RegisterUserToRaffleSystemAsync(registerUserRequest);
+            GetUserInfoResponse userInfoResponse = new()
+            {
+                Email = registerUserRequest.Email,
+                Phone = registerUserRequest.Phone,
+                CanLinkPlayer = registerUserRequest.CanLinkPlayer,
+                CanLinkAgent = registerUserRequest.CanLinkAgent,
+                AuthCode = "705fed6f-278f-4b6c-aa09-a98c3359998e",
+                AgentInfo = new()
+                {
+                    UniqueCode = "TEST001",
+                    FacebookUrl = "urlFB",
+                    InstagramUrl = "urlInsta",
+                    TwitterUrl = "urlTwitter",
+                    UserId747 = 100001,
+                    Username747 = "userName747"
+                },
+                CreatedUtc = DateTime.UtcNow,
+                ErorrCode = 0,
+                Message = "ok",
+                Name = registerUserRequest.Name,
+                PlayerInfo = new()
+                {
+                    UniqueCode = "PlayerTEST001",
+                    FacebookUrl = "urlFBPlayer",
+                    InstagramUrl = "urlInstaPlayer",
+                    TwitterUrl = "urlTwitterPlayer",
+                    UserId747 = 100001,
+                    Username747 = "userName747Player"
+                },
+                SocialCode = "Social001",
+                Surname = registerUserRequest.Surname
+            };
 
             if (userInfoResponse.ErorrCode == 0)
             {
                 // use the raffle auth code as the password
                 // for the universal dashboard
-                string? password = userInfoResponse.AuthCode;
-                string? confirmPassword = userInfoResponse.AuthCode;
+                string? password = userInfoResponse.AuthCode!;
 
                 // the user is successfully registered on our raffle system
                 // it is safe to give him access to the dashboard now
@@ -362,7 +396,7 @@ public class SevenFourSevenController : VersionNeutralApiController
                     FirstName = userInfoResponse.Name!,
                     LastName = userInfoResponse.Surname!,
                     Password = password!,
-                    ConfirmPassword = confirmPassword!,
+                    ConfirmPassword = password!,
                     UserName = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.Username747! : userInfoResponse.PlayerInfo!.Username747!,
                     PhoneNumber = userInfoResponse.Phone!
                 };
@@ -425,7 +459,6 @@ public class SevenFourSevenController : VersionNeutralApiController
                 }
             }
         }
-
 
         return new GenericResponse
         {
