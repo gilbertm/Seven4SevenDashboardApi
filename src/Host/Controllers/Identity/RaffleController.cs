@@ -25,7 +25,7 @@ public class RaffleController : VersionNeutralApiController
 
     [HttpPost("get-entries")]
     [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
-    [OpenApiOperation("Update a ledger record.", "")]
+    [OpenApiOperation("Get raffle system entries.", "")]
     public async Task<GetEntriesResponse> GetRaffleEntriesAsync([FromBody] GetEntriesRequest getEntriesRequest)
     {
         using (HttpClient? client = new HttpClient())

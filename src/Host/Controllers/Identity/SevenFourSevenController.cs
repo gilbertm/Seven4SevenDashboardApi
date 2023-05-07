@@ -332,7 +332,6 @@ public class SevenFourSevenController : VersionNeutralApiController
         // we have sufficient data here to register the user
 
         // if user
-
         bool isUserInRaffleSystem = await IsLegitimateUserInRaffleSystemAsync(new CheckUserRequest
         {
             AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
@@ -343,109 +342,90 @@ public class SevenFourSevenController : VersionNeutralApiController
             IsAgent = registerUserRequest.IsAgent
         });
 
-        // craete the non player/affiliated user
+        // create the non player/affiliated user
         if (!isUserInRaffleSystem)
         {
-            registerUserRequest.SocialProfiles.FacebookUrl = string.Empty;
-            registerUserRequest.SocialProfiles.InstagramUrl = string.Empty;
-            registerUserRequest.SocialProfiles.TwitterUrl = string.Empty;
-            _ = await RegisterUserToRaffleSystemAsync(registerUserRequest);
-        }
+            GetUserInfoResponse userInfoResponse = await RegisterUserToRaffleSystemAsync(registerUserRequest);
 
-        // recheck if player in the raffle system, after operation
-        isUserInRaffleSystem = await IsLegitimateUserInRaffleSystemAsync(new CheckUserRequest
-        {
-            AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
-            Email = registerUserRequest.Email,
-            Phone = registerUserRequest.Phone,
-            UserId747 = registerUserRequest.Info747.UserId747,
-            UserName747 = registerUserRequest.Info747.Username747,
-            IsAgent = registerUserRequest.IsAgent
-        });
-
-        if (isUserInRaffleSystem)
-        {
-            // TODO:// To be implemented.
-            // make it more secure 
-            // hash generated that will check the user from the server
-            // against external user
-            // This additional secret: {_config.GetSection("SevenFourSevenAPIs:PasswordSecretHash").Value!}
-            string? password = $"{getValueMiddleOfCustomString(registerUserRequest.OwnUserAuthCode)}";
-            string? confirmPassword = $"{getValueMiddleOfCustomString(registerUserRequest.OwnUserAuthCode)}";
-
-            // the user is successfully registered on our raffle system
-            // it is safe to give him access to the dashboard now
-            CreateUserRequest? createUserRequest = new CreateUserRequest
+            if (userInfoResponse.ErorrCode == 0)
             {
-                Email = registerUserRequest.Email,
-                FirstName = registerUserRequest.Name,
-                LastName = registerUserRequest.Surname,
+                // use the raffle auth code as the password
+                // for the universal dashboard
+                string? password = userInfoResponse.AuthCode;
+                string? confirmPassword = userInfoResponse.AuthCode;
 
-                // unique code is the verification code from sendgrid
-                // we make use of this for one time password creation
-                // for the user to be able to go around to this dashboard system.
-                Password = password,
-                ConfirmPassword = confirmPassword,
-                UserName = registerUserRequest.Info747.Username747,
-                PhoneNumber = registerUserRequest.Phone
-            };
-
-            UserDetailsDto? updatedOrcreatedUser = await _userService.CreateSevenFourSevenAsync(createUserRequest, string.Empty, GetOriginFromRequest());
-
-            if (updatedOrcreatedUser is { } && updatedOrcreatedUser.Id != default)
-            {
-                AppUser? appUser = await _repoAppUser.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(updatedOrcreatedUser.Id.ToString()), cancellationToken);
-
-                if (appUser is { } && appUser.ApplicationUserId != default)
+                // the user is successfully registered on our raffle system
+                // it is safe to give him access to the dashboard now
+                CreateUserRequest createUserRequest = new CreateUserRequest
                 {
-                    appUser.Update(raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, canLinkPlayer: registerUserRequest.CanLinkPlayer, canLinkAgent: registerUserRequest.CanLinkAgent, socialCode: registerUserRequest.SocialCode);
-                    await _repoAppUser.UpdateAsync(appUser);
-                }
-                else
-                {
-                    string roleId = string.Empty;
-                    string roleName = string.Empty;
-                    List<UserRoleDto>? userRoles = await _userService.GetRolesAsync(updatedOrcreatedUser.Id.ToString(), cancellationToken);
-                    if (userRoles is { } && userRoles.Any())
-                    {
-                        UserRoleDto? userRole = userRoles.Where(r => r.RoleName == "Basic").FirstOrDefault();
-
-                        if (userRole is { })
-                        {
-                            roleId = userRole.RoleId!;
-                            roleName = userRole.RoleName!;
-                        }
-                    }
-
-                    appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: registerUserRequest.Info747.UserId747, raffleUsername747: registerUserRequest.Info747.Username747, isAgent: registerUserRequest.IsAgent, uniqueCode: registerUserRequest.Info747.UniqueCode, canLinkPlayer: registerUserRequest.CanLinkPlayer, canLinkAgent: registerUserRequest.CanLinkAgent, socialCode: registerUserRequest.SocialCode);
-
-                    if (registerUserRequest.Info747 is { })
-                    {
-                        appUser.RaffleUsername747 = registerUserRequest.Info747.Username747;
-                        appUser.RaffleUserId747 = registerUserRequest.Info747.UserId747;
-                    }
-
-                    if (registerUserRequest.SocialProfiles is { })
-                    {
-                        appUser.FacebookUrl = registerUserRequest.SocialProfiles.FacebookUrl;
-                        appUser.InstagramUrl = registerUserRequest.SocialProfiles.InstagramUrl;
-                        appUser.TwitterUrl = registerUserRequest.SocialProfiles.TwitterUrl;
-                    }
-
-                    await _repoAppUser.AddAsync(appUser);
-                }
-            }
-
-            // successfully created
-            if (updatedOrcreatedUser != default)
-            {
-                return new GenericResponse
-                {
-                    ErorrCode = 0,
-                    Message = createUserRequest.Password
+                    Email = userInfoResponse.Email!,
+                    FirstName = userInfoResponse.Name!,
+                    LastName = userInfoResponse.Surname!,
+                    Password = password!,
+                    ConfirmPassword = confirmPassword!,
+                    UserName = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.Username747! : userInfoResponse.PlayerInfo!.Username747!,
+                    PhoneNumber = userInfoResponse.Phone!
                 };
+
+                UserDetailsDto? updatedOrcreatedUser = await _userService.CreateSevenFourSevenAsync(createUserRequest, string.Empty, GetOriginFromRequest());
+
+                if (updatedOrcreatedUser is { } && updatedOrcreatedUser.Id != default)
+                {
+                    AppUser? appUser = await _repoAppUser.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(updatedOrcreatedUser.Id.ToString()), cancellationToken);
+
+                    long userId747 = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.UserId747! : userInfoResponse.PlayerInfo!.UserId747!;
+                    string userName747 = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.Username747! : userInfoResponse.PlayerInfo!.Username747!;
+                    string uniqueCode = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.UniqueCode! : userInfoResponse.PlayerInfo!.UniqueCode!;
+                    bool canLinkPlayer = userInfoResponse.CanLinkPlayer;
+                    bool canLinkAgent = userInfoResponse.CanLinkAgent;
+                    string socialCode = userInfoResponse.SocialCode!;
+
+                    if (appUser is { } && appUser.ApplicationUserId != default)
+                    {
+                        appUser.Update(raffleUserId747: userId747.ToString(), raffleUsername747: userName747, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkPlayer, socialCode: socialCode);
+                        await _repoAppUser.UpdateAsync(appUser);
+                    }
+                    else
+                    {
+                        string roleId = string.Empty;
+                        string roleName = string.Empty;
+                        List<UserRoleDto>? userRoles = await _userService.GetRolesAsync(updatedOrcreatedUser.Id.ToString(), cancellationToken);
+                        if (userRoles is { } && userRoles.Any())
+                        {
+                            UserRoleDto? userRole = userRoles.Where(r => r.RoleName == "Basic").FirstOrDefault();
+
+                            if (userRole is { })
+                            {
+                                roleId = userRole.RoleId!;
+                                roleName = userRole.RoleName!;
+                            }
+                        }
+
+                        appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: userId747.ToString(), raffleUsername747: userName747, isAgent: registerUserRequest.IsAgent, uniqueCode: uniqueCode, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkAgent, socialCode: socialCode);
+
+                        appUser.RaffleUsername747 = userName747;
+                        appUser.RaffleUserId747 = userId747.ToString();
+
+                        appUser.FacebookUrl = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.FacebookUrl! : userInfoResponse.PlayerInfo!.FacebookUrl!;
+                        appUser.InstagramUrl = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.InstagramUrl! : userInfoResponse.PlayerInfo!.InstagramUrl!;
+                        appUser.TwitterUrl = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.TwitterUrl! : userInfoResponse.PlayerInfo!.TwitterUrl!;
+
+                        await _repoAppUser.AddAsync(appUser);
+                    }
+                }
+
+                // successfully created
+                if (updatedOrcreatedUser != default)
+                {
+                    return new GenericResponse
+                    {
+                        ErorrCode = 0,
+                        Message = createUserRequest.Password
+                    };
+                }
             }
         }
+
 
         return new GenericResponse
         {
@@ -459,7 +439,7 @@ public class SevenFourSevenController : VersionNeutralApiController
     /// </summary>
     /// <param name="checkUserRequest"></param>
     /// <returns>bool</returns>
-    [HttpPost("is-player")]
+    [HttpPost("is-legitimate-user")]
     [TenantIdHeader]
     [AllowAnonymous]
     [OpenApiOperation("Check if player exists in the raffle system", "")]
@@ -514,9 +494,7 @@ public class SevenFourSevenController : VersionNeutralApiController
         return false;
     }
 
-    // register the user, after past arengu's validation
-    // check if the user's system affiliation, either agent or player
-    private async Task<bool> RegisterUserToRaffleSystemAsync(RegisterUserRequest registerUserRequest)
+    private async Task<GetUserInfoResponse> RegisterUserToRaffleSystemAsync(RegisterUserRequest registerUserRequest)
     {
         using (var client = new HttpClient())
         {
@@ -546,17 +524,16 @@ public class SevenFourSevenController : VersionNeutralApiController
 
                 if (result is { })
                 {
-                    if (result.ErorrCode != 0)
-                    {
-                        return true;
-                    }
-
-                    return false;
+                    return result;
                 }
             }
         }
 
-        return false;
+        return new GetUserInfoResponse
+        {
+            ErorrCode = 1,
+            Message = "Generic error."
+        };
     }
 
     private string getValueMiddleOfCustomString(string customString)
