@@ -2,7 +2,7 @@ using RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
 
 namespace RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
 
-public class CustomListModel
+public class InkMeLiveMedicalListModel
 {
     public bool I_am_not_Pregnant_or_Breast_feeder { get; set; }
     public bool I_am_not_a_Diabetic_patient { get; set; }
@@ -11,12 +11,11 @@ public class CustomListModel
     public bool I_am_not_under_any_treatment_or_medications { get; set; }
 }
 
-public class IDProof
+public class InkMeLiveIDProof
 {
     public string IdProofFrontSide { get; set; } = default!;
     public string IdProofBackSide { get; set; } = default!;
 }
-
 
 public class InkMeLivePlayerDetailsRequest
 {
@@ -27,9 +26,9 @@ public class InkMeLivePlayerDetailsRequest
     public string SocialCode { get; set; } = default!;
     public int Age { get; set; }
     public string FBprofilelink { get; set; } = default!;
-    public IDProof IdProofs { get; set; } = default!;
+    public InkMeLiveIDProof IdProofs { get; set; } = default!;
     public string DigitalSignature { get; set; } = default!;
-    public CustomListModel ConfirmList { get; set; } = default!;
+    public InkMeLiveMedicalListModel ConfirmList { get; set; } = default!;
 }
 
 public class PlayerDetailsRequestValidator : CustomValidator<InkMeLivePlayerDetailsRequest>
@@ -51,6 +50,8 @@ public class PlayerDetailsRequestValidator : CustomValidator<InkMeLivePlayerDeta
         RuleFor(a => a.IdProofs).Cascade(CascadeMode.Stop)
             .NotNull();
         RuleFor(a => a.ConfirmList).Cascade(CascadeMode.Stop)
+            .NotNull();
+        RuleFor(a => a.FBprofilelink).Cascade(CascadeMode.Stop)
             .NotNull();
     }
 }

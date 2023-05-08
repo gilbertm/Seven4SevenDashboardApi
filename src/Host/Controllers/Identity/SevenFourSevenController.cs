@@ -351,7 +351,7 @@ public class SevenFourSevenController : VersionNeutralApiController
             // GetUserInfoResponse userInfoResponse = await RegisterUserToRaffleSystemAsync(registerUserRequest);
             GetUserInfoResponse userInfoResponse = new()
             {
-                Email = registerUserRequest.Email,
+                Email = "pahanimg10@gmail.com",
                 Phone = registerUserRequest.Phone,
                 CanLinkPlayer = registerUserRequest.CanLinkPlayer,
                 CanLinkAgent = registerUserRequest.CanLinkAgent,
