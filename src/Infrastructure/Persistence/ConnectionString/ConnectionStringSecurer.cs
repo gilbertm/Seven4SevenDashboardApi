@@ -1,4 +1,4 @@
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Runtime.InteropServices;
 using RAFFLE.WebApi.Application.Common.Persistence;
 using RAFFLE.WebApi.Infrastructure.Common;

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using Npgsql;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace RAFFLE.WebApi.Infrastructure.Persistence.ConnectionString;
 

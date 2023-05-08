@@ -23,6 +23,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SendGrid.Extensions.DependencyInjection;
+using RAFFLE.WebApi.Infrastructure.SendGrid;
 
 [assembly: InternalsVisibleTo("Infrastructure.Test")]
 
@@ -51,6 +53,7 @@ public static class Startup
             .AddOpenApiDocumentation(config)
             .AddPersistence()
             .AddRequestLogging(config)
+            .AddMailDeliveryServices(config)
             .AddRouting(options => options.LowercaseUrls = true)
             .AddServices();
     }
