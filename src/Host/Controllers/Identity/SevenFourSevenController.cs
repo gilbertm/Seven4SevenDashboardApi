@@ -358,12 +358,12 @@ public class SevenFourSevenController : VersionNeutralApiController
                 AuthCode = "705fed6f-278f-4b6c-aa09-a98c3359998e",
                 AgentInfo = new()
                 {
-                    UniqueCode = "TEST001",
-                    FacebookUrl = "urlFB",
-                    InstagramUrl = "urlInsta",
-                    TwitterUrl = "urlTwitter",
-                    UserId747 = 100001,
-                    Username747 = "userName747"
+                    UniqueCode = registerUserRequest.Info747.UniqueCode,
+                    FacebookUrl = registerUserRequest.SocialProfiles.FacebookUrl,
+                    InstagramUrl = registerUserRequest.SocialProfiles.InstagramUrl,
+                    TwitterUrl = registerUserRequest.SocialProfiles.TwitterUrl,
+                    UserId747 = 772027571,
+                    Username747 = "pahanimg10"
                 },
                 CreatedUtc = DateTime.UtcNow,
                 ErorrCode = 0,
@@ -371,14 +371,14 @@ public class SevenFourSevenController : VersionNeutralApiController
                 Name = registerUserRequest.Name,
                 PlayerInfo = new()
                 {
-                    UniqueCode = "PlayerTEST001",
-                    FacebookUrl = "urlFBPlayer",
-                    InstagramUrl = "urlInstaPlayer",
-                    TwitterUrl = "urlTwitterPlayer",
-                    UserId747 = 100001,
-                    Username747 = "userName747Player"
+                    UniqueCode = registerUserRequest.Info747.UniqueCode,
+                    FacebookUrl = registerUserRequest.SocialProfiles.FacebookUrl,
+                    InstagramUrl = registerUserRequest.SocialProfiles.InstagramUrl,
+                    TwitterUrl = registerUserRequest.SocialProfiles.TwitterUrl,
+                    UserId747 = 772027571,
+                    Username747 = "pahanimg10"
                 },
-                SocialCode = "Social001",
+                SocialCode = "K8LAZN",
                 Surname = registerUserRequest.Surname
             };
 
