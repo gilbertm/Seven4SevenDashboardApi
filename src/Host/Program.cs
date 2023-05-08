@@ -1,11 +1,12 @@
+using Microsoft.Extensions.Options;
 using RAFFLE.WebApi.Application;
 using RAFFLE.WebApi.Host.Configurations;
 using RAFFLE.WebApi.Host.Controllers;
 using RAFFLE.WebApi.Infrastructure;
 using RAFFLE.WebApi.Infrastructure.Common;
 using RAFFLE.WebApi.Infrastructure.Logging.Serilog;
+using SendGrid.Extensions.DependencyInjection;
 using Serilog;
-using Serilog.Formatting.Compact;
 
 [assembly: ApiConventionType(typeof(RAFFLEApiConventions))]
 
