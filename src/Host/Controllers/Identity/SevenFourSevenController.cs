@@ -5,6 +5,7 @@ using RAFFLE.WebApi.Application.Identity.Users;
 using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
 using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
 using RAFFLE.WebApi.Domain.Catalog;
+using SendGrid;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -15,9 +16,7 @@ namespace RAFFLE.WebApi.Host.Controllers.Identity;
 public class SevenFourSevenController : VersionNeutralApiController
 {
     private readonly IUserService _userService;
-
     private readonly IRepositoryWithEvents<AppUser> _repoAppUser;
-
     private readonly IConfiguration _config;
 
     public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser)
@@ -332,7 +331,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
         // we have sufficient data here to register the user
 
-        // if user
+        // if raffle user
         bool isUserInRaffleSystem = await IsLegitimateUserInRaffleSystemAsync(new CheckUserRequest
         {
             AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
@@ -468,6 +467,26 @@ public class SevenFourSevenController : VersionNeutralApiController
                 };
             }
         }
+        else
+        {
+
+            // reset token
+            // admin's auth code
+            UserInfoRaffleWithUsernameRequest userInfoRaffleWithUsername = new UserInfoRaffleWithUsernameRequest()
+            {
+                AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
+                IsAgent = registerUserRequest.IsAgent,
+                UserName747 = registerUserRequest.Info747.Username747!
+
+            };
+
+            GetUserInfoResponse getUserInfo = await RaffleUserInfoUsingAdminCodeAsync(userInfoRaffleWithUsername);
+
+            if (getUserInfo is not null && getUserInfo.ErorrCode == 0)
+            {
+                await SelfRegisterAsync(getUserInfo, registerUserRequest.IsAgent);
+            }
+        }
 
         return new GenericResponse
         {
@@ -476,11 +495,130 @@ public class SevenFourSevenController : VersionNeutralApiController
         };
     }
 
+    private async Task<GetUserInfoResponse> RaffleUserInfoUsingAdminCodeAsync(UserInfoRaffleWithUsernameRequest userInfoRaffleWithUsernameRequest)
+    {
+        using (HttpClient? client = new HttpClient())
+        {
+            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            string json = JsonSerializer.Serialize(userInfoRaffleWithUsernameRequest);
+
+            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:GetUserInfoUrl").Value!}", data);
+
+            if (response.IsSuccessStatusCode)
+            {
+                GetUserInfoResponse? result = await response.Content.ReadFromJsonAsync<GetUserInfoResponse>();
+
+                if (result is { })
+                {
+                    if (result.ErorrCode != 0)
+                    {
+                        return new GetUserInfoResponse
+                        {
+                            ErorrCode = result.ErorrCode,
+                            Message = result.Message
+                        };
+                    }
+
+                    return result;
+                }
+            }
+        }
+
+        return new GetUserInfoResponse
+        {
+            ErorrCode = 1,
+            Message = "Unsuccessful request. Generic error."
+        };
+    }
+
+    private async Task SelfRegisterAsync(GetUserInfoResponse userInfo, bool isAgent)
+    {
+        CancellationToken cancellationToken = default(CancellationToken);
+
+        string userName = isAgent ? $"{userInfo.AgentInfo!.Username747!}.agent" : $"{userInfo.PlayerInfo!.Username747!}.player";
+
+        UserDetailsDto userDetails = await _userService.GetByUsernameAsync(userName, cancellationToken);
+
+        if (userDetails is null)
+        {
+            // self register
+            // for the universal dashboard
+
+            // the user is successfully registered on our raffle system
+            // it is safe to give him access to the dashboard now
+            CreateUserRequest createUserRequest = new CreateUserRequest
+            {
+                Email = userInfo.Email!,
+                FirstName = userInfo.Name!,
+                LastName = userInfo.Surname!,
+                Password = userInfo.AuthCode!,
+                ConfirmPassword = userInfo.AuthCode!,
+
+                // username can be used on both
+                // player or agent
+                UserName = userName,
+                PhoneNumber = userInfo.Phone!
+            };
+
+            UserDetailsDto? updatedOrCreatedUser = await _userService.CreateSevenFourSevenAsync(createUserRequest, string.Empty, GetOriginFromRequest());
+
+            if (updatedOrCreatedUser is { } && updatedOrCreatedUser.Id != default)
+            {
+                AppUser? appUser = await _repoAppUser.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(updatedOrCreatedUser.Id.ToString()), cancellationToken);
+
+                long userId747 = isAgent ? userInfo.AgentInfo!.UserId747! : userInfo.PlayerInfo!.UserId747!;
+                string userName747 = isAgent ? userInfo.AgentInfo!.Username747! : userInfo.PlayerInfo!.Username747!;
+                string uniqueCode = isAgent ? userInfo.AgentInfo!.UniqueCode! : userInfo.PlayerInfo!.UniqueCode!;
+                bool canLinkPlayer = userInfo.CanLinkPlayer;
+                bool canLinkAgent = userInfo.CanLinkAgent;
+                string socialCode = userInfo.SocialCode!;
+
+                if (appUser is { } && appUser.ApplicationUserId != default)
+                {
+                    appUser.Update(raffleUserId747: userId747.ToString(), raffleUsername747: userName747, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkPlayer, socialCode: socialCode);
+                    await _repoAppUser.UpdateAsync(appUser);
+                }
+                else
+                {
+                    string roleId = string.Empty;
+                    string roleName = string.Empty;
+                    List<UserRoleDto>? userRoles = await _userService.GetRolesAsync(updatedOrCreatedUser.Id.ToString(), cancellationToken);
+                    if (userRoles is { } && userRoles.Any())
+                    {
+                        UserRoleDto? userRole = userRoles.Where(r => r.RoleName == "Basic").FirstOrDefault();
+
+                        if (userRole is { })
+                        {
+                            roleId = userRole.RoleId!;
+                            roleName = userRole.RoleName!;
+                        }
+                    }
+
+                    appUser = new AppUser(applicationUserId: updatedOrCreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: userId747.ToString(), raffleUsername747: userName747, isAgent: isAgent, uniqueCode: uniqueCode, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkAgent, socialCode: socialCode);
+
+                    appUser.RaffleUsername747 = userName747;
+                    appUser.RaffleUserId747 = userId747.ToString();
+
+                    appUser.FacebookUrl = isAgent ? userInfo.AgentInfo!.FacebookUrl! : userInfo.PlayerInfo!.FacebookUrl!;
+                    appUser.InstagramUrl = isAgent ? userInfo.AgentInfo!.InstagramUrl! : userInfo.PlayerInfo!.InstagramUrl!;
+                    appUser.TwitterUrl = isAgent ? userInfo.AgentInfo!.TwitterUrl! : userInfo.PlayerInfo!.TwitterUrl!;
+
+                    await _repoAppUser.AddAsync(appUser);
+                }
+            }
+        }
+    }
+
     /// <summary>
     /// Check if the user is a Player in Raffle system
     /// </summary>
     /// <param name="checkUserRequest"></param>
-    /// <returns>bool</returns>
+    /// <returns>bool.</returns>
     [HttpPost("is-legitimate-user")]
     [TenantIdHeader]
     [AllowAnonymous]
