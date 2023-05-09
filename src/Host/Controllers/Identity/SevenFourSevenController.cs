@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Spreadsheet;
 using RAFFLE.WebApi.Application.Catalog.AppUsers;
 using RAFFLE.WebApi.Application.Common.Persistence;
 using RAFFLE.WebApi.Application.Identity.Users;
@@ -363,7 +364,7 @@ public class SevenFourSevenController : VersionNeutralApiController
                     InstagramUrl = registerUserRequest.SocialProfiles.InstagramUrl,
                     TwitterUrl = registerUserRequest.SocialProfiles.TwitterUrl,
                     UserId747 = 772027571,
-                    Username747 = "pahanimg10"
+                    Username747 = $"pahanimg10"
                 },
                 CreatedUtc = DateTime.UtcNow,
                 ErorrCode = 0,
@@ -397,7 +398,7 @@ public class SevenFourSevenController : VersionNeutralApiController
                     LastName = userInfoResponse.Surname!,
                     Password = password!,
                     ConfirmPassword = password!,
-                    UserName = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.Username747! : userInfoResponse.PlayerInfo!.Username747!,
+                    UserName = registerUserRequest.IsAgent ? $"{userInfoResponse.AgentInfo!.Username747!}.agent" : $"{userInfoResponse.PlayerInfo!.Username747!}.player",
                     PhoneNumber = userInfoResponse.Phone!
                 };
 
@@ -458,12 +459,20 @@ public class SevenFourSevenController : VersionNeutralApiController
                     };
                 }
             }
+            else
+            {
+                return new GenericResponse
+                {
+                    ErorrCode = userInfoResponse.ErorrCode,
+                    Message = userInfoResponse.Message
+                };
+            }
         }
 
         return new GenericResponse
         {
-            ErorrCode = 1,
-            Message = "Generic error, unable to include in the reward and dashboard system."
+            ErorrCode = 0,
+            Message = "User is already registered in the Raffle system."
         };
     }
 

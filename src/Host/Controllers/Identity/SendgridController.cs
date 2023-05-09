@@ -199,7 +199,10 @@ public class SendgridController : VersionNeutralApiController
                 LastName = userInfo.Surname!,
                 Password = newAuthCode!,
                 ConfirmPassword = newAuthCode!,
-                UserName = IsAgent ? userInfo.AgentInfo!.Username747! : userInfo.PlayerInfo!.Username747!,
+
+                // username can be used on both
+                // player or agent
+                UserName = IsAgent ? $"{userInfo.AgentInfo!.Username747!}.agent" : $"{userInfo.PlayerInfo!.Username747!}.player",
                 PhoneNumber = userInfo.Phone!
             };
 
