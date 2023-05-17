@@ -87,17 +87,14 @@ public class InkMeLiveController : VersionNeutralApiController
 
             if (response.IsSuccessStatusCode)
             {
-                InkMeLiveApiResponse result = await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!;
+                InkMeLiveApiWithPlayerModelResponse result = await response.Content.ReadFromJsonAsync<InkMeLiveApiWithPlayerModelResponse>() ?? default!;
 
                 if (result is not null && result.IsSuccess)
                 {
                     if (result.Data is not null)
                     {
-                        var resultData = JsonSerializer.Deserialize<PlayersModel>((JsonDocument)result.Data!);
-
-                        // PlayersModel resultData = result.Data.Adapt<PlayersModel>();
-
-                        return resultData!;
+                        var playerModel = result.Data.Adapt<PlayersModel>();
+                        return playerModel;
                     }
                 }
 
