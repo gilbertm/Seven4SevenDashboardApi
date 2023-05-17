@@ -13,8 +13,8 @@ public class InkMeLiveMedicalListModel
 
 public class InkMeLiveIDProof
 {
-    public string IdProofFrontSide { get; set; } = default!;
-    public string IdProofBackSide { get; set; } = default!;
+    public byte[]? IDProofFrontSide { get; set; }
+    public byte[]? IDProofBackSide { get; set; }
 }
 
 public class InkMeLivePlayerDetailsRequest
@@ -27,7 +27,7 @@ public class InkMeLivePlayerDetailsRequest
     public int Age { get; set; }
     public string FBprofilelink { get; set; } = default!;
     public InkMeLiveIDProof IdProofs { get; set; } = default!;
-    public string DigitalSignature { get; set; } = default!;
+    public byte[]? DigitalSignature { get; set; }
     public InkMeLiveMedicalListModel ConfirmList { get; set; } = default!;
 }
 

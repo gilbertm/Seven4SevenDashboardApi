@@ -135,7 +135,7 @@ public class SendgridController : VersionNeutralApiController
             }
 
             // send an bridge message
-            // user's auth cod
+            // user's auth code
             GenericResponse sendSMSBridgeAsync = await SendSMSBridgeAsync(raffleUserAuthCode.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
 
             if (sendSMSBridgeAsync is not null && sendSMSBridgeAsync.ErorrCode != 0)
