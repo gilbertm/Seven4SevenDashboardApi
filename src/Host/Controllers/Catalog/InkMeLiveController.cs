@@ -90,6 +90,8 @@ public class InkMeLiveController : VersionNeutralApiController
 
             if (response.IsSuccessStatusCode)
             {
+                InkMeLiveApiResponse resultIfExists = await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!;
+
                 InkMeLiveApiWithPlayerModelResponse result = await response.Content.ReadFromJsonAsync<InkMeLiveApiWithPlayerModelResponse>() ?? default!;
 
                 if (result is not null && result.IsSuccess)
