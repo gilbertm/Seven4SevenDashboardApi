@@ -44,7 +44,7 @@ public static class SpecificationBuilderExtensions
         this ISpecificationBuilder<T> specificationBuilder,
         Search? search)
     {
-        if (!string.IsNullOrEmpty(search?.Keyword))
+        if (!string.IsNullOrWhiteSpace(search?.Keyword))
         {
             if (search.Fields?.Any() is true)
             {
@@ -125,7 +125,7 @@ public static class SpecificationBuilderExtensions
 
             Expression binaryExpresioFilter;
 
-            if (!string.IsNullOrEmpty(filter.Logic))
+            if (!string.IsNullOrWhiteSpace(filter.Logic))
             {
                 if (filter.Filters is null) throw new CustomException("The Filters attribute is required when declaring a logic");
                 binaryExpresioFilter = CreateFilterExpression(filter.Logic, filter.Filters, parameter);
@@ -154,7 +154,7 @@ public static class SpecificationBuilderExtensions
         {
             Expression bExpresionFilter;
 
-            if (!string.IsNullOrEmpty(filter.Logic))
+            if (!string.IsNullOrWhiteSpace(filter.Logic))
             {
                 if (filter.Filters is null) throw new CustomException("The Filters attribute is required when declaring a logic");
                 bExpresionFilter = CreateFilterExpression(filter.Logic, filter.Filters, parameter);
@@ -295,8 +295,8 @@ public static class SpecificationBuilderExtensions
 
     private static Filter GetValidFilter(Filter filter)
     {
-        if (string.IsNullOrEmpty(filter.Field)) throw new CustomException("The field attribute is required when declaring a filter");
-        if (string.IsNullOrEmpty(filter.Operator)) throw new CustomException("The Operator attribute is required when declaring a filter");
+        if (string.IsNullOrWhiteSpace(filter.Field)) throw new CustomException("The field attribute is required when declaring a filter");
+        if (string.IsNullOrWhiteSpace(filter.Operator)) throw new CustomException("The Operator attribute is required when declaring a filter");
         return filter;
     }
 

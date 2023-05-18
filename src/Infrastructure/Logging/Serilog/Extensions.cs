@@ -74,7 +74,7 @@ public static class Extensions
 
     private static void ConfigureElasticSearch(WebApplicationBuilder builder, LoggerConfiguration serilogConfig, string appName, string elasticSearchUrl)
     {
-        if (!string.IsNullOrEmpty(elasticSearchUrl))
+        if (!string.IsNullOrWhiteSpace(elasticSearchUrl))
         {
             string? formattedAppName = appName?.ToLower().Replace(".", "-").Replace(" ", "-");
             string indexFormat = $"{formattedAppName}-logs-{builder.Environment.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}";

@@ -50,7 +50,7 @@ public class CurrentUser : ICurrentUser, ICurrentUserInitializer
             throw new Exception("Method reserved for in-scope initialization");
         }
 
-        if (!string.IsNullOrEmpty(userId))
+        if (!string.IsNullOrWhiteSpace(userId))
         {
             _userId = Guid.Parse(userId);
         }

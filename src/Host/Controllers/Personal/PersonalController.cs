@@ -15,7 +15,7 @@ public class PersonalController : VersionNeutralApiController
     [OpenApiOperation("Get profile details of currently logged in user.", "")]
     public async Task<ActionResult<UserDetailsDto>> GetProfileAsync(CancellationToken cancellationToken)
     {
-        return User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId)
+        return User.GetUserId() is not { } userId || string.IsNullOrWhiteSpace(userId)
             ? Unauthorized()
             : Ok(await _userService.GetAsync(userId, cancellationToken));
     }
@@ -24,7 +24,7 @@ public class PersonalController : VersionNeutralApiController
     [OpenApiOperation("Update profile details of currently logged in user.", "")]
     public async Task<ActionResult> UpdateProfileAsync(UpdateUserRequest request)
     {
-        if (User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
+        if (User.GetUserId() is not { } userId || string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized();
         }
@@ -38,7 +38,7 @@ public class PersonalController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public async Task<ActionResult> ChangePasswordAsync(ChangePasswordRequest model)
     {
-        if (User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId))
+        if (User.GetUserId() is not { } userId || string.IsNullOrWhiteSpace(userId))
         {
             return Unauthorized();
         }
@@ -51,7 +51,7 @@ public class PersonalController : VersionNeutralApiController
     [OpenApiOperation("Get permissions of currently logged in user.", "")]
     public async Task<ActionResult<List<string>>> GetPermissionsAsync(CancellationToken cancellationToken)
     {
-        return User.GetUserId() is not { } userId || string.IsNullOrEmpty(userId)
+        return User.GetUserId() is not { } userId || string.IsNullOrWhiteSpace(userId)
             ? Unauthorized()
             : Ok(await _userService.GetPermissionsAsync(userId, cancellationToken));
     }

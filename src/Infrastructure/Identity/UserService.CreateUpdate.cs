@@ -45,7 +45,7 @@ internal partial class UserService
     {
         string? email = principal.FindFirstValue(ClaimTypes.Upn);
         string? username = principal.GetDisplayName();
-        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(username))
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(username))
         {
             throw new InternalServerException(string.Format(_t["Username or Email not valid."]));
         }
@@ -123,7 +123,7 @@ internal partial class UserService
 
         List<string>? messages = new List<string> { string.Format(_t["User {0} Registered."], user.UserName) };
 
-        if (_securitySettings.RequireConfirmedAccount && !string.IsNullOrEmpty(user.Email))
+        if (_securitySettings.RequireConfirmedAccount && !string.IsNullOrWhiteSpace(user.Email))
         {
             // send verification email
             string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin);
@@ -227,7 +227,7 @@ internal partial class UserService
         if (request.Image != null || request.DeleteCurrentImage)
         {
             user.ImageUrl = await _fileStorage.UploadAsync<ApplicationUser>(request.Image, FileType.Image);
-            if (request.DeleteCurrentImage && !string.IsNullOrEmpty(currentImage))
+            if (request.DeleteCurrentImage && !string.IsNullOrWhiteSpace(currentImage))
             {
                 string root = Directory.GetCurrentDirectory();
                 _fileStorage.Remove(Path.Combine(root, currentImage));

@@ -9,14 +9,14 @@ public class DatabaseSettings : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (string.IsNullOrEmpty(DBProvider))
+        if (string.IsNullOrWhiteSpace(DBProvider))
         {
             yield return new ValidationResult(
                 $"{nameof(DatabaseSettings)}.{nameof(DBProvider)} is not configured",
                 new[] { nameof(DBProvider) });
         }
 
-        if (string.IsNullOrEmpty(ConnectionString))
+        if (string.IsNullOrWhiteSpace(ConnectionString))
         {
             yield return new ValidationResult(
                 $"{nameof(DatabaseSettings)}.{nameof(ConnectionString)} is not configured",

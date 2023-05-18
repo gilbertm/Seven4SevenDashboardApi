@@ -23,7 +23,7 @@ public class RequestLoggingMiddleware : IMiddleware
         {
             var request = httpContext.Request;
 
-            if (!string.IsNullOrEmpty(request.ContentType)
+            if (!string.IsNullOrWhiteSpace(request.ContentType)
                 && request.ContentType.StartsWith("application/json"))
             {
                 request.EnableBuffering();

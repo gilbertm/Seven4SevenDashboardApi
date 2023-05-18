@@ -73,7 +73,7 @@ internal class RoleService : IRoleService
 
     public async Task<string> CreateOrUpdateAsync(CreateOrUpdateRoleRequest request)
     {
-        if (string.IsNullOrEmpty(request.Id))
+        if (string.IsNullOrWhiteSpace(request.Id))
         {
             // Create a new role.
             var role = new ApplicationRole(request.Name, request.Description);
@@ -146,7 +146,7 @@ internal class RoleService : IRoleService
         // Add all permissions that were not previously selected
         foreach (string permission in request.Permissions.Where(c => !currentClaims.Any(p => p.Value == c)))
         {
-            if (!string.IsNullOrEmpty(permission))
+            if (!string.IsNullOrWhiteSpace(permission))
             {
                 _db.RoleClaims.Add(new ApplicationRoleClaim
                 {

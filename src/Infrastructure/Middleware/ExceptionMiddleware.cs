@@ -37,7 +37,7 @@ internal class ExceptionMiddleware : IMiddleware
             string tenant = _currentUser.GetTenant() ?? string.Empty;
             if (userId != Guid.Empty) LogContext.PushProperty("UserId", userId);
             LogContext.PushProperty("UserEmail", email);
-            if (!string.IsNullOrEmpty(tenant)) LogContext.PushProperty("Tenant", tenant);
+            if (!string.IsNullOrWhiteSpace(tenant)) LogContext.PushProperty("Tenant", tenant);
             string errorId = Guid.NewGuid().ToString();
             LogContext.PushProperty("ErrorId", errorId);
             LogContext.PushProperty("StackTrace", exception.StackTrace);

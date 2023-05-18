@@ -5,9 +5,13 @@ using RAFFLE.WebApi.Application.Identity.Users;
 using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
 using RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
 using RAFFLE.WebApi.Domain.Catalog;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
+using Image = System.Drawing.Image;
 
 namespace RAFFLE.WebApi.Host.Controllers.Identity;
 
@@ -72,7 +76,6 @@ public class InkMeLiveController : VersionNeutralApiController
     public async Task<PlayersModel> GetPlayerAsync(string userName)
     {
         InkMeLiveTokenResponse token = await GetTokenAsync() ?? default!;
-        PlayersModel player = new PlayersModel();
 
         using (HttpClient? client = new HttpClient())
         {
@@ -80,7 +83,7 @@ public class InkMeLiveController : VersionNeutralApiController
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (token is not null && !string.IsNullOrEmpty(token.AuthToken))
+            if (token is not null && !string.IsNullOrWhiteSpace(token.AuthToken))
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
 
             HttpResponseMessage response = await client.GetAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:GetDetailsByUserName").Value!}?playerUsername={userName}");
@@ -93,8 +96,24 @@ public class InkMeLiveController : VersionNeutralApiController
                 {
                     if (result.Data is not null)
                     {
-                        var playerModel = result.Data.Adapt<PlayersModel>();
-                        return playerModel;
+                        PlayersModel player = result.Data.Adapt<PlayersModel>();
+
+                        if (player != null && !string.IsNullOrWhiteSpace(player.IDProofBackSide))
+                            player.IDProofBackSide = Path.Combine(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!, player.IDProofBackSidePath!);
+
+                        if (player != null && !string.IsNullOrWhiteSpace(player.IDProofFrontSide))
+                            player.IDProofFrontSide = Path.Combine(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!, player.IDProofFrontSidePath!);
+
+                        if (player != null && !string.IsNullOrWhiteSpace(player.DigitalSignature))
+                        {
+                            string path = Path.Combine(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!, player.DigitalSignaturePath!);
+
+                            using HttpClient httClient = new HttpClient();
+                            byte[] imageBytes = await httClient.GetByteArrayAsync(path);
+                            player.DigitalSignature = Encoding.UTF8.GetString(imageBytes);
+                        }
+
+                        return player ?? default!;
                     }
                 }
 
@@ -117,7 +136,7 @@ public class InkMeLiveController : VersionNeutralApiController
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (token is not null && !string.IsNullOrEmpty(token.AuthToken))
+            if (token is not null && !string.IsNullOrWhiteSpace(token.AuthToken))
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
 
             HttpResponseMessage response = await client.GetAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:DeletePlayer").Value!}?playerUsername={userName}");
@@ -144,12 +163,19 @@ public class InkMeLiveController : VersionNeutralApiController
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (token is not null && !string.IsNullOrEmpty(token.AuthToken))
+            if (token is not null && !string.IsNullOrWhiteSpace(token.AuthToken))
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
 
             string json = JsonSerializer.Serialize(inkMeLivePlayerDetailsRequest);
 
             StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
+
+            if (inkMeLivePlayerDetailsRequest.DigitalSignature is not null)
+            {
+                var byteToImage = byteArrayToImage(inkMeLivePlayerDetailsRequest.DigitalSignature);
+
+                inkMeLivePlayerDetailsRequest.DigitalSignature = imageToByteArray(byteToImage);
+            }
 
             HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:SignUp").Value!}", data);
 
@@ -175,7 +201,7 @@ public class InkMeLiveController : VersionNeutralApiController
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (token is not null && !string.IsNullOrEmpty(token.AuthToken))
+            if (token is not null && !string.IsNullOrWhiteSpace(token.AuthToken))
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
 
             string json = JsonSerializer.Serialize(inkMeLivePlayerDetailsRequest);
@@ -191,5 +217,26 @@ public class InkMeLiveController : VersionNeutralApiController
         }
 
         return default!;
+    }
+
+    private byte[] imageToByteArray(Image img)
+    {
+        MemoryStream ms = new MemoryStream();
+        img.Save(ms, ImageFormat.Png);
+        return ms.ToArray();
+    }
+
+    private Image byteArrayToImage(byte[] byteArrayIn)
+    {
+        string base64 = Encoding.UTF8.GetString(byteArrayIn);
+
+        var base64Data = Regex.Match(base64, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+        var binData = Convert.FromBase64String(base64Data);
+
+
+        MemoryStream ms = new MemoryStream(binData, 0, binData.Length);
+        ms.Write(binData, 0, binData.Length);
+        Image image = Image.FromStream(ms, true);
+        return image;
     }
 }

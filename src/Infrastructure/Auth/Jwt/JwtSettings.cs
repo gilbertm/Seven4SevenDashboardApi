@@ -12,7 +12,7 @@ public class JwtSettings : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
-        if (string.IsNullOrEmpty(Key))
+        if (string.IsNullOrWhiteSpace(Key))
         {
             yield return new ValidationResult("No Key defined in JwtSettings config", new[] { nameof(Key) });
         }

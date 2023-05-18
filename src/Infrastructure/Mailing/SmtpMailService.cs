@@ -32,7 +32,7 @@ public class SmtpMailService : IMailService
                 email.To.Add(MailboxAddress.Parse(address));
 
             // Reply To
-            if (!string.IsNullOrEmpty(request.ReplyTo))
+            if (!string.IsNullOrWhiteSpace(request.ReplyTo))
                 email.ReplyTo.Add(new MailboxAddress(request.ReplyToName, request.ReplyTo));
 
             // Bcc
