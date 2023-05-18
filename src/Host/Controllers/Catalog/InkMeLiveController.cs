@@ -77,20 +77,19 @@ public class InkMeLiveController : VersionNeutralApiController
     {
         InkMeLiveTokenResponse token = await GetTokenAsync() ?? default!;
 
-        using (HttpClient? client = new HttpClient())
+        try
         {
-            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            if (token is not null && !string.IsNullOrWhiteSpace(token.AuthToken))
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
-
-            HttpResponseMessage response = await client.GetAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:GetDetailsByUserName").Value!}?playerUsername={userName}");
-
-            if (response.IsSuccessStatusCode)
+            using (HttpClient? client = new HttpClient())
             {
-                InkMeLiveApiResponse resultIfExists = await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!;
+                client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                if (token is not null && !string.IsNullOrWhiteSpace(token.AuthToken))
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
+
+
+                HttpResponseMessage response = await client.GetAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:GetDetailsByUserName").Value!}?playerUsername={userName}");
 
                 InkMeLiveApiWithPlayerModelResponse result = await response.Content.ReadFromJsonAsync<InkMeLiveApiWithPlayerModelResponse>() ?? default!;
 
@@ -118,8 +117,10 @@ public class InkMeLiveController : VersionNeutralApiController
                         return player ?? default!;
                     }
                 }
-
             }
+        } catch
+        {
+            return default!;
         }
 
         return default!;
