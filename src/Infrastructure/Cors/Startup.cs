@@ -26,7 +26,8 @@ internal static class Startup
                 policy.AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
-                    .WithOrigins(origins.ToArray())));
+                    // .WithOrigins(origins.ToArray())));
+                    .SetIsOriginAllowed(origin => true)));
     }
 
     internal static IApplicationBuilder UseCorsPolicy(this IApplicationBuilder app) =>

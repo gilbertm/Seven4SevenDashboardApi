@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /
 
 # Copy csproj and restore as distinct layers
@@ -12,9 +12,6 @@ COPY ["src/Core/Domain/Domain.csproj", "src/Core/Domain/"]
 COPY ["src/Core/Shared/Shared.csproj", "src/Core/Shared/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
 COPY ["src/Migrators/Migrators.MSSQL/Migrators.MSSQL.csproj", "src/Migrators/Migrators.MSSQL/"]
-COPY ["src/Migrators/Migrators.MySQL/Migrators.MySQL.csproj", "src/Migrators/Migrators.MySQL/"]
-COPY ["src/Migrators/Migrators.PostgreSQL/Migrators.PostgreSQL.csproj", "src/Migrators/Migrators.PostgreSQL/"]
-COPY ["src/Migrators/Migrators.Oracle/Migrators.Oracle.csproj", "src/Migrators/Migrators.Oracle/"]
 
 RUN dotnet restore "src/Host/Host.csproj" --disable-parallel
 
@@ -24,7 +21,7 @@ WORKDIR "/src/Host"
 RUN dotnet publish "Host.csproj" -c Release -o /app/publish
 
 # Build the runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 
 COPY --from=build /app/publish .
@@ -34,8 +31,8 @@ COPY --from=build /app/publish .
 RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
 USER appuser
 
-ENV ASPNETCORE_URLS=https://+:5050;http://+:5060
-EXPOSE 5050
-EXPOSE 5060
+ENV ASPNETCORE_URLS=https://+:5000;http://+:5001
+EXPOSE 5000
+EXPOSE 5001
 
 ENTRYPOINT ["dotnet", "RAFFLE.WebApi.Host.dll"]

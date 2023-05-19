@@ -88,7 +88,6 @@ public class InkMeLiveController : VersionNeutralApiController
                 if (token is not null && !string.IsNullOrWhiteSpace(token.AuthToken))
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
 
-
                 HttpResponseMessage response = await client.GetAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:GetDetailsByUserName").Value!}?playerUsername={userName}");
 
                 InkMeLiveApiWithPlayerModelResponse result = await response.Content.ReadFromJsonAsync<InkMeLiveApiWithPlayerModelResponse>() ?? default!;
