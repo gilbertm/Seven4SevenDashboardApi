@@ -6,6 +6,7 @@ COPY ["Directory.Build.props", "/"]
 COPY ["Directory.Build.targets", "/"]
 COPY ["dotnet.ruleset", "/"]
 COPY ["stylecop.json", "/"]
+COPY ["src/Host/Files", "/src/Host/Files"]
 COPY ["src/Host/Host.csproj", "src/Host/"]
 COPY ["src/Core/Application/Application.csproj", "src/Core/Application/"]
 COPY ["src/Core/Domain/Domain.csproj", "src/Core/Domain/"]
@@ -23,6 +24,8 @@ RUN dotnet publish "Host.csproj" -c Release -o /app/publish
 # Build the runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
+
+RUN mkdir -p /app/Files
 
 COPY --from=build /app/publish .
 

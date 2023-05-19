@@ -40,6 +40,11 @@
         </None>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="Files\*">
+            <CopyToPublishDirectory>always</CopyToPublishDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
       <EmbeddedResource Remove="Databases\**" />
       <None Remove="Databases\**" />
     </ItemGroup>
