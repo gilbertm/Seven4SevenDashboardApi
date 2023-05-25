@@ -348,8 +348,8 @@ public class SevenFourSevenController : VersionNeutralApiController
             // hard code sample
             // nothing get's pushed on the main raffle system
             // Production TODO:// enable this.
-            // GetUserInfoResponse userInfoResponse = await RegisterUserToRaffleSystemAsync(registerUserRequest);
-            GetUserInfoResponse userInfoResponse = new()
+            GetUserInfoResponse userInfoResponse = await RegisterUserToRaffleSystemAsync(registerUserRequest);
+            /* GetUserInfoResponse userInfoResponse = new()
             {
                 Email = "pahanimg10@gmail.com",
                 Phone = registerUserRequest.Phone,
@@ -380,7 +380,7 @@ public class SevenFourSevenController : VersionNeutralApiController
                 },
                 SocialCode = "K8LAZN",
                 Surname = registerUserRequest.Surname
-            };
+            }; */
 
             if (userInfoResponse.ErorrCode == 0)
             {

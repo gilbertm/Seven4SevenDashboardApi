@@ -20,6 +20,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json;
+using Twilio.Rest.Verify.V2.Service;
 
 namespace RAFFLE.WebApi.Infrastructure.Identity;
 
@@ -50,9 +51,14 @@ internal class TokenService : ITokenService
 
     public async Task<TokenResponse> GetTokenAsync(TokenRequest request, string ipAddress, CancellationToken cancellationToken)
     {
+        ApplicationUser user = await _userManager.FindByEmailAsync(request.Email.Trim().Normalize()) ?? default!;
+
+        bool userPasswordCheck = false;
+        if (user is not null)
+            userPasswordCheck = await _userManager.CheckPasswordAsync(user, request.Password);
+
         if (string.IsNullOrWhiteSpace(_currentTenant?.Id)
-            || await _userManager.FindByEmailAsync(request.Email.Trim().Normalize()) is not { } user
-            || !await _userManager.CheckPasswordAsync(user, request.Password))
+            || user is null || !userPasswordCheck)
         {
 
             throw new UnauthorizedException(_t["Authentication Failed."]);
