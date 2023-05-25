@@ -25,6 +25,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid.Extensions.DependencyInjection;
 using RAFFLE.WebApi.Infrastructure.SendGrid;
+using System.Globalization;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 [assembly: InternalsVisibleTo("Infrastructure.Test")]
 
@@ -32,11 +35,24 @@ namespace RAFFLE.WebApi.Infrastructure;
 
 public static class Startup
 {
+    private const string RaffleAPIByPassName = "Raffle.ByPass.API";
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         var applicationAssembly = typeof(RAFFLE.WebApi.Application.Startup).GetTypeInfo().Assembly;
+
         MapsterSettings.Configure();
         return services
+            .AddHttpClient(RaffleAPIByPassName)
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                var handler = new HttpClientHandler();
+
+                handler.ServerCertificateCustomValidationCallback = ValidateServerCertificattion;
+
+                return handler;
+            })
+            .Services
             .AddApiVersioning()
             .AddAuth(config)
             .AddBackgroundJobs(config)
@@ -56,6 +72,16 @@ public static class Startup
             .AddMailDeliveryServices(config)
             .AddRouting(options => options.LowercaseUrls = true)
             .AddServices();
+    }
+
+    private static bool ValidateServerCertificattion(HttpRequestMessage message, X509Certificate2? certificate, X509Chain? chain, SslPolicyErrors errors)
+    {
+        Console.WriteLine($"Requested URI: {message.RequestUri}");
+        Console.WriteLine($"Effective date: {certificate?.GetEffectiveDateString()}");
+        Console.WriteLine($"Expiry date: {certificate?.GetExpirationDateString()}");
+        Console.WriteLine($"Issuer: {certificate?.Issuer}");
+        Console.WriteLine($"Subject: {certificate?.Subject}");
+        return true;
     }
 
     private static IServiceCollection AddApiVersioning(this IServiceCollection services) =>

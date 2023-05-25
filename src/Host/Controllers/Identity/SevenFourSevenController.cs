@@ -18,12 +18,15 @@ public class SevenFourSevenController : VersionNeutralApiController
     private readonly IUserService _userService;
     private readonly IRepositoryWithEvents<AppUser> _repoAppUser;
     private readonly IConfiguration _config;
+    private readonly IHttpClientFactory _clientFactory;
 
-    public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser)
+
+    public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser, IHttpClientFactory clientFactory)
     {
         _userService = userService;
         _config = config;
         _repoAppUser = repoAppUser;
+        _clientFactory = clientFactory;
     }
 
     /*
@@ -36,7 +39,7 @@ public class SevenFourSevenController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public async Task<BridgeHierarchyResponse> BridgeUserAsync([FromBody] BridgeRequest bridgeRequest)
     {
-        using (HttpClient? client = new HttpClient())
+        using (HttpClient? client = _clientFactory.CreateClient("Raffle.ByPass.API"))
         {
             client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Bridge:BaseUrl").Value!);
             client.DefaultRequestHeaders.Accept.Clear();
