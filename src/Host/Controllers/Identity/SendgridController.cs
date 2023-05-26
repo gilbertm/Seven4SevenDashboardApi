@@ -352,11 +352,26 @@ public class SendgridController : VersionNeutralApiController
             Name = Name
         };
         // var client = new SendGridClient(_config.GetSection("SevenFourSevenAPIs:Sendgrid:ApiKey").Value!);
-        var from = new EmailAddress(_config.GetSection("SevenFourSevenAPIs:Sendgrid:Email").Value!, _config.GetSection("SevenFourSevenAPIs:Sendgrid:Name").Value!);
-        var subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!;
-        var to = new EmailAddress(sendgridMailRequest.Email, sendgridMailRequest.Name);
-        var plainTextContent = $"Paste this URL: https://localhost:5002/?AuthCode={AuthCode} in your browser bar.";
-        var htmlContent = $"<strong>Please kindly check below</strong><br />Sample: <a href='https://localhost:5002/?AuthCode={AuthCode}'>Authorization Code<a/>";
+        EmailAddress from = new EmailAddress(_config.GetSection("SevenFourSevenAPIs:Sendgrid:Email").Value!, _config.GetSection("SevenFourSevenAPIs:Sendgrid:Name").Value!);
+        string subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!;
+        EmailAddress to = new EmailAddress(sendgridMailRequest.Email, sendgridMailRequest.Name);
+
+        string plainTextContent = $"Hi, authorization reset requested. This is your 747Live Reward System authorization path: {_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}. " +
+            $"Copy and paste this path in your browser's address. Congratulations and welcome back to 747 live, enjoy and good luck." +
+            $"If you have not made this request, please kindly ignore and/or contact support. Thank you very much. Yours, 747Live Reward Systems.";
+
+        string htmlContent = $"Hi,<br /><br />" +
+            $"Authorization reset requested." +
+            $"<br /><br />" +
+            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}<a/></strong>" +
+            $"<br /><br />" +
+            $"If you have not made this request, please kindly ignore and/or contact support." +
+            $"<br /><br />" +
+            $"Thank you very much." +
+            $"<br /><br />" +
+            $"Yours," +
+            $"<br /><br />" +
+            $"747Live Reward Systems";
         var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
         var response = await _sendGridClient.SendEmailAsync(msg);
 
@@ -384,7 +399,18 @@ public class SendgridController : VersionNeutralApiController
         InternalMessageCodeRequest internalMessageCodeRequest = new InternalMessageCodeRequest()
         {
             AuthToken = _config.GetSection("SevenFourSevenAPIs:Bridge:AuthToken").Value!,
-            Message = $"Sample: <a href='https://localhost:5002/?AuthCode={AuthCode}'>Authorization Code<a/>",
+            Message = $"Hi,<br /><br />" +
+            $"Authorization reset requested." +
+            $"<br /><br />" +
+            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}<a/></strong>" +
+            $"<br /><br />" +
+            $"If you have not made this request, please kindly ignore and/or contact support." +
+            $"<br /><br />" +
+            $"Thank you very much." +
+            $"<br /><br />" +
+            $"Yours," +
+            $"<br /><br />" +
+            $"747Live Reward Systems",
             Platform = IsAgent ? 1 : 2,
             Subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!,
             Username = UserName

@@ -4,7 +4,7 @@ public class User
 {
     public long ClientId { get; set; } = default!;
     public string UserName { get; set; } = default!;
-    public long ParentClientId { get; set; } = default!;
+    public long? ParentClientId { get; set; } = default!;
 }
 
 public class BridgeHierarchyResponse
