@@ -356,14 +356,14 @@ public class SendgridController : VersionNeutralApiController
         string subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!;
         EmailAddress to = new EmailAddress(sendgridMailRequest.Email, sendgridMailRequest.Name);
 
-        string plainTextContent = $"Hi, authorization reset requested. This is your 747Live Reward System authorization path: {_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}. " +
+        string plainTextContent = $"Hi, authorization reset requested. This is your 747Live Reward System authorization path: {_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}. " +
             $"Copy and paste this path in your browser's address. Congratulations and welcome back to 747 live, enjoy and good luck." +
             $"If you have not made this request, please kindly ignore and/or contact support. Thank you very much. Yours, 747Live Reward Systems.";
 
         string htmlContent = $"Hi,<br /><br />" +
             $"Authorization reset requested." +
             $"<br /><br />" +
-            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}<a/></strong>" +
+            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
             $"<br /><br />" +
             $"If you have not made this request, please kindly ignore and/or contact support." +
             $"<br /><br />" +
@@ -402,7 +402,7 @@ public class SendgridController : VersionNeutralApiController
             Message = $"Hi,<br /><br />" +
             $"Authorization reset requested." +
             $"<br /><br />" +
-            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}<a/></strong>" +
+            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
             $"<br /><br />" +
             $"If you have not made this request, please kindly ignore and/or contact support." +
             $"<br /><br />" +

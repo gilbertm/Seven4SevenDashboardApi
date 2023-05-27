@@ -1,33 +1,28 @@
+using DocumentFormat.OpenXml.Drawing.Charts;
 using Mapster;
+using Org.BouncyCastle.Utilities.Zlib;
 using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Application.Identity.Tokens;
 using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
 using RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
 using RAFFLE.WebApi.Domain.Catalog;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Png;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Image = System.Drawing.Image;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace RAFFLE.WebApi.Host.Controllers.Identity;
 
 public class InkMeLiveController : VersionNeutralApiController
 {
-    private readonly IUserService _userService;
-
-    private readonly IRepositoryWithEvents<AppUser> _repoAppUser;
-
     private readonly IConfiguration _config;
 
-    public InkMeLiveController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser)
+    public InkMeLiveController(IConfiguration config)
     {
-        _userService = userService;
         _config = config;
-        _repoAppUser = repoAppUser;
     }
 
     [HttpPost("get-token")]
@@ -117,7 +112,8 @@ public class InkMeLiveController : VersionNeutralApiController
                     }
                 }
             }
-        } catch
+        }
+        catch
         {
             return default!;
         }
@@ -224,7 +220,7 @@ public class InkMeLiveController : VersionNeutralApiController
     private byte[] imageToByteArray(Image img)
     {
         MemoryStream ms = new MemoryStream();
-        img.Save(ms, ImageFormat.Png);
+        img.Save(ms, new PngEncoder() { CompressionLevel = PngCompressionLevel.Level9 });
         return ms.ToArray();
     }
 
@@ -232,13 +228,20 @@ public class InkMeLiveController : VersionNeutralApiController
     {
         string base64 = Encoding.UTF8.GetString(byteArrayIn);
 
-        var base64Data = Regex.Match(base64, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-        var binData = Convert.FromBase64String(base64Data);
-
+        string? base64Data = Regex.Match(base64, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
+        byte[]? binData = Convert.FromBase64String(base64Data);
 
         MemoryStream ms = new MemoryStream(binData, 0, binData.Length);
         ms.Write(binData, 0, binData.Length);
-        Image image = Image.FromStream(ms, true);
-        return image;
+
+        using (MemoryStream stream = new MemoryStream())
+        {
+            ms.Position = 0;
+            ms.CopyTo(stream);
+            stream.Position = 0;
+            var image = Image.Load(stream);
+
+            return image;
+        }
     }
 }
