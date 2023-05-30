@@ -15,6 +15,7 @@ using System.Net;
 using RAFFLE.WebApi.Application.Catalog.AppUsers;
 using RAFFLE.WebApi.Domain.Catalog;
 using RAFFLE.WebApi.Application.Common.Persistence;
+using RAFFLE.WebApi.Infrastructure.SendGrid;
 
 namespace RAFFLE.WebApi.Host.Controllers.Identity;
 
@@ -98,6 +99,8 @@ public class SendgridController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public async Task<GenericResponse> ResetTokenAsync([FromBody] UserInfoRaffleWithUsernameRequest userInfoRaffleWithUsername)
     {
+        SendGridHelper sendGridHelper = new(_userService, _config, _repoAppUser, _sendGridClient);
+
         // reset token
         // admin's auth code
         userInfoRaffleWithUsername.AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!;
@@ -123,7 +126,7 @@ public class SendgridController : VersionNeutralApiController
 
             // send an email
             // user's auth code
-            GenericResponse sendGridMail = await SendgridMailAsync(raffleUserAuthCode.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
+            GenericResponse sendGridMail = await sendGridHelper.SendgridMailAsync(raffleUserAuthCode.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
 
             if (sendGridMail is not null && sendGridMail.ErorrCode != 0)
             {
@@ -136,7 +139,7 @@ public class SendgridController : VersionNeutralApiController
 
             // send an bridge message
             // user's auth code
-            GenericResponse sendSMSBridgeAsync = await SendSMSBridgeAsync(raffleUserAuthCode.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
+            GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSBridgeAsync(raffleUserAuthCode.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
 
             if (sendSMSBridgeAsync is not null && sendSMSBridgeAsync.ErorrCode != 0)
             {
@@ -171,9 +174,9 @@ public class SendgridController : VersionNeutralApiController
     {
         CancellationToken cancellationToken = default(CancellationToken);
 
-        var userDetails = await _userService.GetByUsernameAsync(userName, cancellationToken);
+        UserDetailsDto userDetails = await _userService.GetByUsernameAsync(userName, cancellationToken);
 
-        var request = new Application.Identity.Users.Password.ChangePasswordRequest()
+        Application.Identity.Users.Password.ChangePasswordRequest request = new Application.Identity.Users.Password.ChangePasswordRequest()
         {
             Password = oldAuthCode,
             NewPassword = newAuthCode,
@@ -212,16 +215,16 @@ public class SendgridController : VersionNeutralApiController
             {
                 AppUser? appUser = await _repoAppUser.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(updatedOrCreatedUser.Id.ToString()), cancellationToken);
 
-                long userId747 = IsAgent ? userInfo.AgentInfo!.UserId747! : userInfo.PlayerInfo!.UserId747!;
-                string userName747 = IsAgent ? userInfo.AgentInfo!.Username747! : userInfo.PlayerInfo!.Username747!;
-                string uniqueCode = IsAgent ? userInfo.AgentInfo!.UniqueCode! : userInfo.PlayerInfo!.UniqueCode!;
+                long? userId747 = IsAgent ? userInfo.AgentInfo!.UserId747 : userInfo.PlayerInfo!.UserId747;
+                string? userName747 = IsAgent ? userInfo.AgentInfo!.Username747 : userInfo.PlayerInfo!.Username747;
+                string? uniqueCode = IsAgent ? userInfo.AgentInfo!.UniqueCode : userInfo.PlayerInfo!.UniqueCode;
                 bool canLinkPlayer = userInfo.CanLinkPlayer;
                 bool canLinkAgent = userInfo.CanLinkAgent;
-                string socialCode = userInfo.SocialCode!;
+                string? socialCode = userInfo.SocialCode;
 
                 if (appUser is { } && appUser.ApplicationUserId != default)
                 {
-                    appUser.Update(raffleUserId747: userId747.ToString(), raffleUsername747: userName747, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkPlayer, socialCode: socialCode);
+                    appUser.Update(raffleUserId747: userId747 is null ? string.Empty : userId747.ToString()!, raffleUsername747: userName747 is null ? string.Empty : userName747, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkPlayer, socialCode: socialCode is null ? string.Empty : socialCode);
                     await _repoAppUser.UpdateAsync(appUser);
                 }
                 else
@@ -240,14 +243,14 @@ public class SendgridController : VersionNeutralApiController
                         }
                     }
 
-                    appUser = new AppUser(applicationUserId: updatedOrCreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: userId747.ToString(), raffleUsername747: userName747, isAgent: IsAgent, uniqueCode: uniqueCode, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkAgent, socialCode: socialCode);
+                    appUser = new AppUser(applicationUserId: updatedOrCreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: userId747 is null ? string.Empty : userId747.ToString()!, raffleUsername747: userName747 is null ? string.Empty : userName747, isAgent: IsAgent, uniqueCode: uniqueCode is null ? string.Empty : uniqueCode, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkAgent, socialCode: socialCode is null ? string.Empty : socialCode);
 
-                    appUser.RaffleUsername747 = userName747;
-                    appUser.RaffleUserId747 = userId747.ToString();
+                    appUser.RaffleUsername747 = userName747 is null ? string.Empty : userName747;
+                    appUser.RaffleUserId747 = userId747 is null ? string.Empty : userId747.ToString()!;
 
-                    appUser.FacebookUrl = IsAgent ? userInfo.AgentInfo!.FacebookUrl! : userInfo.PlayerInfo!.FacebookUrl!;
-                    appUser.InstagramUrl = IsAgent ? userInfo.AgentInfo!.InstagramUrl! : userInfo.PlayerInfo!.InstagramUrl!;
-                    appUser.TwitterUrl = IsAgent ? userInfo.AgentInfo!.TwitterUrl! : userInfo.PlayerInfo!.TwitterUrl!;
+                    appUser.FacebookUrl = IsAgent ? userInfo.AgentInfo!.FacebookUrl : userInfo.PlayerInfo!.FacebookUrl;
+                    appUser.InstagramUrl = IsAgent ? userInfo.AgentInfo!.InstagramUrl : userInfo.PlayerInfo!.InstagramUrl;
+                    appUser.TwitterUrl = IsAgent ? userInfo.AgentInfo!.TwitterUrl : userInfo.PlayerInfo!.TwitterUrl;
 
                     await _repoAppUser.AddAsync(appUser);
                 }
@@ -341,137 +344,6 @@ public class SendgridController : VersionNeutralApiController
         {
             ErorrCode = 1,
             Message = "Unsuccessful request. Generic error."
-        };
-    }
-
-    private async Task<GenericResponse> SendgridMailAsync(string AuthCode, string Email, string Name)
-    {
-        SendgridMailRequest sendgridMailRequest = new SendgridMailRequest()
-        {
-            Email = Email,
-            Name = Name
-        };
-        // var client = new SendGridClient(_config.GetSection("SevenFourSevenAPIs:Sendgrid:ApiKey").Value!);
-        EmailAddress from = new EmailAddress(_config.GetSection("SevenFourSevenAPIs:Sendgrid:Email").Value!, _config.GetSection("SevenFourSevenAPIs:Sendgrid:Name").Value!);
-        string subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!;
-        EmailAddress to = new EmailAddress(sendgridMailRequest.Email, sendgridMailRequest.Name);
-
-        string plainTextContent = $"Hi, authorization reset requested. This is your 747Live Reward System authorization path: {_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}. " +
-            $"Copy and paste this path in your browser's address. Congratulations and welcome back to 747 live, enjoy and good luck." +
-            $"If you have not made this request, please kindly ignore and/or contact support. Thank you very much. Yours, 747Live Reward Systems.";
-
-        string htmlContent = $"Hi,<br /><br />" +
-            $"Authorization reset requested." +
-            $"<br /><br />" +
-            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
-            $"<br /><br />" +
-            $"If you have not made this request, please kindly ignore and/or contact support." +
-            $"<br /><br />" +
-            $"Thank you very much." +
-            $"<br /><br />" +
-            $"Yours," +
-            $"<br /><br />" +
-            $"747Live Reward Systems";
-        var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-        var response = await _sendGridClient.SendEmailAsync(msg);
-
-        if (response is not null)
-        {
-            if (response.IsSuccessStatusCode)
-            {
-                return new GenericResponse
-                {
-                    ErorrCode = 0,
-                    Message = "Email successful."
-                };
-            }
-        }
-
-        return new GenericResponse
-        {
-            ErorrCode = 1,
-            Message = "Unsuccessful request. Generic error."
-        };
-    }
-
-    public async Task<GenericResponse> SendSMSBridgeAsync(string AuthCode, string UserName, bool IsAgent)
-    {
-        InternalMessageCodeRequest internalMessageCodeRequest = new InternalMessageCodeRequest()
-        {
-            AuthToken = _config.GetSection("SevenFourSevenAPIs:Bridge:AuthToken").Value!,
-            Message = $"Hi,<br /><br />" +
-            $"Authorization reset requested." +
-            $"<br /><br />" +
-            $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
-            $"<br /><br />" +
-            $"If you have not made this request, please kindly ignore and/or contact support." +
-            $"<br /><br />" +
-            $"Thank you very much." +
-            $"<br /><br />" +
-            $"Yours," +
-            $"<br /><br />" +
-            $"747Live Reward Systems",
-            Platform = IsAgent ? 1 : 2,
-            Subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!,
-            Username = UserName
-        };
-
-        using (HttpClient? client = new HttpClient())
-        {
-            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Bridge:BaseUrl").Value!);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            // from client
-            switch (internalMessageCodeRequest.Platform)
-            {
-                // maybe there's a change in internal mapping
-                // reconciling here.
-                // agent
-                case 1:
-                    internalMessageCodeRequest.Platform = int.Parse(_config.GetSection("SevenFourSevenAPIs:Bridge:Platform:Agent").Value!);
-                    break;
-
-                // player
-                case 2:
-                    internalMessageCodeRequest.Platform = int.Parse(_config.GetSection("SevenFourSevenAPIs:Bridge:Platform:Player").Value!);
-                    break;
-            }
-
-            string json = JsonSerializer.Serialize(internalMessageCodeRequest);
-
-            StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Bridge:SendMessageUrl").Value!}", data);
-
-            if (response.IsSuccessStatusCode)
-            {
-                BridgeGenericResponse? result = await response.Content.ReadFromJsonAsync<BridgeGenericResponse>();
-
-                if (result is { })
-                {
-                    if (result.Status != 0)
-                    {
-                        return new GenericResponse
-                        {
-                            ErorrCode = result.Status,
-                            Message = result.Message ?? string.Empty
-                        };
-                    }
-
-                    return new GenericResponse
-                    {
-                        ErorrCode = 0,
-                        Message = result.Message ?? string.Empty
-                    };
-                }
-            }
-        }
-
-        return new GenericResponse
-        {
-            ErorrCode = 1,
-            Message = "Generic error. Unknow."
         };
     }
 

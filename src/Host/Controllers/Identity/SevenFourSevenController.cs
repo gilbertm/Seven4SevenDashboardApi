@@ -1,15 +1,14 @@
-using DocumentFormat.OpenXml.Spreadsheet;
 using RAFFLE.WebApi.Application.Catalog.AppUsers;
 using RAFFLE.WebApi.Application.Common.Persistence;
 using RAFFLE.WebApi.Application.Identity.Users;
 using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
 using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
 using RAFFLE.WebApi.Domain.Catalog;
+using RAFFLE.WebApi.Infrastructure.SendGrid;
 using SendGrid;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Twilio.TwiML.Messaging;
 
 namespace RAFFLE.WebApi.Host.Controllers.Identity;
 
@@ -19,14 +18,15 @@ public class SevenFourSevenController : VersionNeutralApiController
     private readonly IRepositoryWithEvents<AppUser> _repoAppUser;
     private readonly IConfiguration _config;
     private readonly IHttpClientFactory _clientFactory;
-
-
-    public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser, IHttpClientFactory clientFactory)
+    private readonly ISendGridClient _sendGridClient;
+    
+    public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser, IHttpClientFactory clientFactory, ISendGridClient sendGridClient)
     {
         _userService = userService;
         _config = config;
         _repoAppUser = repoAppUser;
         _clientFactory = clientFactory;
+        _sendGridClient = sendGridClient;
     }
 
     /*
@@ -330,11 +330,10 @@ public class SevenFourSevenController : VersionNeutralApiController
     [ApiConventionMethod(typeof(RAFFLEApiConventions), nameof(RAFFLEApiConventions.Register))]
     public async Task<GenericResponse> SelfRegisterAsync([FromBody] RegisterUserRequest registerUserRequest)
     {
-        CancellationToken cancellationToken = default(CancellationToken);
+        UserInfoRaffleWithUsernameRequest userInfoRaffleWithUsername;
 
-        // we have sufficient data here to register the user
+        SendGridHelper sendGridHelper = new(_userService, _config, _repoAppUser, _sendGridClient);
 
-        // if raffle user
         bool isUserInRaffleSystem = await IsLegitimateUserInRaffleSystemAsync(new CheckUserRequest
         {
             AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
@@ -348,116 +347,28 @@ public class SevenFourSevenController : VersionNeutralApiController
         // create the non player/affiliated user
         if (!isUserInRaffleSystem)
         {
-            // hard code sample
-            // nothing get's pushed on the main raffle system
-            // Production TODO:// enable this.
             GetUserInfoResponse userInfoResponse = await RegisterUserToRaffleSystemAsync(registerUserRequest);
-            /* GetUserInfoResponse userInfoResponse = new()
-            {
-                Email = "pahanimg10@gmail.com",
-                Phone = registerUserRequest.Phone,
-                CanLinkPlayer = registerUserRequest.CanLinkPlayer,
-                CanLinkAgent = registerUserRequest.CanLinkAgent,
-                AuthCode = "705fed6f-278f-4b6c-aa09-a98c3359998e",
-                AgentInfo = new()
-                {
-                    UniqueCode = registerUserRequest.Info747.UniqueCode,
-                    FacebookUrl = registerUserRequest.SocialProfiles.FacebookUrl,
-                    InstagramUrl = registerUserRequest.SocialProfiles.InstagramUrl,
-                    TwitterUrl = registerUserRequest.SocialProfiles.TwitterUrl,
-                    UserId747 = 772027571,
-                    Username747 = $"pahanimg10"
-                },
-                CreatedUtc = DateTime.UtcNow,
-                ErorrCode = 0,
-                Message = "ok",
-                Name = registerUserRequest.Name,
-                PlayerInfo = new()
-                {
-                    UniqueCode = registerUserRequest.Info747.UniqueCode,
-                    FacebookUrl = registerUserRequest.SocialProfiles.FacebookUrl,
-                    InstagramUrl = registerUserRequest.SocialProfiles.InstagramUrl,
-                    TwitterUrl = registerUserRequest.SocialProfiles.TwitterUrl,
-                    UserId747 = 772027571,
-                    Username747 = "pahanimg10"
-                },
-                SocialCode = "K8LAZN",
-                Surname = registerUserRequest.Surname
-            }; */
 
             if (userInfoResponse.ErorrCode == 0)
             {
-                // use the raffle auth code as the password
-                // for the universal dashboard
-                string? password = userInfoResponse.AuthCode!;
+                string? password = userInfoResponse.AuthCode ??= null;
 
-                // the user is successfully registered on our raffle system
-                // it is safe to give him access to the dashboard now
-                CreateUserRequest createUserRequest = new CreateUserRequest
+                if (password is not null)
                 {
-                    Email = userInfoResponse.Email!,
-                    FirstName = userInfoResponse.Name!,
-                    LastName = userInfoResponse.Surname!,
-                    Password = password!,
-                    ConfirmPassword = password!,
-                    UserName = registerUserRequest.IsAgent ? $"{userInfoResponse.AgentInfo!.Username747!}.agent" : $"{userInfoResponse.PlayerInfo!.Username747!}.player",
-                    PhoneNumber = userInfoResponse.Phone!
-                };
-
-                UserDetailsDto? updatedOrcreatedUser = await _userService.CreateSevenFourSevenAsync(createUserRequest, string.Empty, GetOriginFromRequest());
-
-                if (updatedOrcreatedUser is { } && updatedOrcreatedUser.Id != default)
-                {
-                    AppUser? appUser = await _repoAppUser.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(updatedOrcreatedUser.Id.ToString()), cancellationToken);
-
-                    long userId747 = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.UserId747! : userInfoResponse.PlayerInfo!.UserId747!;
-                    string userName747 = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.Username747! : userInfoResponse.PlayerInfo!.Username747!;
-                    string uniqueCode = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.UniqueCode! : userInfoResponse.PlayerInfo!.UniqueCode!;
-                    bool canLinkPlayer = userInfoResponse.CanLinkPlayer;
-                    bool canLinkAgent = userInfoResponse.CanLinkAgent;
-                    string socialCode = userInfoResponse.SocialCode!;
-
-                    if (appUser is { } && appUser.ApplicationUserId != default)
+                    userInfoRaffleWithUsername = new UserInfoRaffleWithUsernameRequest()
                     {
-                        appUser.Update(raffleUserId747: userId747.ToString(), raffleUsername747: userName747, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkPlayer, socialCode: socialCode);
-                        await _repoAppUser.UpdateAsync(appUser);
-                    }
-                    else
-                    {
-                        string roleId = string.Empty;
-                        string roleName = string.Empty;
-                        List<UserRoleDto>? userRoles = await _userService.GetRolesAsync(updatedOrcreatedUser.Id.ToString(), cancellationToken);
-                        if (userRoles is { } && userRoles.Any())
-                        {
-                            UserRoleDto? userRole = userRoles.Where(r => r.RoleName == "Basic").FirstOrDefault();
+                        AuthCode = password,
+                        IsAgent = registerUserRequest.IsAgent,
+                        UserName747 = registerUserRequest.Info747.Username747!
 
-                            if (userRole is { })
-                            {
-                                roleId = userRole.RoleId!;
-                                roleName = userRole.RoleName!;
-                            }
-                        }
-
-                        appUser = new AppUser(applicationUserId: updatedOrcreatedUser.Id.ToString(), roleId: roleId, roleName: roleName, raffleUserId747: userId747.ToString(), raffleUsername747: userName747, isAgent: registerUserRequest.IsAgent, uniqueCode: uniqueCode, canLinkPlayer: canLinkPlayer, canLinkAgent: canLinkAgent, socialCode: socialCode);
-
-                        appUser.RaffleUsername747 = userName747;
-                        appUser.RaffleUserId747 = userId747.ToString();
-
-                        appUser.FacebookUrl = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.FacebookUrl! : userInfoResponse.PlayerInfo!.FacebookUrl!;
-                        appUser.InstagramUrl = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.InstagramUrl! : userInfoResponse.PlayerInfo!.InstagramUrl!;
-                        appUser.TwitterUrl = registerUserRequest.IsAgent ? userInfoResponse.AgentInfo!.TwitterUrl! : userInfoResponse.PlayerInfo!.TwitterUrl!;
-
-                        await _repoAppUser.AddAsync(appUser);
-                    }
+                    };
                 }
-
-                // successfully created
-                if (updatedOrcreatedUser != default)
+                else
                 {
                     return new GenericResponse
                     {
-                        ErorrCode = 0,
-                        Message = createUserRequest.Password
+                        ErorrCode = 1,
+                        Message = "Generic error. Authcode error. Unknown"
                     };
                 }
             }
@@ -472,33 +383,70 @@ public class SevenFourSevenController : VersionNeutralApiController
         }
         else
         {
-
-            // reset token
-            // admin's auth code
-            UserInfoRaffleWithUsernameRequest userInfoRaffleWithUsername = new UserInfoRaffleWithUsernameRequest()
+            // reset
+            // use main
+            userInfoRaffleWithUsername = new UserInfoRaffleWithUsernameRequest()
             {
                 AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
                 IsAgent = registerUserRequest.IsAgent,
                 UserName747 = registerUserRequest.Info747.Username747!
 
             };
-
-            GetUserInfoResponse getUserInfo = await RaffleUserInfoUsingAdminCodeAsync(userInfoRaffleWithUsername);
-
-            if (getUserInfo is not null && getUserInfo.ErorrCode == 0)
-            {
-                await SelfRegisterAsync(getUserInfo, registerUserRequest.IsAgent);
-            }
         }
 
-        return new GenericResponse
+        // the user is in the raffle now
+        // must be
+        // reset token
+        // admin's auth code
+        GetUserInfoResponse getUserInfo = await RaffleUserInfoUsingCodeAsync(userInfoRaffleWithUsername);
+
+        if (getUserInfo is not null && getUserInfo.ErorrCode == 0)
         {
-            ErorrCode = 0,
-            Message = "User is already registered in the Raffle system."
-        };
+            await SelfRegisterAsync(getUserInfo, registerUserRequest.IsAgent);
+
+            // send an email
+            // user's auth code
+            GenericResponse sendGridMail = await sendGridHelper.SendgridMailAsync(userInfoRaffleWithUsername.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
+
+            if (sendGridMail is not null && sendGridMail.ErorrCode != 0)
+            {
+                return new GenericResponse()
+                {
+                    ErorrCode = 1,
+                    Message = $"Sendgrid send mail error. {sendGridMail!.Message}"
+                };
+            }
+
+            // send an bridge message
+            // user's auth code
+            GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSBridgeAsync(userInfoRaffleWithUsername.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
+
+            if (sendSMSBridgeAsync is not null && sendSMSBridgeAsync.ErorrCode != 0)
+            {
+                return new GenericResponse()
+                {
+                    ErorrCode = 1,
+                    Message = $"Bridge message send error. {sendSMSBridgeAsync!.Message}"
+                };
+            }
+
+            return new GenericResponse
+            {
+                ErorrCode = getUserInfo.ErorrCode,
+                Message = getUserInfo.Message
+            };
+        }
+        else
+        {
+            return new GenericResponse
+            {
+                ErorrCode = 1,
+                Message = "Error getting user info."
+            };
+        }
     }
 
-    private async Task<GetUserInfoResponse> RaffleUserInfoUsingAdminCodeAsync(UserInfoRaffleWithUsernameRequest userInfoRaffleWithUsernameRequest)
+    private async Task<GetUserInfoResponse> RaffleUserInfoUsingCodeAsync(UserInfoRaffleWithUsernameRequest userInfoRaffleWithUsernameRequest)
     {
         using (HttpClient? client = new HttpClient())
         {
@@ -574,9 +522,9 @@ public class SevenFourSevenController : VersionNeutralApiController
             {
                 AppUser? appUser = await _repoAppUser.FirstOrDefaultAsync(new AppUserByApplicationUserIdSpec(updatedOrCreatedUser.Id.ToString()), cancellationToken);
 
-                long userId747 = isAgent ? userInfo.AgentInfo!.UserId747! : userInfo.PlayerInfo!.UserId747!;
-                string userName747 = isAgent ? userInfo.AgentInfo!.Username747! : userInfo.PlayerInfo!.Username747!;
-                string uniqueCode = isAgent ? userInfo.AgentInfo!.UniqueCode! : userInfo.PlayerInfo!.UniqueCode!;
+                long userId747 = isAgent ? (userInfo.AgentInfo!.UserId747 ?? 0) : (userInfo.PlayerInfo!.UserId747 ?? 0);
+                string userName747 = isAgent ? (userInfo.AgentInfo!.Username747 ?? string.Empty) : (userInfo.PlayerInfo!.Username747 ?? string.Empty);
+                string uniqueCode = isAgent ? (userInfo.AgentInfo!.UniqueCode ?? string.Empty) : (userInfo.PlayerInfo!.UniqueCode ?? string.Empty);
                 bool canLinkPlayer = userInfo.CanLinkPlayer;
                 bool canLinkAgent = userInfo.CanLinkAgent;
                 string socialCode = userInfo.SocialCode!;
@@ -607,9 +555,9 @@ public class SevenFourSevenController : VersionNeutralApiController
                     appUser.RaffleUsername747 = userName747;
                     appUser.RaffleUserId747 = userId747.ToString();
 
-                    appUser.FacebookUrl = isAgent ? userInfo.AgentInfo!.FacebookUrl! : userInfo.PlayerInfo!.FacebookUrl!;
-                    appUser.InstagramUrl = isAgent ? userInfo.AgentInfo!.InstagramUrl! : userInfo.PlayerInfo!.InstagramUrl!;
-                    appUser.TwitterUrl = isAgent ? userInfo.AgentInfo!.TwitterUrl! : userInfo.PlayerInfo!.TwitterUrl!;
+                    appUser.FacebookUrl = isAgent ? (userInfo.AgentInfo!.FacebookUrl ?? null) : (userInfo.PlayerInfo!.FacebookUrl ?? null);
+                    appUser.InstagramUrl = isAgent ? (userInfo.AgentInfo!.InstagramUrl ?? null) : (userInfo.PlayerInfo!.InstagramUrl ?? null);
+                    appUser.TwitterUrl = isAgent ? (userInfo.AgentInfo!.TwitterUrl ?? null) : (userInfo.PlayerInfo!.TwitterUrl ?? null);
 
                     await _repoAppUser.AddAsync(appUser);
                 }
@@ -679,7 +627,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
     private async Task<GetUserInfoResponse> RegisterUserToRaffleSystemAsync(RegisterUserRequest registerUserRequest)
     {
-        using (var client = new HttpClient())
+        using (HttpClient client = new())
         {
             client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
             client.DefaultRequestHeaders.Accept.Clear();
