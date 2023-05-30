@@ -416,7 +416,7 @@ public class SevenFourSevenController : VersionNeutralApiController
                     return new GenericResponse()
                     {
                         ErorrCode = 1,
-                        Message = $"Sendgrid send mail error. {sendGridMail!.Message}"
+                        Message = $"SendGrid send mail error. {sendGridMail!.Message}"
                     };
                 }
 
@@ -437,7 +437,9 @@ public class SevenFourSevenController : VersionNeutralApiController
             return new GenericResponse
             {
                 ErorrCode = getUserInfo.ErorrCode,
-                Message = getUserInfo.Message
+
+                // auth code
+                Message = getUserInfo.AuthCode ?? string.Empty
             };
         }
         else

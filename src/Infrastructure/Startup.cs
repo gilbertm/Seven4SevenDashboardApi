@@ -48,7 +48,7 @@ public static class Startup
             {
                 var handler = new HttpClientHandler();
 
-                handler.ServerCertificateCustomValidationCallback = ValidateServerCertificattion;
+                handler.ServerCertificateCustomValidationCallback = ValidateServerCertification;
 
                 return handler;
             })
@@ -63,7 +63,7 @@ public static class Startup
             .AddHealthCheck()
             .AddPOLocalization(config)
             .AddMailing(config)
-            .AddMediatR(Assembly.GetExecutingAssembly())
+            .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()))
             .AddMultitenancy()
             .AddNotifications(config)
             .AddOpenApiDocumentation(config)
@@ -74,7 +74,7 @@ public static class Startup
             .AddServices();
     }
 
-    private static bool ValidateServerCertificattion(HttpRequestMessage message, X509Certificate2? certificate, X509Chain? chain, SslPolicyErrors errors)
+    private static bool ValidateServerCertification(HttpRequestMessage message, X509Certificate2? certificate, X509Chain? chain, SslPolicyErrors errors)
     {
         Console.WriteLine($"Requested URI: {message.RequestUri}");
         Console.WriteLine($"Effective date: {certificate?.GetEffectiveDateString()}");
