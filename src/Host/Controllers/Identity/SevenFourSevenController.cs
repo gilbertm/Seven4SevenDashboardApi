@@ -19,7 +19,7 @@ public class SevenFourSevenController : VersionNeutralApiController
     private readonly IConfiguration _config;
     private readonly IHttpClientFactory _clientFactory;
     private readonly ISendGridClient _sendGridClient;
-    
+
     public SevenFourSevenController(IUserService userService, IConfiguration config, IRepositoryWithEvents<AppUser> repoAppUser, IHttpClientFactory clientFactory, ISendGridClient sendGridClient)
     {
         _userService = userService;
@@ -404,30 +404,34 @@ public class SevenFourSevenController : VersionNeutralApiController
         {
             await SelfRegisterAsync(getUserInfo, registerUserRequest.IsAgent);
 
-            // send an email
-            // user's auth code
-            GenericResponse sendGridMail = await sendGridHelper.SendgridMailAsync(userInfoRaffleWithUsername.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
-
-            if (sendGridMail is not null && sendGridMail.ErorrCode != 0)
+            // only for the newly created
+            if (!isUserInRaffleSystem)
             {
-                return new GenericResponse()
-                {
-                    ErorrCode = 1,
-                    Message = $"Sendgrid send mail error. {sendGridMail!.Message}"
-                };
-            }
+                // send an email
+                // user's auth code
+                GenericResponse sendGridMail = await sendGridHelper.SendgridMailAsync(getUserInfo.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
 
-            // send an bridge message
-            // user's auth code
-            GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSBridgeAsync(userInfoRaffleWithUsername.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
-
-            if (sendSMSBridgeAsync is not null && sendSMSBridgeAsync.ErorrCode != 0)
-            {
-                return new GenericResponse()
+                if (sendGridMail is not null && sendGridMail.ErorrCode != 0)
                 {
-                    ErorrCode = 1,
-                    Message = $"Bridge message send error. {sendSMSBridgeAsync!.Message}"
-                };
+                    return new GenericResponse()
+                    {
+                        ErorrCode = 1,
+                        Message = $"Sendgrid send mail error. {sendGridMail!.Message}"
+                    };
+                }
+
+                // send an bridge message
+                // user's auth code
+                GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSBridgeAsync(getUserInfo.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
+
+                if (sendSMSBridgeAsync is not null && sendSMSBridgeAsync.ErorrCode != 0)
+                {
+                    return new GenericResponse()
+                    {
+                        ErorrCode = 1,
+                        Message = $"Bridge message send error. {sendSMSBridgeAsync!.Message}"
+                    };
+                }
             }
 
             return new GenericResponse

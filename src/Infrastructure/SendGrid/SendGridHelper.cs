@@ -48,7 +48,7 @@ namespace RAFFLE.WebApi.Infrastructure.SendGrid
             string htmlContent = $"Hi,<br /><br />" +
                 $"Authorization reset requested." +
                 $"<br /><br />" +
-                $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
+                $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
                 $"<br /><br />" +
                 $"If you have not made this request, please kindly ignore and/or contact support." +
                 $"<br /><br />" +
