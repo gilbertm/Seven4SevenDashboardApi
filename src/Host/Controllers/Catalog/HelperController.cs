@@ -1,6 +1,6 @@
-﻿using RAFFLE.WebApi.Application.Catalog.AppUsers;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Catalog.AppUsers;
 
-namespace RAFFLE.WebApi.Host.Controllers.Catalog;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Catalog;
 
 public class HelperController : VersionedApiController
 {

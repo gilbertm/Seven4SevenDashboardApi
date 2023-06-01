@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.Common.Settings;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Settings;
 
 public class CorsSettings
 {

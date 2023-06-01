@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.Mailing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Mailing;
 
 public class MailSettings
 {

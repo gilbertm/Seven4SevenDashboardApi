@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.BackgroundJobs;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.BackgroundJobs;
 
 public class HangfireStorageSettings
 {

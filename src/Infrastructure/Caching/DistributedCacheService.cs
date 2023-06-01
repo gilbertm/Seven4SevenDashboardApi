@@ -1,10 +1,10 @@
 using System.Text;
-using RAFFLE.WebApi.Application.Common.Caching;
-using RAFFLE.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Caching;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 
-namespace RAFFLE.WebApi.Infrastructure.Caching;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Caching;
 
 #pragma warning disable CA2254
 public class DistributedCacheService : ICacheService

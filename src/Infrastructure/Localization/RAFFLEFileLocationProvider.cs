@@ -1,11 +1,11 @@
-using RAFFLE.WebApi.Infrastructure.Common.Extensions;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using OrchardCore.Localization;
 
-namespace RAFFLE.WebApi.Infrastructure.Localization;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Localization;
 
 /// <summary>
 /// Provides PO files for RAFFLE Localization.
@@ -24,7 +24,7 @@ public class RAFFLEFileLocationProvider : ILocalizationFileLocationProvider
     public IEnumerable<IFileInfo> GetLocations(string cultureName)
     {
         // Loads all *.po files from the culture folder under the Resource Path.
-        // for example, src\Host\Localization\en-US\RAFFLE.Exceptions.po
+        // for example, src\Host\Localization\en-US\UNIFIEDDASHBOARD.Exceptions.po
         foreach (var file in _fileProvider.GetDirectoryContents(PathExtensions.Combine(_resourcesContainer, cultureName)))
         {
             yield return file;

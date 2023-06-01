@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.Middleware;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Middleware;
 
 public class MiddlewareSettings
 {

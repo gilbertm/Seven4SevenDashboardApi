@@ -1,12 +1,12 @@
 using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Events;
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Domain.Catalog;
-using RAFFLE.WebApi.Infrastructure.Persistence.Configuration;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Context;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 
 public class ApplicationDbContext : BaseDbContext
 {

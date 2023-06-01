@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using RAFFLE.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
 
 public class CurrentUser : ICurrentUser, ICurrentUserInitializer
 {

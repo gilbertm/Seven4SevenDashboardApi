@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Application.Dashboard;
+using UNIFIEDDASHBOARD.WebApi.Application.Dashboard;
 
-namespace RAFFLE.WebApi.Host.Controllers.Dashboard;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Dashboard;
 
 public class DashboardController : VersionedApiController
 {

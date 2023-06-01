@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Application.Catalog.AppUsers;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Application.Catalog.AppUsers;
 public class AppUserByApplicationUserIdCollectionSpec : EntitiesByPaginationFilterSpec<AppUser, AppUserDto>
 {
     public AppUserByApplicationUserIdCollectionSpec(SearchAppUsersRequest request)

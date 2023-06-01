@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <RootNamespace>RAFFLE.WebApi.Domain</RootNamespace>
-        <AssemblyName>RAFFLE.WebApi.Domain</AssemblyName>
+        <RootNamespace>UNIFIEDDASHBOARD.WebApi.Domain</RootNamespace>
+        <AssemblyName>UNIFIEDDASHBOARD.WebApi.Domain</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="NewId" Version="4.0.1" />

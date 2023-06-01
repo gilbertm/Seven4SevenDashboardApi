@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Shared.Events;
+using UNIFIEDDASHBOARD.WebApi.Shared.Events;
 
-namespace RAFFLE.WebApi.Domain.Common.Contracts;
+namespace UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;
 
 public abstract class DomainEvent : IEvent
 {

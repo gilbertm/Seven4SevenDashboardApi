@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.Localization;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Localization;
 
 public class LocalizationSettings
 {

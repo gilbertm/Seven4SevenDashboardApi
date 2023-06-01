@@ -1,9 +1,9 @@
-﻿using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Common.Mailing;
-using RAFFLE.WebApi.Application.Identity.Users.Password;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Mailing;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users.Password;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal partial class UserService
 {

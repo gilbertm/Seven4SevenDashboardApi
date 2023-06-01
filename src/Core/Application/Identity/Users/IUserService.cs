@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using RAFFLE.WebApi.Application.Identity.Users.Password;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users.Password;
 
-namespace RAFFLE.WebApi.Application.Identity.Users;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
 
 public interface IUserService : ITransientService
 {

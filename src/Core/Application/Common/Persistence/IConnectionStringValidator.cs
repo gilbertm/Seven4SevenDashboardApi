@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Application.Common.Persistence;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
 
 public interface IConnectionStringValidator
 {

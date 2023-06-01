@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
 
-namespace RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
 
 public class InkMeLiveMedicalListModel
 {

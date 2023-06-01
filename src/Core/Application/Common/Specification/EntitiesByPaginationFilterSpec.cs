@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Application.Common.Specification;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Specification;
 
 public class EntitiesByPaginationFilterSpec<T, TResult> : EntitiesByBaseFilterSpec<T, TResult>
 {

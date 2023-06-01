@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.Permissions;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Permissions;
 
 internal class PermissionRequirement : IAuthorizationRequirement
 {

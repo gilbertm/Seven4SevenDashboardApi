@@ -1,4 +1,4 @@
-using RAFFLE.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.Console.Extensions;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using SendGrid.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.BackgroundJobs;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.BackgroundJobs;
 
 internal static class Startup
 {

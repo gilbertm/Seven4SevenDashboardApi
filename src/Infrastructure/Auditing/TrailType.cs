@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.Auditing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auditing;
 
 public enum TrailType : byte
 {

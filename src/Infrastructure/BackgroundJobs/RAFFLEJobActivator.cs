@@ -1,13 +1,13 @@
 ﻿using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Infrastructure.Auth;
-using RAFFLE.WebApi.Infrastructure.Common;
-using RAFFLE.WebApi.Infrastructure.Multitenancy;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Hangfire;
 using Hangfire.Server;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.BackgroundJobs;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.BackgroundJobs;
 
 public class RAFFLEJobActivator : JobActivator
 {

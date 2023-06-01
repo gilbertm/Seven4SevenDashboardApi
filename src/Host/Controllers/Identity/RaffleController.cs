@@ -1,12 +1,12 @@
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
-using RAFFLE.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public class RaffleController : VersionNeutralApiController
 {

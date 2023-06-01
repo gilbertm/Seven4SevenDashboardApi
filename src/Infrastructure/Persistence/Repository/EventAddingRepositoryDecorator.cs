@@ -1,9 +1,9 @@
 ﻿using Ardalis.Specification;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Domain.Common.Contracts;
-using RAFFLE.WebApi.Domain.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common.Events;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Repository;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Repository;
 
 /// <summary>
 /// The repository that implements IRepositoryWithEvents.

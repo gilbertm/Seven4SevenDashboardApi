@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Identity.Tokens;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Identity.Tokens;
 
 public class TokenRequest {
     public string Email { get; set; } = default!;

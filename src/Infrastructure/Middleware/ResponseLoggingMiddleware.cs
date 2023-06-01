@@ -1,9 +1,9 @@
-using RAFFLE.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using Serilog.Context;
 
-namespace RAFFLE.WebApi.Infrastructure.Middleware;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Middleware;
 
 public class ResponseLoggingMiddleware : IMiddleware
 {

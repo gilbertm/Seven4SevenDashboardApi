@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Context;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 
 internal static class ModelBuilderExtensions
 {

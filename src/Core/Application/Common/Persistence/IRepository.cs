@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Application.Common.Persistence;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
 
 // The Repository for the Application Db
 // I(Read)RepositoryBase<T> is from Ardalis.Specification

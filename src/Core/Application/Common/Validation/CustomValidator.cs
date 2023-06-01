@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Common.Validation;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Validation;
 
 public class CustomValidator<T> : AbstractValidator<T>
 {

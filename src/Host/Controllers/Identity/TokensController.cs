@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Application.Identity.Tokens;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Tokens;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public sealed class TokensController : VersionNeutralApiController
 {

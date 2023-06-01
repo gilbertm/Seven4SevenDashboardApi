@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.OpenApi;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.OpenApi;
 
 public class SwaggerSettings
 {

@@ -1,8 +1,8 @@
-using RAFFLE.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.Permissions;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Permissions;
 
 internal class PermissionPolicyProvider : IAuthorizationPolicyProvider
 {

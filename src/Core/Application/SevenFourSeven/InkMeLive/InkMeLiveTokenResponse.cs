@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
 public class InkMeLiveTokenResponse
 {
     public int StatusCode { get; set; }

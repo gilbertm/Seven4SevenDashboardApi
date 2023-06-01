@@ -1,6 +1,6 @@
-﻿using RAFFLE.WebApi.Infrastructure.Multitenancy;
+﻿using UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
 
 internal interface IDatabaseInitializer
 {

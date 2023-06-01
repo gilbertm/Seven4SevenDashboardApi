@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Common.FileStorage;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.FileStorage;
 
 public class FileUploadRequest
 {

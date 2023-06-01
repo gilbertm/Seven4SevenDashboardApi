@@ -1,7 +1,7 @@
-using RAFFLE.WebApi.Application.Multitenancy;
-using RAFFLE.WebApi.Infrastructure.Persistence;
-using RAFFLE.WebApi.Shared.Authorization;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Application.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 
-namespace RAFFLE.WebApi.Infrastructure.Multitenancy;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
 
 internal static class Startup
 {

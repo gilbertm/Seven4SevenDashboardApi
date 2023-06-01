@@ -1,16 +1,16 @@
 using System.Data;
 using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Events;
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Domain.Common.Contracts;
-using RAFFLE.WebApi.Infrastructure.Auditing;
-using RAFFLE.WebApi.Infrastructure.Identity;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auditing;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Options;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Context;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 
 public abstract class BaseDbContext : MultiTenantIdentityDbContext<ApplicationUser, ApplicationRole, string, IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, ApplicationRoleClaim, IdentityUserToken<string>>
 {

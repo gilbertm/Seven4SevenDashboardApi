@@ -1,7 +1,7 @@
 ﻿using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Caching;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Caching;
 
-namespace RAFFLE.WebApi.Infrastructure.Caching;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Caching;
 
 public class CacheKeyService : ICacheKeyService
 {

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
-namespace RAFFLE.WebApi.Infrastructure.SecurityHeaders;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SecurityHeaders;
 
 internal static class Startup
 {

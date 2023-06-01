@@ -1,10 +1,10 @@
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Domain.Common.Contracts;
-using RAFFLE.WebApi.Infrastructure.Common;
-using RAFFLE.WebApi.Infrastructure.Persistence.ConnectionString;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
-using RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
-using RAFFLE.WebApi.Infrastructure.Persistence.Repository;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.ConnectionString;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Options;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Serilog;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence;
 
 internal static class Startup
 {

@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace RAFFLE.WebApi.Infrastructure.Common.Extensions;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Extensions;
 
 public static class TypeExtensions
 {

@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace RAFFLE.WebApi.Application.Common.Exceptions;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
 
 public class ForbiddenException : CustomException
 {

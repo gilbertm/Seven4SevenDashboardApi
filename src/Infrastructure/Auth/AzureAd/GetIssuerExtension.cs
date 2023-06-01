@@ -1,4 +1,4 @@
-using RAFFLE.WebApi.Infrastructure.Auth.AzureAd;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.AzureAd;
 
 namespace System.Security.Claims;
 

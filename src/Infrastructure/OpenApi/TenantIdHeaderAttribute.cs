@@ -1,6 +1,6 @@
-﻿using RAFFLE.WebApi.Shared.Multitenancy;
+﻿using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 
-namespace RAFFLE.WebApi.Infrastructure.OpenApi;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.OpenApi;
 
 public class TenantIdHeaderAttribute : SwaggerHeaderAttribute
 {

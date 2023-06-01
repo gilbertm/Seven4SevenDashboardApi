@@ -1,11 +1,11 @@
-﻿using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Domain.Identity;
-using RAFFLE.WebApi.Shared.Authorization;
-using RAFFLE.WebApi.Shared.Multitenancy;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Domain.Identity;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Microsoft.EntityFrameworkCore;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal partial class UserService
 {

@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Domain.Common.Events;
+namespace UNIFIEDDASHBOARD.WebApi.Domain.Common.Events;
 
 public static class EntityDeletedEvent
 {

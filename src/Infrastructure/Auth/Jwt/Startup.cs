@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.Jwt;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Jwt;
 
 internal static class Startup
 {

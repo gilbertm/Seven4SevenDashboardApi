@@ -1,7 +1,7 @@
-﻿using RAFFLE.WebApi.Infrastructure.Middleware;
+﻿using UNIFIEDDASHBOARD.WebApi.Infrastructure.Middleware;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
-namespace RAFFLE.WebApi.Host.Controllers;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers;
 
 #nullable disable
 #pragma warning disable RCS1163, IDE0060

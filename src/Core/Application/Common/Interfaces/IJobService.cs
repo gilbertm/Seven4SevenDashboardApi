@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace RAFFLE.WebApi.Application.Common.Interfaces;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 
 public interface IJobService : ITransientService
 {

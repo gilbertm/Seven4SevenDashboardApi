@@ -1,8 +1,8 @@
-using RAFFLE.WebApi.Domain.Common.Events;
-using RAFFLE.WebApi.Domain.Identity;
-using RAFFLE.WebApi.Shared.Events;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Domain.Identity;
+using UNIFIEDDASHBOARD.WebApi.Shared.Events;
 
-namespace RAFFLE.WebApi.Application.Dashboard;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Dashboard;
 
 public class SendStatsChangedNotificationHandler :
     IEventNotificationHandler<ApplicationRoleCreatedEvent>,

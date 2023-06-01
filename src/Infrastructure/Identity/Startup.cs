@@ -1,8 +1,8 @@
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal static class Startup
 {

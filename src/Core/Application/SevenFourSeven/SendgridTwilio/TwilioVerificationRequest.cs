@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace RAFFLE.WebApi.Application.SevenFourSeven.SendgridTwilio;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.SendgridTwilio;
 
 public class TwilioVerificationRequest
 {

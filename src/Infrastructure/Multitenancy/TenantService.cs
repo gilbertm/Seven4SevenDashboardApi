@@ -1,14 +1,14 @@
 ﻿using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Application.Multitenancy;
-using RAFFLE.WebApi.Infrastructure.Persistence;
-using RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Application.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
 using Mapster;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
-namespace RAFFLE.WebApi.Infrastructure.Multitenancy;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
 
 internal class TenantService : ITenantService
 {

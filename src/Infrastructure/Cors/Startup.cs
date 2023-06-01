@@ -1,9 +1,9 @@
-﻿using RAFFLE.WebApi.Infrastructure.Common.Settings;
+﻿using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Cors;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Cors;
 
 internal static class Startup
 {

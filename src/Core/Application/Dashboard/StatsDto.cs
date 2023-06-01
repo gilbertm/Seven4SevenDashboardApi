@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Dashboard;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Dashboard;
 
 public class StatsDto
 {

@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Identity.Roles;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Identity.Roles;
 
 public class CreateOrUpdateRoleRequest
 {

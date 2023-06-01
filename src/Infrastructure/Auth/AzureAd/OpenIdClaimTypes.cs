@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.Auth.AzureAd;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.AzureAd;
 
 internal static class OpenIdConnectClaimTypes
 {

@@ -1,6 +1,6 @@
-﻿using RAFFLE.WebApi.Domain.Common;
+﻿using UNIFIEDDASHBOARD.WebApi.Domain.Common;
 
-namespace RAFFLE.WebApi.Domain.Catalog;
+namespace UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
 
 public class AppUser : AuditableEntity, IAggregateRoot
 {

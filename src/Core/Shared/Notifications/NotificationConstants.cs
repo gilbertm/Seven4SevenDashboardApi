@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Shared.Notifications;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Shared.Notifications;
 
 public static class NotificationConstants
 {

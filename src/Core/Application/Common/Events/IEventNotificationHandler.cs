@@ -1,6 +1,6 @@
-﻿using RAFFLE.WebApi.Shared.Events;
+﻿using UNIFIEDDASHBOARD.WebApi.Shared.Events;
 
-namespace RAFFLE.WebApi.Application.Common.Events;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
 
 // This is just a shorthand to make it a bit easier to create event handlers for specific events.
 public interface IEventNotificationHandler<TEvent> : INotificationHandler<EventNotification<TEvent>>

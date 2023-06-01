@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.Localization;
 
-namespace RAFFLE.WebApi.Infrastructure.Localization;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Localization;
 
 internal static class Startup
 {

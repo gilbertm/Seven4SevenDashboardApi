@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
 
-namespace RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
 
 public class GetUserInfoRequestValidator : CustomValidator<GetUserInfoRequest>
 {

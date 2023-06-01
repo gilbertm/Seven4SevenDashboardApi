@@ -1,7 +1,7 @@
 using System.Text;
 using Microsoft.Extensions.Primitives;
 
-namespace RAFFLE.WebApi.Infrastructure.Common.Extensions;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Extensions;
 
 public class PathExtensions
 {

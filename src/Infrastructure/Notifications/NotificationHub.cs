@@ -1,11 +1,11 @@
 ﻿using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace RAFFLE.WebApi.Infrastructure.Notifications;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Notifications;
 
 [Authorize]
 public class NotificationHub : Hub, ITransientService

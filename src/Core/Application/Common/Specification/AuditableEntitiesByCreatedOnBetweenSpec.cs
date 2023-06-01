@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Application.Common.Specification;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Specification;
 
 public class AuditableEntitiesByCreatedOnBetweenSpec<T> : Specification<T>
     where T : AuditableEntity

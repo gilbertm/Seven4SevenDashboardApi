@@ -1,8 +1,8 @@
 using System.Security.Claims;
-using RAFFLE.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
 using Microsoft.AspNetCore.Authorization;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.Permissions;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Permissions;
 
 internal class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {

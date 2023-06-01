@@ -1,13 +1,13 @@
 ﻿using System.Security.Claims;
 using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Infrastructure.Common;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Hangfire.Client;
 using Hangfire.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.BackgroundJobs;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.BackgroundJobs;
 
 public class RAFFLEJobFilter : IClientFilter
 {

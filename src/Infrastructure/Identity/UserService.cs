@@ -1,26 +1,26 @@
 using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
 using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Caching;
-using RAFFLE.WebApi.Application.Common.Events;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Common.FileStorage;
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Application.Common.Mailing;
-using RAFFLE.WebApi.Application.Common.Models;
-using RAFFLE.WebApi.Application.Common.Specification;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Domain.Identity;
-using RAFFLE.WebApi.Infrastructure.Auth;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
-using RAFFLE.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Caching;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.FileStorage;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Mailing;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Models;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Specification;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Domain.Identity;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal partial class UserService : IUserService
 {

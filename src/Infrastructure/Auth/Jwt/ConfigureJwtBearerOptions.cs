@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using System.Text;
-using RAFFLE.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.Jwt;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Jwt;
 
 public class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
 {

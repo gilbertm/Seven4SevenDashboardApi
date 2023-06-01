@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Application.Identity.Roles;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Roles;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public class RolesController : VersionNeutralApiController
 {

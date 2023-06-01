@@ -1,8 +1,8 @@
 using System.Text;
-using RAFFLE.WebApi.Application.Common.Mailing;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Mailing;
 using RazorEngineCore;
 
-namespace RAFFLE.WebApi.Infrastructure.Mailing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Mailing;
 
 public class EmailTemplateService : IEmailTemplateService
 {

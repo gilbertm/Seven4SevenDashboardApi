@@ -1,13 +1,13 @@
 using System.Reflection;
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Domain.Catalog;
-using RAFFLE.WebApi.Infrastructure.Identity;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
-using RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
 using Microsoft.Extensions.Logging;
-using RAFFLE.WebApi.Domain.Common;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common;
 
-namespace RAFFLE.WebApi.Infrastructure.Catalog;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Catalog;
 
 public class EntitiesSeeder : ICustomSeeder
 {

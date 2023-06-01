@@ -1,14 +1,14 @@
 using Microsoft.Data.SqlClient;
 using System.Runtime.InteropServices;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.ConnectionString;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.ConnectionString;
 
 public class ConnectionStringSecurer : IConnectionStringSecurer
 {

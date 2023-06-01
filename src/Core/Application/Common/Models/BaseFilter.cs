@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Common.Models;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Models;
 
 public class BaseFilter
 {

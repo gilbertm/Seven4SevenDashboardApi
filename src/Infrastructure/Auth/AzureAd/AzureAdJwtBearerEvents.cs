@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
 using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Infrastructure.Multitenancy;
-using RAFFLE.WebApi.Shared.Authorization;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Serilog;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.AzureAd;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.AzureAd;
 
 internal class AzureAdJwtBearerEvents : JwtBearerEvents
 {

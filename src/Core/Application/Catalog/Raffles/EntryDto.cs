@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Catalog.Raffles;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Catalog.Raffles;
 
 public class EntryDto : IDto
 {

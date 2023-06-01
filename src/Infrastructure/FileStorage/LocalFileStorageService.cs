@@ -1,10 +1,10 @@
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using RAFFLE.WebApi.Application.Common.FileStorage;
-using RAFFLE.WebApi.Domain.Common;
-using RAFFLE.WebApi.Infrastructure.Common.Extensions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.FileStorage;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Extensions;
 
-namespace RAFFLE.WebApi.Infrastructure.FileStorage;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.FileStorage;
 
 public class LocalFileStorageService : IFileStorageService
 {

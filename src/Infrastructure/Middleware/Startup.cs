@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Middleware;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Middleware;
 
 internal static class Startup
 {

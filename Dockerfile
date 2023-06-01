@@ -38,4 +38,4 @@ ENV ASPNETCORE_URLS=https://+:5000;http://+:5001
 EXPOSE 5000
 EXPOSE 5001
 
-ENTRYPOINT ["dotnet", "RAFFLE.WebApi.Host.dll"]
+ENTRYPOINT ["dotnet", "UNIFIEDDASHBOARD.WebApi.Host.dll"]

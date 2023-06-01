@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.Notifications;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Notifications;
 
 public class SignalRSettings
 {

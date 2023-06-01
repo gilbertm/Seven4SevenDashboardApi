@@ -1,9 +1,9 @@
 ﻿using Finbuckle.MultiTenant.EntityFrameworkCore;
-using RAFFLE.WebApi.Infrastructure.Auditing;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auditing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Configuration;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Configuration;
 
 public class AuditTrailConfig : IEntityTypeConfiguration<Trail>
 {

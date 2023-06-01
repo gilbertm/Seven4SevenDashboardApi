@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Identity.Users.Password;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Identity.Users.Password;
 
 public class ForgotPasswordRequest
 {

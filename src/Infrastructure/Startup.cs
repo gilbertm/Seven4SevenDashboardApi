@@ -1,22 +1,22 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using RAFFLE.WebApi.Infrastructure.Auth;
-using RAFFLE.WebApi.Infrastructure.BackgroundJobs;
-using RAFFLE.WebApi.Infrastructure.Caching;
-using RAFFLE.WebApi.Infrastructure.Common;
-using RAFFLE.WebApi.Infrastructure.Cors;
-using RAFFLE.WebApi.Infrastructure.FileStorage;
-using RAFFLE.WebApi.Infrastructure.Localization;
-using RAFFLE.WebApi.Infrastructure.Mailing;
-using RAFFLE.WebApi.Infrastructure.Mapping;
-using RAFFLE.WebApi.Infrastructure.Middleware;
-using RAFFLE.WebApi.Infrastructure.Multitenancy;
-using RAFFLE.WebApi.Infrastructure.Notifications;
-using RAFFLE.WebApi.Infrastructure.OpenApi;
-using RAFFLE.WebApi.Infrastructure.Persistence;
-using RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
-using RAFFLE.WebApi.Infrastructure.SecurityHeaders;
-using RAFFLE.WebApi.Infrastructure.Validations;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.BackgroundJobs;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Caching;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Cors;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.FileStorage;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Localization;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Mailing;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Mapping;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Middleware;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Notifications;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.OpenApi;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.SecurityHeaders;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Validations;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +24,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid.Extensions.DependencyInjection;
-using RAFFLE.WebApi.Infrastructure.SendGrid;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid;
 using System.Globalization;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 
 [assembly: InternalsVisibleTo("Infrastructure.Test")]
 
-namespace RAFFLE.WebApi.Infrastructure;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure;
 
 public static class Startup
 {
@@ -39,7 +39,7 @@ public static class Startup
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        var applicationAssembly = typeof(RAFFLE.WebApi.Application.Startup).GetTypeInfo().Assembly;
+        var applicationAssembly = typeof(UNIFIEDDASHBOARD.WebApi.Application.Startup).GetTypeInfo().Assembly;
 
         MapsterSettings.Configure();
         return services

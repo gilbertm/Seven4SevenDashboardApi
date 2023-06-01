@@ -1,11 +1,11 @@
 using System.Data;
 using Dapper;
 using Finbuckle.MultiTenant.EntityFrameworkCore;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Domain.Common.Contracts;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Repository;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Repository;
 
 public class DapperRepository : IDapperRepository
 {

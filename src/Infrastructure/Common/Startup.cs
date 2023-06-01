@@ -1,7 +1,7 @@
-﻿using RAFFLE.WebApi.Application.Common.Interfaces;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Common;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
 
 internal static class Startup
 {

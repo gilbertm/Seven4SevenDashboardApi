@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
-using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
-using RAFFLE.WebApi.Application.SevenFourSeven.SendgridTwilio;
-using RAFFLE.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Bridge;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.SendgridTwilio;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net.Http.Headers;
@@ -12,7 +12,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
-namespace RAFFLE.WebApi.Infrastructure.SendGrid
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid
 {
     public class SendGridHelper
     {

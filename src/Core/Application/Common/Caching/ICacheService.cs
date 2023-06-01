@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Common.Caching;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Caching;
 
 public interface ICacheService
 {

@@ -1,11 +1,11 @@
-using RAFFLE.WebApi.Application.Common.Mailing;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Mailing;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace RAFFLE.WebApi.Infrastructure.Mailing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Mailing;
 
 public class SmtpMailService : IMailService
 {

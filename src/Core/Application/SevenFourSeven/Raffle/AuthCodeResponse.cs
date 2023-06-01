@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
 
 public class AuthCodeResponse : GenericResponse
 {

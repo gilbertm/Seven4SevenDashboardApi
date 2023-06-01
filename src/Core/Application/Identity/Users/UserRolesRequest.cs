@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Identity.Users;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
 
 public class UserRolesRequest
 {

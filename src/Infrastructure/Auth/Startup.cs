@@ -1,14 +1,14 @@
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Infrastructure.Auth.AzureAd;
-using RAFFLE.WebApi.Infrastructure.Auth.Jwt;
-using RAFFLE.WebApi.Infrastructure.Auth.Permissions;
-using RAFFLE.WebApi.Infrastructure.Identity;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.AzureAd;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Jwt;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Permissions;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
 
 internal static class Startup
 {

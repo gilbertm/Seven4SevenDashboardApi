@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Domain.Common.Contracts;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;
 
-namespace RAFFLE.WebApi.Infrastructure.Auditing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auditing;
 
 public class Trail : BaseEntity
 {

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
-namespace RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
 public class PlayersModel
 {
     public int Id { get; set; }

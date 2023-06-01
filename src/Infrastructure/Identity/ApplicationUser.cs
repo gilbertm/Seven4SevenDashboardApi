@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 public class ApplicationUser : IdentityUser
 {

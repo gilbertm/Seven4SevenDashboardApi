@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.Mapping;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Mapping;
 
 public class MapsterSettings
 {

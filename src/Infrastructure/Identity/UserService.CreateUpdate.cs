@@ -1,15 +1,15 @@
 ﻿using System.Security.Claims;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Common.Mailing;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Domain.Common;
-using RAFFLE.WebApi.Domain.Identity;
-using RAFFLE.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Mailing;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Domain.Common;
+using UNIFIEDDASHBOARD.WebApi.Domain.Identity;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal partial class UserService
 {

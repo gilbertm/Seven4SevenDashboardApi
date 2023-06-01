@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
 
 public interface ICurrentUserInitializer
 {

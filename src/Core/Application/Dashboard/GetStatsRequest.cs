@@ -1,7 +1,7 @@
-﻿using RAFFLE.WebApi.Application.Identity.Roles;
-using RAFFLE.WebApi.Application.Identity.Users;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Identity.Roles;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
 
-namespace RAFFLE.WebApi.Application.Dashboard;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Dashboard;
 
 public class GetStatsRequest : IRequest<StatsDto>
 {

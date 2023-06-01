@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.Auth;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
 
 public class SecuritySettings
 {

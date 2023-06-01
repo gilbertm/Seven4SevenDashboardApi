@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.Common;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
 
 internal class DbProviderKeys
 {

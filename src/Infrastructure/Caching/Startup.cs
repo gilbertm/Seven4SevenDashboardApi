@@ -1,8 +1,8 @@
-﻿using RAFFLE.WebApi.Application.Common.Caching;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Caching;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Caching;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Caching;
 
 internal static class Startup
 {

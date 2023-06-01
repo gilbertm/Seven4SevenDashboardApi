@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace RAFFLE.WebApi.Domain.Common;
+namespace UNIFIEDDASHBOARD.WebApi.Domain.Common;
 
 public enum FileType
 {

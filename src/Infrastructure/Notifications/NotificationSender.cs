@@ -1,10 +1,10 @@
 ﻿using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Shared.Notifications;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Shared.Notifications;
 using Microsoft.AspNetCore.SignalR;
-using static RAFFLE.WebApi.Shared.Notifications.NotificationConstants;
+using static UNIFIEDDASHBOARD.WebApi.Shared.Notifications.NotificationConstants;
 
-namespace RAFFLE.WebApi.Infrastructure.Notifications;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Notifications;
 
 public class NotificationSender : INotificationSender
 {

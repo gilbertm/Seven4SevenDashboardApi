@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <RootNamespace>RAFFLE.WebApi.Application</RootNamespace>
-        <AssemblyName>RAFFLE.WebApi.Application</AssemblyName>
+        <RootNamespace>UNIFIEDDASHBOARD.WebApi.Application</RootNamespace>
+        <AssemblyName>UNIFIEDDASHBOARD.WebApi.Application</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Ardalis.Specification" Version="6.1.0" />

@@ -1,9 +1,9 @@
-﻿using RAFFLE.WebApi.Application.Common.Caching;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Shared.Authorization;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Caching;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 using Microsoft.EntityFrameworkCore;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal partial class UserService
 {

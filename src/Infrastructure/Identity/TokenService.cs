@@ -2,19 +2,19 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Identity.Tokens;
-using RAFFLE.WebApi.Infrastructure.Auth;
-using RAFFLE.WebApi.Infrastructure.Auth.Jwt;
-using RAFFLE.WebApi.Infrastructure.Multitenancy;
-using RAFFLE.WebApi.Shared.Authorization;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Tokens;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Jwt;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
-using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -22,7 +22,7 @@ using Microsoft.Extensions.Configuration;
 using System.Text.Json;
 using Twilio.Rest.Verify.V2.Service;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal class TokenService : ITokenService
 {

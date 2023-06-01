@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 
 #nullable disable
 
@@ -141,7 +141,7 @@ namespace Migrators.MSSQL.Migrations
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
-            modelBuilder.Entity("RAFFLE.WebApi.Domain.Catalog.AppUser", b =>
+            modelBuilder.Entity("UNIFIEDDASHBOARD.WebApi.Domain.Catalog.AppUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -225,7 +225,7 @@ namespace Migrators.MSSQL.Migrations
                     b.ToTable("AppUsers", "Catalog");
                 });
 
-            modelBuilder.Entity("RAFFLE.WebApi.Infrastructure.Auditing.Trail", b =>
+            modelBuilder.Entity("UNIFIEDDASHBOARD.WebApi.Infrastructure.Auditing.Trail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -267,7 +267,7 @@ namespace Migrators.MSSQL.Migrations
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
-            modelBuilder.Entity("RAFFLE.WebApi.Infrastructure.Identity.ApplicationRole", b =>
+            modelBuilder.Entity("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -304,7 +304,7 @@ namespace Migrators.MSSQL.Migrations
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
-            modelBuilder.Entity("RAFFLE.WebApi.Infrastructure.Identity.ApplicationRoleClaim", b =>
+            modelBuilder.Entity("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationRoleClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -342,7 +342,7 @@ namespace Migrators.MSSQL.Migrations
                     b.HasAnnotation("Finbuckle:MultiTenant", true);
                 });
 
-            modelBuilder.Entity("RAFFLE.WebApi.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -438,7 +438,7 @@ namespace Migrators.MSSQL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("RAFFLE.WebApi.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -447,7 +447,7 @@ namespace Migrators.MSSQL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("RAFFLE.WebApi.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -456,13 +456,13 @@ namespace Migrators.MSSQL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("RAFFLE.WebApi.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RAFFLE.WebApi.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -471,16 +471,16 @@ namespace Migrators.MSSQL.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("RAFFLE.WebApi.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RAFFLE.WebApi.Infrastructure.Identity.ApplicationRoleClaim", b =>
+            modelBuilder.Entity("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationRoleClaim", b =>
                 {
-                    b.HasOne("RAFFLE.WebApi.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

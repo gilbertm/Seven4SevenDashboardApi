@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <RootNamespace>RAFFLE.WebApi.Shared</RootNamespace>
-        <AssemblyName>RAFFLE.WebApi.Shared</AssemblyName>
+        <RootNamespace>UNIFIEDDASHBOARD.WebApi.Shared</RootNamespace>
+        <AssemblyName>UNIFIEDDASHBOARD.WebApi.Shared</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
       <PackageReference Update="Roslynator.Analyzers" Version="4.3.0">

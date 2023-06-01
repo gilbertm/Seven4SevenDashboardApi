@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Auditing;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Auditing;
 
 public interface IAuditService : ITransientService
 {

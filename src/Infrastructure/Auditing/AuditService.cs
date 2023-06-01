@@ -1,9 +1,9 @@
-using RAFFLE.WebApi.Application.Auditing;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Application.Auditing;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
-namespace RAFFLE.WebApi.Infrastructure.Auditing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auditing;
 
 public class AuditService : IAuditService
 {

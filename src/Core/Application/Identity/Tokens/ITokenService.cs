@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Identity.Tokens;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Identity.Tokens;
 
 public interface ITokenService : ITransientService
 {

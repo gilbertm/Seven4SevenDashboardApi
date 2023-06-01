@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace RAFFLE.WebApi.Shared.Authorization;
+namespace UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 
 public static class RAFFLERoles
 {

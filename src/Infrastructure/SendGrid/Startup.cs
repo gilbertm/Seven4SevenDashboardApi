@@ -1,10 +1,10 @@
-﻿using RAFFLE.WebApi.Infrastructure.Common.Settings;
+﻿using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SendGrid.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.SendGrid;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid;
 
 internal static class Startup
 {

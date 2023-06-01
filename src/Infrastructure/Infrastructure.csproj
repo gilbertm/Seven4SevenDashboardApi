@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <RootNamespace>RAFFLE.WebApi.Infrastructure</RootNamespace>
-        <AssemblyName>RAFFLE.WebApi.Infrastructure</AssemblyName>
+        <RootNamespace>UNIFIEDDASHBOARD.WebApi.Infrastructure</RootNamespace>
+        <AssemblyName>UNIFIEDDASHBOARD.WebApi.Infrastructure</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />

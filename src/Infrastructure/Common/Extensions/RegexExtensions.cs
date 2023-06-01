@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace RAFFLE.WebApi.Infrastructure.Common.Extensions;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Extensions;
 
 public static class RegexExtensions
 {

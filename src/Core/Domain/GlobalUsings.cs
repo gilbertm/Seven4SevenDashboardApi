@@ -1,1 +1,1 @@
-﻿global using RAFFLE.WebApi.Domain.Common.Contracts;
+﻿global using UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;

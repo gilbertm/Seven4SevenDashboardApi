@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
-using RAFFLE.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 using Hangfire;
 
-namespace RAFFLE.WebApi.Infrastructure.BackgroundJobs;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.BackgroundJobs;
 
 public class HangfireService : IJobService
 {

@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Web;
 using Serilog;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.AzureAd;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.AzureAd;
 
 internal static class Startup
 {

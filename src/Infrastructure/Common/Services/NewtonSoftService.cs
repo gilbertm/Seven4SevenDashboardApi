@@ -1,9 +1,9 @@
-using RAFFLE.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
-namespace RAFFLE.WebApi.Infrastructure.Common.Services;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Services;
 
 public class NewtonSoftService : ISerializerService
 {

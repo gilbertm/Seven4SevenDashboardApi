@@ -1,11 +1,11 @@
 using System.Text;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Infrastructure.Common;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal partial class UserService
 {

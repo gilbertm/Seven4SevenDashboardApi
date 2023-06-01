@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.SecurityHeaders;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SecurityHeaders;
 
 internal class HeaderNames
 {

@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Application.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Application.Multitenancy;
 
-namespace RAFFLE.WebApi.Host.Controllers.Multitenancy;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Multitenancy;
 
 public class TenantsController : VersionNeutralApiController
 {

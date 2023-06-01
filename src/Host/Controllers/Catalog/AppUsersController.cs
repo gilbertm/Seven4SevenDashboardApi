@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
-using RAFFLE.WebApi.Application.Catalog.AppUsers;
-using RAFFLE.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Application.Catalog.AppUsers;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
 
-namespace RAFFLE.WebApi.Host.Controllers.Catalog;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Catalog;
 
 public class AppUsersController : VersionedApiController
 {

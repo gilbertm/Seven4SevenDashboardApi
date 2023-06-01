@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth;
 
 public class CurrentUserMiddleware : IMiddleware
 {

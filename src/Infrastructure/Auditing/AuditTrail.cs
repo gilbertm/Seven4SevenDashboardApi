@@ -1,7 +1,7 @@
-using RAFFLE.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace RAFFLE.WebApi.Infrastructure.Auditing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auditing;
 
 public class AuditTrail
 {

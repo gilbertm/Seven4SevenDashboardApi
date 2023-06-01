@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.Jwt;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Jwt;
 
 public class JwtSettings : IValidatableObject
 {

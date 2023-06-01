@@ -1,7 +1,7 @@
-using RAFFLE.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
-namespace RAFFLE.WebApi.Infrastructure.Auth.Permissions;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Auth.Permissions;
 
 public class MustHavePermissionAttribute : AuthorizeAttribute
 {

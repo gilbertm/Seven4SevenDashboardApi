@@ -1,9 +1,9 @@
-﻿using RAFFLE.WebApi.Application.Common.Events;
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Shared.Notifications;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Shared.Notifications;
 using MediatR;
 
-namespace RAFFLE.WebApi.Infrastructure.Notifications;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Notifications;
 
 // Sends all events that are also an INotificationMessage to all clients
 // Note: for this to work, the Event/NotificationMessage class needs to be in the

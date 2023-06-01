@@ -1,9 +1,9 @@
-using RAFFLE.WebApi.Application.Common.Events;
-using RAFFLE.WebApi.Shared.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Shared.Events;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace RAFFLE.WebApi.Infrastructure.Common.Services;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common.Services;
 
 public class EventPublisher : IEventPublisher
 {

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence;
 
 public class DatabaseSettings : IValidatableObject
 {

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 
-namespace RAFFLE.WebApi.Infrastructure.Validations;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Validations;
 
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

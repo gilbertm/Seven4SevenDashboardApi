@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace RAFFLE.WebApi.Infrastructure.Multitenancy;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
 
 public class TenantHealthCheck : IHealthCheck
 {

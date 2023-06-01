@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Domain.Common.Contracts;
+namespace UNIFIEDDASHBOARD.WebApi.Domain.Common.Contracts;
 
 public interface ISoftDelete
 {

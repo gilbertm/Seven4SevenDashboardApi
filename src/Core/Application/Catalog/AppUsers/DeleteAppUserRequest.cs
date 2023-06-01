@@ -1,6 +1,6 @@
-﻿using RAFFLE.WebApi.Domain.Common.Events;
+﻿using UNIFIEDDASHBOARD.WebApi.Domain.Common.Events;
 
-namespace RAFFLE.WebApi.Application.Catalog.AppUsers;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Catalog.AppUsers;
 
 public class DeleteAppUserRequest : IRequest<Guid>
 {

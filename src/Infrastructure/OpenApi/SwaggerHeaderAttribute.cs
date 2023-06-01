@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.OpenApi;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.OpenApi;
 
 [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 public class SwaggerHeaderAttribute : Attribute

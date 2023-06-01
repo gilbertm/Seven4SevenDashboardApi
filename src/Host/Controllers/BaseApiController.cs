@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace RAFFLE.WebApi.Host.Controllers;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers;
 
 [ApiController]
 public class BaseApiController : ControllerBase

@@ -9,7 +9,7 @@ using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
 
-namespace RAFFLE.WebApi.Infrastructure.Logging.Serilog;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Logging.Serilog;
 
 public static class Extensions
 {

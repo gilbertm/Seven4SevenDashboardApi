@@ -1,10 +1,10 @@
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.Identity.Users.Password;
-using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users.Password;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Bridge;
 using System.Dynamic;
 using System.Net.Http.Headers;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public class UsersController : VersionNeutralApiController
 {

@@ -1,9 +1,9 @@
 using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
 
 internal class ApplicationDbInitializer
 {

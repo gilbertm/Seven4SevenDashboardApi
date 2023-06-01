@@ -1,7 +1,7 @@
 ﻿using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 
-namespace RAFFLE.WebApi.Infrastructure.Multitenancy;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
 
 public class RAFFLETenantInfo : ITenantInfo
 {

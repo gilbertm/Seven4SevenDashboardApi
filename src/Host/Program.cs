@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Options;
-using RAFFLE.WebApi.Application;
-using RAFFLE.WebApi.Host.Configurations;
-using RAFFLE.WebApi.Host.Controllers;
-using RAFFLE.WebApi.Infrastructure;
-using RAFFLE.WebApi.Infrastructure.Common;
-using RAFFLE.WebApi.Infrastructure.Logging.Serilog;
+using UNIFIEDDASHBOARD.WebApi.Application;
+using UNIFIEDDASHBOARD.WebApi.Host.Configurations;
+using UNIFIEDDASHBOARD.WebApi.Host.Controllers;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Logging.Serilog;
 using SendGrid.Extensions.DependencyInjection;
 using Serilog;
 

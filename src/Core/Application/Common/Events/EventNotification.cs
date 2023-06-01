@@ -1,6 +1,6 @@
-using RAFFLE.WebApi.Shared.Events;
+using UNIFIEDDASHBOARD.WebApi.Shared.Events;
 
-namespace RAFFLE.WebApi.Application.Common.Events;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
 
 public class EventNotification<TEvent> : INotification
     where TEvent : IEvent

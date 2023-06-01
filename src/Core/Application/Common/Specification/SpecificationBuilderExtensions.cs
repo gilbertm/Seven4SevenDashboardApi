@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text.Json;
 
-namespace RAFFLE.WebApi.Application.Common.Specification;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Specification;
 
 // See https://github.com/ardalis/Specification/issues/53
 public static class SpecificationBuilderExtensions

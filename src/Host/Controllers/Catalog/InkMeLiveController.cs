@@ -1,10 +1,10 @@
 using DocumentFormat.OpenXml.Drawing.Charts;
 using Mapster;
 using Org.BouncyCastle.Utilities.Zlib;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
-using RAFFLE.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
@@ -14,7 +14,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Image = SixLabors.ImageSharp.Image;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public class InkMeLiveController : VersionNeutralApiController
 {

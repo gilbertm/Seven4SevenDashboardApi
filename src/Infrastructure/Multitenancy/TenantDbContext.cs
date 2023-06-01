@@ -1,8 +1,8 @@
 ﻿using Finbuckle.MultiTenant.Stores;
-using RAFFLE.WebApi.Infrastructure.Persistence.Configuration;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-namespace RAFFLE.WebApi.Infrastructure.Multitenancy;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
 
 public class TenantDbContext : EFCoreStoreDbContext<RAFFLETenantInfo>
 {

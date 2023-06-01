@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Domain.Identity;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Domain.Identity;
 
 public abstract class ApplicationUserEvent : DomainEvent
 {

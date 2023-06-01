@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Shared.Authorization;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 
 public static class RAFFLEClaims
 {

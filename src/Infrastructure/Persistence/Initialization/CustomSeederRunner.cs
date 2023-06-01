@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
 
 internal class CustomSeederRunner
 {

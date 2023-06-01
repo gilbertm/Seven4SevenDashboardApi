@@ -1,11 +1,11 @@
 ﻿using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Infrastructure.Multitenancy;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
 
 internal class DatabaseInitializer : IDatabaseInitializer
 {

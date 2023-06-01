@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Host.Controllers;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers;
 
 [Route("api/[controller]")]
 [ApiVersionNeutral]

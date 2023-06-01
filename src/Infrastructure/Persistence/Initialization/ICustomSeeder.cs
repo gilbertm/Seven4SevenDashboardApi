@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Initialization;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Initialization;
 
 public interface ICustomSeeder
 {

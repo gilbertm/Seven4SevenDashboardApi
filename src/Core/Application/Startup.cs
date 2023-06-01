@@ -1,7 +1,7 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Application;
+namespace UNIFIEDDASHBOARD.WebApi.Application;
 
 public static class Startup
 {

@@ -9,7 +9,7 @@ using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 using ZymLabs.NSwag.FluentValidation;
 
-namespace RAFFLE.WebApi.Infrastructure.OpenApi;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.OpenApi;
 
 internal static class Startup
 {

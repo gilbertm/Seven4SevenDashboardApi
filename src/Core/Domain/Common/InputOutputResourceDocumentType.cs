@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Domain.Common;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Domain.Common;
 
 public enum InputOutputResourceDocumentType : sbyte
 {

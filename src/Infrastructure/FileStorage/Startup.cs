@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.FileProviders;
 
-namespace RAFFLE.WebApi.Infrastructure.FileStorage;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.FileStorage;
 
 internal static class Startup
 {

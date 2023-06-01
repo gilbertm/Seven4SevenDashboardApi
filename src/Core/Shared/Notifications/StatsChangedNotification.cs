@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Shared.Notifications;
+namespace UNIFIEDDASHBOARD.WebApi.Shared.Notifications;
 
 public class StatsChangedNotification : INotificationMessage
 {

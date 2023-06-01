@@ -1,16 +1,16 @@
-using RAFFLE.WebApi.Application.Catalog.AppUsers;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
-using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
-using RAFFLE.WebApi.Domain.Catalog;
-using RAFFLE.WebApi.Infrastructure.SendGrid;
+using UNIFIEDDASHBOARD.WebApi.Application.Catalog.AppUsers;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Bridge;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid;
 using SendGrid;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public class SevenFourSevenController : VersionNeutralApiController
 {

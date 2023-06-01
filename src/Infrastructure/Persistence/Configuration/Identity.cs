@@ -1,10 +1,10 @@
 ﻿using Finbuckle.MultiTenant.EntityFrameworkCore;
-using RAFFLE.WebApi.Infrastructure.Identity;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.Configuration;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Configuration;
 
 public class ApplicationUserConfig : IEntityTypeConfiguration<ApplicationUser>
 {

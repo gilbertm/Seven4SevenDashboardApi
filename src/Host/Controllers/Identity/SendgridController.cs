@@ -1,23 +1,23 @@
 using Microsoft.Identity.Client;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
-using RAFFLE.WebApi.Application.SevenFourSeven.Raffle;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Bridge;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using Twilio.Rest.Verify.V2.Service;
 using Twilio;
-using RAFFLE.WebApi.Application.SevenFourSeven.SendgridTwilio;
+using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.SendgridTwilio;
 using System.Net.Mail;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Net;
-using RAFFLE.WebApi.Application.Catalog.AppUsers;
-using RAFFLE.WebApi.Domain.Catalog;
-using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Infrastructure.SendGrid;
+using UNIFIEDDASHBOARD.WebApi.Application.Catalog.AppUsers;
+using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public class SendgridController : VersionNeutralApiController
 {

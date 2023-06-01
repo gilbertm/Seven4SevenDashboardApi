@@ -1,9 +1,9 @@
-﻿using RAFFLE.WebApi.Application.Common.Events;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Domain.Identity;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Domain.Identity;
 using Microsoft.AspNetCore.Identity;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal class InvalidateUserPermissionCacheHandler :
     IEventNotificationHandler<ApplicationUserUpdatedEvent>,

@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Application.Multitenancy;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Application.Multitenancy;
 
 public class GetAllTenantsRequest : IRequest<List<TenantDto>>
 {

@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.SevenFourSeven.InkMeLive;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
 
 public record InkMeLiveTokenRequest(string ClientId, string ClientSecret);
 

@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.Common.Mailing;
+namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Mailing;
 
 public interface IEmailTemplateService : ITransientService
 {

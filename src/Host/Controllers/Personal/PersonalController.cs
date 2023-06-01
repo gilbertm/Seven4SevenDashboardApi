@@ -1,9 +1,9 @@
 using System.Security.Claims;
-using RAFFLE.WebApi.Application.Auditing;
-using RAFFLE.WebApi.Application.Identity.Users;
-using RAFFLE.WebApi.Application.Identity.Users.Password;
+using UNIFIEDDASHBOARD.WebApi.Application.Auditing;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users.Password;
 
-namespace RAFFLE.WebApi.Host.Controllers.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
 public class PersonalController : VersionNeutralApiController
 {

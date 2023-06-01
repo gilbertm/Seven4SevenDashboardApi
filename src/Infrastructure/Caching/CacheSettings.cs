@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Infrastructure.Caching;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Caching;
 
 public class CacheSettings
 {

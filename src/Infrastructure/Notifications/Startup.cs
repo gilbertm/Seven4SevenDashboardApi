@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
-namespace RAFFLE.WebApi.Infrastructure.Notifications;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Notifications;
 
 internal static class Startup
 {

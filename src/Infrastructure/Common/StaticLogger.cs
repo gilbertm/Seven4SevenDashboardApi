@@ -1,6 +1,6 @@
 using Serilog;
 
-namespace RAFFLE.WebApi.Infrastructure.Common;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
 
 public static class StaticLogger
 {

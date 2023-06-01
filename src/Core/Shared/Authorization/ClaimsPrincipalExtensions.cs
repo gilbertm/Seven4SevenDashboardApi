@@ -1,4 +1,4 @@
-using RAFFLE.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
 
 namespace System.Security.Claims;
 

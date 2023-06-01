@@ -1,18 +1,18 @@
 using Finbuckle.MultiTenant;
-using RAFFLE.WebApi.Application.Common.Events;
-using RAFFLE.WebApi.Application.Common.Exceptions;
-using RAFFLE.WebApi.Application.Common.Interfaces;
-using RAFFLE.WebApi.Application.Identity.Roles;
-using RAFFLE.WebApi.Domain.Identity;
-using RAFFLE.WebApi.Infrastructure.Persistence.Context;
-using RAFFLE.WebApi.Shared.Authorization;
-using RAFFLE.WebApi.Shared.Multitenancy;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Events;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Exceptions;
+using UNIFIEDDASHBOARD.WebApi.Application.Common.Interfaces;
+using UNIFIEDDASHBOARD.WebApi.Application.Identity.Roles;
+using UNIFIEDDASHBOARD.WebApi.Domain.Identity;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Context;
+using UNIFIEDDASHBOARD.WebApi.Shared.Authorization;
+using UNIFIEDDASHBOARD.WebApi.Shared.Multitenancy;
 using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace RAFFLE.WebApi.Infrastructure.Identity;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Identity;
 
 internal class RoleService : IRoleService
 {

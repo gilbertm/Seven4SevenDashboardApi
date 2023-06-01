@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Application.Common.Exporters;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Application.Common.Exporters;
 
 public interface IExcelWriter : ITransientService
 {

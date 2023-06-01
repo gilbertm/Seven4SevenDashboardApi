@@ -1,5 +1,5 @@
-﻿using RAFFLE.WebApi.Application.Common.Persistence;
-using RAFFLE.WebApi.Infrastructure.Common;
+﻿using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
+using UNIFIEDDASHBOARD.WebApi.Infrastructure.Common;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -7,7 +7,7 @@ using MySqlConnector;
 using Npgsql;
 using Microsoft.Data.SqlClient;
 
-namespace RAFFLE.WebApi.Infrastructure.Persistence.ConnectionString;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.ConnectionString;
 
 internal class ConnectionStringValidator : IConnectionStringValidator
 {

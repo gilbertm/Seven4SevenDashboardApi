@@ -1,4 +1,4 @@
-namespace RAFFLE.WebApi.Application.SevenFourSeven.Bridge;
+namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Bridge;
 
 public class User
 {

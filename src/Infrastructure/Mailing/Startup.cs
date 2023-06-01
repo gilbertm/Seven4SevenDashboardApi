@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RAFFLE.WebApi.Infrastructure.Mailing;
+namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Mailing;
 
 internal static class Startup
 {

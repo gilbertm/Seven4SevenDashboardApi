@@ -1,4 +1,4 @@
-﻿namespace RAFFLE.WebApi.Infrastructure.Persistence.Configuration;
+﻿namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.Persistence.Configuration;
 
 internal static class SchemaNames
 {
