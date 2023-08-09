@@ -28,8 +28,48 @@ namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid
             _repoAppUser = repoAppUser;
             _sendGridClient = sendGridClient;
         }
+        public Task<GenericResponse> SendgridResetMailAsync(string AuthCode, string Email, string Name)
+        {
+            return SendgridMailAsync(Email, Name,
+                $"Hi, authorization reset requested. This is your 747Live Reward System authorization path: {_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}. " +
+                $"Copy and paste this path in your browser's address. Congratulations and welcome back to 747 live, enjoy and good luck." +
+                $"If you have not made this request, please kindly ignore and/or contact support. Thank you very much. Yours, 747Live Reward Systems.",
 
-        public async Task<GenericResponse> SendgridMailAsync(string AuthCode, string Email, string Name)
+                $"Hi,<br /><br />" +
+                $"Authorization reset requested." +
+                $"<br /><br />" +
+                $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
+                $"<br /><br />" +
+                $"If you have not made this request, please kindly ignore and/or contact support." +
+                $"<br /><br />" +
+                $"Thank you very much." +
+                $"<br /><br />" +
+                $"Yours," +
+                $"<br /><br />" +
+                $"747Live Reward Systems");
+        }
+        public Task<GenericResponse> SendgridLoginMailAsync(string AuthCode, string Email, string Name)
+        {
+            return SendgridMailAsync(Email, Name,
+                $"Hi, authorization link requested. This is your 747Live Reward System authorization path: {_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}. " +
+                $"Copy and paste this path in your browser's address. Congratulations and welcome back to 747 live, enjoy and good luck." +
+                $"If you have not made this request, please kindly ignore and/or contact support. Thank you very much. Yours, 747Live Reward Systems.",
+
+                $"Hi,<br /><br />" +
+                $"Authorization link  requested." +
+                $"<br /><br />" +
+                $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
+                $"<br /><br />" +
+                $"If you have not made this request, please kindly ignore and/or contact support." +
+                $"<br /><br />" +
+                $"Thank you very much." +
+                $"<br /><br />" +
+                $"Yours," +
+                $"<br /><br />" +
+                $"747Live Reward Systems");
+        }
+
+        public async Task<GenericResponse> SendgridMailAsync(string Email, string Name, string plainTextContent, string htmlContent)
         {
             SendgridMailRequest sendgridMailRequest = new SendgridMailRequest()
             {
@@ -41,35 +81,16 @@ namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid
             string subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!;
             EmailAddress to = new EmailAddress(sendgridMailRequest.Email, sendgridMailRequest.Name);
 
-            string plainTextContent = $"Hi, authorization reset requested. This is your 747Live Reward System authorization path: {_config.GetSection("MainRewardSystem:BaseUrl").Value!}?AuthCode={AuthCode}. " +
-                $"Copy and paste this path in your browser's address. Congratulations and welcome back to 747 live, enjoy and good luck." +
-                $"If you have not made this request, please kindly ignore and/or contact support. Thank you very much. Yours, 747Live Reward Systems.";
-
-            string htmlContent = $"Hi,<br /><br />" +
-                $"Authorization reset requested." +
-                $"<br /><br />" +
-                $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
-                $"<br /><br />" +
-                $"If you have not made this request, please kindly ignore and/or contact support." +
-                $"<br /><br />" +
-                $"Thank you very much." +
-                $"<br /><br />" +
-                $"Yours," +
-                $"<br /><br />" +
-                $"747Live Reward Systems";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await _sendGridClient.SendEmailAsync(msg);
 
-            if (response is not null)
+            if (response is not null && response.IsSuccessStatusCode)
             {
-                if (response.IsSuccessStatusCode)
+                return new GenericResponse
                 {
-                    return new GenericResponse
-                    {
-                        ErorrCode = 0,
-                        Message = "Email successful."
-                    };
-                }
+                    ErorrCode = 0,
+                    Message = "Email successful."
+                };
             }
 
             return new GenericResponse
@@ -79,9 +100,9 @@ namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid
             };
         }
 
-        public async Task<GenericResponse> SendSMSBridgeAsync(string AuthCode, string UserName, bool IsAgent)
+        public Task<GenericResponse> SendSMSResetBridgeAsync(string AuthCode, string UserName, bool IsAgent)
         {
-            InternalMessageCodeRequest internalMessageCodeRequest = new InternalMessageCodeRequest()
+            return SendSMSBridgeAsync(new InternalMessageCodeRequest()
             {
                 AuthToken = _config.GetSection("SevenFourSevenAPIs:Bridge:AuthToken").Value!,
                 Message = $"Hi,<br /><br />" +
@@ -99,8 +120,34 @@ namespace UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid
                 Platform = IsAgent ? 1 : 2,
                 Subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!,
                 Username = UserName
-            };
+            });
+        }
 
+        public Task<GenericResponse> SendSMSLoginBridgeAsync(string AuthCode, string UserName, bool IsAgent)
+        {
+            return SendSMSBridgeAsync(new InternalMessageCodeRequest()
+            {
+                AuthToken = _config.GetSection("SevenFourSevenAPIs:Bridge:AuthToken").Value!,
+                Message = $"Hi,<br /><br />" +
+                $"Authorization link requested." +
+                $"<br /><br />" +
+                $"This is your 747Live Reward System authorization <strong><a href='{_config.GetSection("MainRewardSystem:BaseUrl").Value!}/?AuthCode={AuthCode}'>{AuthCode}</a></strong>" +
+                $"<br /><br />" +
+                $"If you have not made this request, please kindly ignore and/or contact support." +
+                $"<br /><br />" +
+                $"Thank you very much." +
+                $"<br /><br />" +
+                $"Yours," +
+                $"<br /><br />" +
+                $"747Live Reward Systems",
+                Platform = IsAgent ? 1 : 2,
+                Subject = _config.GetSection("SevenFourSevenAPIs:Sendgrid:Subject").Value!,
+                Username = UserName
+            });
+        }
+
+        public async Task<GenericResponse> SendSMSBridgeAsync(InternalMessageCodeRequest internalMessageCodeRequest)
+        {
             using (HttpClient? client = new HttpClient())
             {
                 client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Bridge:BaseUrl").Value!);
