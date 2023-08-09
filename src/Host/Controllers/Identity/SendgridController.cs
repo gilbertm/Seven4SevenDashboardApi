@@ -126,7 +126,7 @@ public class SendgridController : VersionNeutralApiController
 
             // send an email
             // user's auth code
-            GenericResponse sendGridMail = await sendGridHelper.SendgridResetMailAsync(raffleUserAuthCode.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
+            GenericResponse sendGridMail = await sendGridHelper.SendgridMailAsync(raffleUserAuthCode.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
 
             if (sendGridMail is not null && sendGridMail.ErorrCode != 0)
             {
@@ -139,7 +139,7 @@ public class SendgridController : VersionNeutralApiController
 
             // send an bridge message
             // user's auth code
-            GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSResetBridgeAsync(raffleUserAuthCode.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
+            GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSBridgeAsync(raffleUserAuthCode.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
 
             if (sendSMSBridgeAsync is not null && sendSMSBridgeAsync.ErorrCode != 0)
             {

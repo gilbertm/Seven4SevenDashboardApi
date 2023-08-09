@@ -1,7 +1,3 @@
-using SendGrid;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
 using UNIFIEDDASHBOARD.WebApi.Application.Catalog.AppUsers;
 using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
 using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
@@ -9,6 +5,10 @@ using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Bridge;
 using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.Raffle;
 using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
 using UNIFIEDDASHBOARD.WebApi.Infrastructure.SendGrid;
+using SendGrid;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
@@ -409,7 +409,7 @@ public class SevenFourSevenController : VersionNeutralApiController
             {
                 // send an email
                 // user's auth code
-                GenericResponse sendGridMail = await sendGridHelper.SendgridResetMailAsync(getUserInfo.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
+                GenericResponse sendGridMail = await sendGridHelper.SendgridMailAsync(getUserInfo.AuthCode!, getUserInfo.Email!, userInfoRaffleWithUsername.UserName747!);
 
                 if (sendGridMail is not null && sendGridMail.ErorrCode != 0)
                 {
@@ -422,7 +422,7 @@ public class SevenFourSevenController : VersionNeutralApiController
 
                 // send an bridge message
                 // user's auth code
-                GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSResetBridgeAsync(getUserInfo.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
+                GenericResponse sendSMSBridgeAsync = await sendGridHelper.SendSMSBridgeAsync(getUserInfo.AuthCode!, userInfoRaffleWithUsername.UserName747!, userInfoRaffleWithUsername.IsAgent);
 
                 if (sendSMSBridgeAsync is not null && sendSMSBridgeAsync.ErorrCode != 0)
                 {
@@ -671,95 +671,6 @@ public class SevenFourSevenController : VersionNeutralApiController
             ErorrCode = 1,
             Message = "Generic error."
         };
-    }
-
-
-    /// <summary>
-    /// Send the email to user via it can login.
-    /// </summary>
-    /// <param name="userName747"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    [HttpPost("send-login-email")]
-    [TenantIdHeader]
-    [AllowAnonymous]
-    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Users)]
-    [OpenApiOperation("Send the user an email with a link through which he can login", "")]
-    public async Task<GenericResponse> SendLoginEmail(string userName747)
-    {
-        var isUserAgant = await IsUserAgent(userName747);
-
-        var user = await RaffleUserInfoUsingCodeAsync(new UserInfoRaffleWithUsernameRequest
-        {
-            AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
-            IsAgent = isUserAgant,
-            UserName747 = userName747
-        });
-
-        if (user == null)
-        {
-            return new GenericResponse
-            {
-                ErorrCode = 1,
-                Message = "Error getting user info."
-            };
-        }
-
-        if (user.ErorrCode == 0)
-        {
-            SendGridHelper sendGridHelper = new(_userService, _config, _repoAppUser, _sendGridClient);
-            var sendSMSBridgeAsync = await sendGridHelper.SendSMSLoginBridgeAsync(user.AuthCode!, userName747!, isUserAgant);
-            var sendEmailBridgeAsync = await sendGridHelper.SendgridLoginMailAsync(user.AuthCode!, user.Email!, userName747!);
-            return new GenericResponse
-            {
-                ErorrCode = sendEmailBridgeAsync.ErorrCode == 0 || sendSMSBridgeAsync.ErorrCode == 0 ?
-                    0 : sendSMSBridgeAsync.ErorrCode + sendSMSBridgeAsync.ErorrCode,
-                Message = sendEmailBridgeAsync.Message + sendSMSBridgeAsync.Message
-
-            };
-        }
-        else
-        {
-            return new GenericResponse { ErorrCode = user.ErorrCode, Message = user.Message };
-        }
-
-    }
-
-    private async Task<bool> IsUserAgent(string userName747)
-    {
-        using (HttpClient? client = new HttpClient())
-        {
-            client.BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:Raffle:BaseUrl").Value!);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            var checkUserRequest = new CheckUserRequest
-            {
-                AuthCode = _config.GetSection("SevenFourSevenAPIs:Raffle:AuthCode").Value!,
-                Email = string.Empty,
-                Phone = string.Empty,
-                // number string Zero
-                UserId747 = "0",
-                UserName747 = userName747
-            };
-
-            string json = JsonSerializer.Serialize(checkUserRequest);
-            var data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage responseAgent = await client
-                .PostAsync($"{_config.GetSection("SevenFourSevenAPIs:Raffle:CheckAgentExists").Value!}", data);
-            if (responseAgent.IsSuccessStatusCode)
-            {
-                GenericExistCountResponse? resultAgentExist = await responseAgent.Content.ReadFromJsonAsync<GenericExistCountResponse>();
-
-                if (resultAgentExist == null || resultAgentExist.ErorrCode != 0 || resultAgentExist.ExistCount <= 0)
-                    return false;
-                else
-                    return true;
-            }
-            else
-                return false;
-        }
     }
 
     private string getValueMiddleOfCustomString(string customString)
