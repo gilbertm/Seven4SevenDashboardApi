@@ -1,12 +1,5 @@
-using DocumentFormat.OpenXml.Drawing.Charts;
 using Mapster;
-using Org.BouncyCastle.Utilities.Zlib;
-using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
-using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
 using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
-using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using System.Net.Http.Headers;
 using System.Text;
@@ -215,6 +208,34 @@ public class InkMeLiveController : VersionNeutralApiController
         }
 
         return default!;
+    }
+
+    [HttpPost("applicant-player-agreement")]
+    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    [OpenApiOperation("Update an ink me live player applicant attachments.", "")]
+    public async Task<InkMeLiveApiResponse> ApplicantPlayerAgreementAsync([FromBody] InkMeLivePlayerAgreementRequest playerAgreementRequest)
+    {
+        var token = await GetTokenAsync();
+        using var client = new HttpClient
+        {
+            BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!)
+        };
+
+        if (!string.IsNullOrWhiteSpace(token.AuthToken))
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
+
+        using var formContent = new MultipartFormDataContent("NKdKd9Yk");
+        var fileName = $"{playerAgreementRequest.PlayerUserName}.Agreement.{DateTime.UtcNow:yyyyMMdd_hhmmss}{playerAgreementRequest.AgreementFileExtension}";
+        formContent.Add(new ByteArrayContent(playerAgreementRequest.Agreement), "agreement", fileName);
+
+        var playerAttachmentsPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAgreement").Value;
+        var playerAttachmentsPathWithQueryParameters = $"{playerAttachmentsPath}?playerUserName={playerAgreementRequest.PlayerUserName}";
+
+        var response = await client.PostAsync(playerAttachmentsPathWithQueryParameters, formContent);
+
+        return response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
+            : default!;
     }
 
     private byte[] imageToByteArray(Image img)

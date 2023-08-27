@@ -31,6 +31,15 @@ public class InkMeLivePlayerDetailsRequest
     public InkMeLiveMedicalListModel ConfirmList { get; set; } = default!;
 }
 
+public class InkMeLivePlayerAgreementRequest
+{
+    public string PlayerUserName { get; set; } = default!;
+
+    public string AgreementFileExtension { get; set; } = default!;
+
+    public byte[] Agreement { get; set; } = default!;
+}
+
 public class PlayerDetailsRequestValidator : CustomValidator<InkMeLivePlayerDetailsRequest>
 {
     public PlayerDetailsRequestValidator(IStringLocalizer<PlayerDetailsRequestValidator> T)
