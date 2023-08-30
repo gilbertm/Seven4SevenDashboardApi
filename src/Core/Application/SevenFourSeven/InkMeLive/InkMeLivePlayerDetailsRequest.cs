@@ -43,18 +43,11 @@ public class InkMeLivePlayerAgreementRequest
     public byte[] Agreement { get; set; } = default!;
 }
 
-public class InkMeLivePlayerAttachmentsRequest
-{
-    public string PlayerUserName { get; set; } = default!;
-
-    public FileType FilesType { get; set; } = default!;
-
-    public IReadOnlyList<IFormFile> Attachments { get; set; } = new List<IFormFile>();
-}
+public record InkMeLivePlayerAttachmentsRequest(string PlayerUsername, IReadOnlyList<IFormFile> Attachments);
 
 public class InkMeLivePlayerSubmitAttachmentsRequest
 {
-    public string PlayerUserName { get; set; } = default!;
+    public string PlayerUsername { get; set; } = default!;
 
     public int StatusId { get; set; }
 }

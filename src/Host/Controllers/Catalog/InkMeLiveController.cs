@@ -230,15 +230,17 @@ public class InkMeLiveController : VersionNeutralApiController
 
         using var formContent = new MultipartFormDataContent("NKdKd9Yk");
 
+        formContent.Add(new StringContent(request.PlayerUsername, Encoding.UTF8), "PlayerUsername");
+
         foreach (var attachment in request.Attachments)
         {
-            formContent.Add(new StreamContent(attachment.OpenReadStream()), "uploadFile", attachment.FileName);
+            var streamContent = new StreamContent(attachment.OpenReadStream());
+            streamContent.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
+            formContent.Add(streamContent, "Attachments", attachment.FileName);
         }
 
         var playerAttachmentsPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAttachments").Value;
-        var playerAttachmentsPathWithQueryParameters = $"{playerAttachmentsPath}?playerUserName={request.PlayerUserName}&fileType={(int)request.FilesType}";
-
-        var response = await client.PostAsync(playerAttachmentsPathWithQueryParameters, formContent);
+        var response = await client.PostAsync(playerAttachmentsPath, formContent);
 
         return response.IsSuccessStatusCode
             ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
@@ -264,7 +266,7 @@ public class InkMeLiveController : VersionNeutralApiController
 
         var response = await client.PostAsJsonAsync(playerChangeStatusPath, new InkMeLivePlayerSubmitAttachmentsRequest
         {
-            PlayerUserName = playerUserName,
+            PlayerUsername = playerUserName,
             StatusId = 8 // PendingVerification. Will force client to wait until attachments will be approved by admins.
         });
 
