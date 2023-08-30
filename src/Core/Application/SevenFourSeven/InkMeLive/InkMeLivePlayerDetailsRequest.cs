@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
 
 namespace UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
@@ -29,6 +30,8 @@ public class InkMeLivePlayerDetailsRequest
     public InkMeLiveIDProof IdProofs { get; set; } = default!;
     public byte[]? DigitalSignature { get; set; }
     public InkMeLiveMedicalListModel ConfirmList { get; set; } = default!;
+
+    public bool ResetPlayerStatusToNew { get; set; }
 }
 
 public class InkMeLivePlayerAgreementRequest
@@ -38,6 +41,22 @@ public class InkMeLivePlayerAgreementRequest
     public string AgreementFileExtension { get; set; } = default!;
 
     public byte[] Agreement { get; set; } = default!;
+}
+
+public class InkMeLivePlayerAttachmentsRequest
+{
+    public string PlayerUserName { get; set; } = default!;
+
+    public FileType FilesType { get; set; } = default!;
+
+    public IReadOnlyList<IFormFile> Attachments { get; set; } = new List<IFormFile>();
+}
+
+public class InkMeLivePlayerSubmitAttachmentsRequest
+{
+    public string PlayerUserName { get; set; } = default!;
+
+    public int StatusId { get; set; }
 }
 
 public class PlayerDetailsRequestValidator : CustomValidator<InkMeLivePlayerDetailsRequest>

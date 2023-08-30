@@ -9,6 +9,7 @@ using Image = SixLabors.ImageSharp.Image;
 
 namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
+// TODO: FluentValidation, HttpClientFactory with token handler
 public class InkMeLiveController : VersionNeutralApiController
 {
     private readonly IConfiguration _config;
@@ -210,9 +211,71 @@ public class InkMeLiveController : VersionNeutralApiController
         return default!;
     }
 
-    [HttpPost("applicant-player-agreement")]
+    [HttpPost("applicant-player-attachments")]
     [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
     [OpenApiOperation("Update an ink me live player applicant attachments.", "")]
+    public async Task<InkMeLiveApiResponse> ApplicantPlayerAttachmentsAsync([FromForm] InkMeLivePlayerAttachmentsRequest request)
+    {
+        if (request.Attachments.Count is 0 || request.Attachments.All(x => x.Length is 0))
+            return default!;
+
+        var token = await GetTokenAsync();
+        using var client = new HttpClient
+        {
+            BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!)
+        };
+
+        if (!string.IsNullOrWhiteSpace(token.AuthToken))
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
+
+        using var formContent = new MultipartFormDataContent("NKdKd9Yk");
+
+        foreach (var attachment in request.Attachments)
+        {
+            formContent.Add(new StreamContent(attachment.OpenReadStream()), "uploadFile", attachment.FileName);
+        }
+
+        var playerAttachmentsPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAttachments").Value;
+        var playerAttachmentsPathWithQueryParameters = $"{playerAttachmentsPath}?playerUserName={request.PlayerUserName}&fileType={(int)request.FilesType}";
+
+        var response = await client.PostAsync(playerAttachmentsPathWithQueryParameters, formContent);
+
+        return response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
+            : default!;
+    }
+
+    [HttpPut("applicant-player-submit-attachments")]
+    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    [OpenApiOperation("Update an ink me live player applicant attachments submit.", "")]
+    public async Task<InkMeLiveApiResponse> ApplicantPlayerSubmitAttachmentsAsync([FromQuery] string playerUserName)
+    {
+        var token = await GetTokenAsync();
+
+        using var client = new HttpClient
+        {
+            BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!)
+        };
+
+        if (!string.IsNullOrWhiteSpace(token.AuthToken))
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
+
+        var playerChangeStatusPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:ChangePlayerStatus").Value;
+
+        var response = await client.PostAsJsonAsync(playerChangeStatusPath, new InkMeLivePlayerSubmitAttachmentsRequest
+        {
+            PlayerUserName = playerUserName,
+            StatusId = 8 // PendingVerification. Will force client to wait until attachments will be approved by admins.
+        });
+
+        return response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
+            : default!;
+    }
+
+    [HttpPost("applicant-player-agreement")]
+    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    [OpenApiOperation("Update an ink me live player applicant agreement.", "")]
     public async Task<InkMeLiveApiResponse> ApplicantPlayerAgreementAsync([FromBody] InkMeLivePlayerAgreementRequest playerAgreementRequest)
     {
         var token = await GetTokenAsync();
@@ -228,10 +291,10 @@ public class InkMeLiveController : VersionNeutralApiController
         var fileName = $"{playerAgreementRequest.PlayerUserName}.Agreement.{DateTime.UtcNow:yyyyMMdd_hhmmss}{playerAgreementRequest.AgreementFileExtension}";
         formContent.Add(new ByteArrayContent(playerAgreementRequest.Agreement), "agreement", fileName);
 
-        var playerAttachmentsPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAgreement").Value;
-        var playerAttachmentsPathWithQueryParameters = $"{playerAttachmentsPath}?playerUserName={playerAgreementRequest.PlayerUserName}";
+        var playerAgreementPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAgreement").Value;
+        var playerAgreementPathWithQueryParameters = $"{playerAgreementPath}?playerUserName={playerAgreementRequest.PlayerUserName}";
 
-        var response = await client.PostAsync(playerAttachmentsPathWithQueryParameters, formContent);
+        var response = await client.PostAsync(playerAgreementPathWithQueryParameters, formContent);
 
         return response.IsSuccessStatusCode
             ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!

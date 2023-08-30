@@ -5,7 +5,7 @@ namespace UNIFIEDDASHBOARD.WebApi.Domain.Common;
 public enum FileType
 {
     [Description(".jpg,.png,.jpeg")]
-    Image,
+    Image = 1,
 
     [Description(".avi, .mov, .hevc")]
     Video = 2,
