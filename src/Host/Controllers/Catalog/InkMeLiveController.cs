@@ -1,11 +1,8 @@
 using Mapster;
 using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
-using SixLabors.ImageSharp.Formats.Png;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using Image = SixLabors.ImageSharp.Image;
 
 namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
@@ -95,11 +92,12 @@ public class InkMeLiveController : VersionNeutralApiController
 
                         if (player != null && !string.IsNullOrWhiteSpace(player.DigitalSignature))
                         {
-                            string path = Path.Combine(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!, player.DigitalSignaturePath!);
+                            var path = Path.Combine(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!, player.DigitalSignaturePath!);
 
-                            using HttpClient httClient = new HttpClient();
-                            byte[] imageBytes = await httClient.GetByteArrayAsync(path);
-                            player.DigitalSignature = Encoding.UTF8.GetString(imageBytes);
+                            using var httClient = new HttpClient();
+                            var imageBytes = await httClient.GetByteArrayAsync(path);
+                            var base64 = Convert.ToBase64String(imageBytes);
+                            player.DigitalSignature = $"data:image/png;base64,{base64}";
                         }
 
                         return player ?? default!;
@@ -161,13 +159,6 @@ public class InkMeLiveController : VersionNeutralApiController
             string json = JsonSerializer.Serialize(inkMeLivePlayerDetailsRequest);
 
             StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
-
-            if (inkMeLivePlayerDetailsRequest.DigitalSignature is not null)
-            {
-                var byteToImage = byteArrayToImage(inkMeLivePlayerDetailsRequest.DigitalSignature);
-
-                inkMeLivePlayerDetailsRequest.DigitalSignature = imageToByteArray(byteToImage);
-            }
 
             HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:SignUp").Value!}", data);
 
@@ -301,33 +292,5 @@ public class InkMeLiveController : VersionNeutralApiController
         return response.IsSuccessStatusCode
             ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
             : default!;
-    }
-
-    private byte[] imageToByteArray(Image img)
-    {
-        MemoryStream ms = new MemoryStream();
-        img.Save(ms, new PngEncoder() { CompressionLevel = PngCompressionLevel.Level9 });
-        return ms.ToArray();
-    }
-
-    private Image byteArrayToImage(byte[] byteArrayIn)
-    {
-        string base64 = Encoding.UTF8.GetString(byteArrayIn);
-
-        string? base64Data = Regex.Match(base64, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-        byte[]? binData = Convert.FromBase64String(base64Data);
-
-        MemoryStream ms = new MemoryStream(binData, 0, binData.Length);
-        ms.Write(binData, 0, binData.Length);
-
-        using (MemoryStream stream = new MemoryStream())
-        {
-            ms.Position = 0;
-            ms.CopyTo(stream);
-            stream.Position = 0;
-            var image = Image.Load(stream);
-
-            return image;
-        }
     }
 }
