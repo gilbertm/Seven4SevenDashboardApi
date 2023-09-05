@@ -204,6 +204,7 @@ public class InkMeLiveController : VersionNeutralApiController
 
     [HttpPost("applicant-player-attachments")]
     [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    [RequestSizeLimit(300_000_000)] // 300 mb
     [OpenApiOperation("Update an ink me live player applicant attachments.", "")]
     public async Task<InkMeLiveApiResponse> ApplicantPlayerAttachmentsAsync([FromForm] InkMeLivePlayerAttachmentsRequest request)
     {
@@ -232,34 +233,6 @@ public class InkMeLiveController : VersionNeutralApiController
 
         var playerAttachmentsPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAttachments").Value;
         var response = await client.PostAsync(playerAttachmentsPath, formContent);
-
-        return response.IsSuccessStatusCode
-            ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
-            : default!;
-    }
-
-    [HttpPut("applicant-player-submit-attachments")]
-    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
-    [OpenApiOperation("Update an ink me live player applicant attachments submit.", "")]
-    public async Task<InkMeLiveApiResponse> ApplicantPlayerSubmitAttachmentsAsync([FromQuery] string playerUserName)
-    {
-        var token = await GetTokenAsync();
-
-        using var client = new HttpClient
-        {
-            BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!)
-        };
-
-        if (!string.IsNullOrWhiteSpace(token.AuthToken))
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
-
-        var playerChangeStatusPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:ChangePlayerStatus").Value;
-
-        var response = await client.PostAsJsonAsync(playerChangeStatusPath, new InkMeLivePlayerSubmitAttachmentsRequest
-        {
-            PlayerUsername = playerUserName,
-            StatusId = 8 // PendingVerification. Will force client to wait until attachments will be approved by admins.
-        });
 
         return response.IsSuccessStatusCode
             ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
