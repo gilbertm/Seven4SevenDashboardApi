@@ -1,21 +1,12 @@
-using DocumentFormat.OpenXml.Drawing.Charts;
 using Mapster;
-using Org.BouncyCastle.Utilities.Zlib;
-using UNIFIEDDASHBOARD.WebApi.Application.Common.Persistence;
-using UNIFIEDDASHBOARD.WebApi.Application.Identity.Users;
 using UNIFIEDDASHBOARD.WebApi.Application.SevenFourSeven.InkMeLive;
-using UNIFIEDDASHBOARD.WebApi.Domain.Catalog;
-using SixLabors.ImageSharp.Formats;
-using SixLabors.ImageSharp.Formats.Jpeg;
-using SixLabors.ImageSharp.Formats.Png;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Text.RegularExpressions;
-using Image = SixLabors.ImageSharp.Image;
 
 namespace UNIFIEDDASHBOARD.WebApi.Host.Controllers.Identity;
 
+// TODO: FluentValidation, HttpClientFactory with token handler
 public class InkMeLiveController : VersionNeutralApiController
 {
     private readonly IConfiguration _config;
@@ -101,11 +92,12 @@ public class InkMeLiveController : VersionNeutralApiController
 
                         if (player != null && !string.IsNullOrWhiteSpace(player.DigitalSignature))
                         {
-                            string path = Path.Combine(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!, player.DigitalSignaturePath!);
+                            var path = Path.Combine(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!, player.DigitalSignaturePath!);
 
-                            using HttpClient httClient = new HttpClient();
-                            byte[] imageBytes = await httClient.GetByteArrayAsync(path);
-                            player.DigitalSignature = Encoding.UTF8.GetString(imageBytes);
+                            using var httClient = new HttpClient();
+                            var imageBytes = await httClient.GetByteArrayAsync(path);
+                            var base64 = Convert.ToBase64String(imageBytes);
+                            player.DigitalSignature = $"data:image/png;base64,{base64}";
                         }
 
                         return player ?? default!;
@@ -168,13 +160,6 @@ public class InkMeLiveController : VersionNeutralApiController
 
             StringContent? data = new StringContent(json, Encoding.UTF8, "application/json");
 
-            if (inkMeLivePlayerDetailsRequest.DigitalSignature is not null)
-            {
-                var byteToImage = byteArrayToImage(inkMeLivePlayerDetailsRequest.DigitalSignature);
-
-                inkMeLivePlayerDetailsRequest.DigitalSignature = imageToByteArray(byteToImage);
-            }
-
             HttpResponseMessage response = await client.PostAsync($"{_config.GetSection("SevenFourSevenAPIs:InkMeLive:SignUp").Value!}", data);
 
             if (response.IsSuccessStatusCode)
@@ -217,31 +202,68 @@ public class InkMeLiveController : VersionNeutralApiController
         return default!;
     }
 
-    private byte[] imageToByteArray(Image img)
+    [HttpPost("applicant-player-attachments")]
+    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    [RequestSizeLimit(300_000_000)] // 300 mb
+    [OpenApiOperation("Update an ink me live player applicant attachments.", "")]
+    public async Task<InkMeLiveApiResponse> ApplicantPlayerAttachmentsAsync([FromForm] InkMeLivePlayerAttachmentsRequest request)
     {
-        MemoryStream ms = new MemoryStream();
-        img.Save(ms, new PngEncoder() { CompressionLevel = PngCompressionLevel.Level9 });
-        return ms.ToArray();
+        if (request.Attachments.Count is 0 || request.Attachments.All(x => x.Length is 0))
+            return default!;
+
+        var token = await GetTokenAsync();
+        using var client = new HttpClient
+        {
+            BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!)
+        };
+
+        if (!string.IsNullOrWhiteSpace(token.AuthToken))
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
+
+        using var formContent = new MultipartFormDataContent("NKdKd9Yk");
+
+        formContent.Add(new StringContent(request.PlayerUsername, Encoding.UTF8), "PlayerUsername");
+
+        foreach (var attachment in request.Attachments)
+        {
+            var streamContent = new StreamContent(attachment.OpenReadStream());
+            streamContent.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
+            formContent.Add(streamContent, "Attachments", attachment.FileName);
+        }
+
+        var playerAttachmentsPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAttachments").Value;
+        var response = await client.PostAsync(playerAttachmentsPath, formContent);
+
+        return response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
+            : default!;
     }
 
-    private Image byteArrayToImage(byte[] byteArrayIn)
+    [HttpPost("applicant-player-agreement")]
+    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    [OpenApiOperation("Update an ink me live player applicant agreement.", "")]
+    public async Task<InkMeLiveApiResponse> ApplicantPlayerAgreementAsync([FromBody] InkMeLivePlayerAgreementRequest playerAgreementRequest)
     {
-        string base64 = Encoding.UTF8.GetString(byteArrayIn);
-
-        string? base64Data = Regex.Match(base64, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
-        byte[]? binData = Convert.FromBase64String(base64Data);
-
-        MemoryStream ms = new MemoryStream(binData, 0, binData.Length);
-        ms.Write(binData, 0, binData.Length);
-
-        using (MemoryStream stream = new MemoryStream())
+        var token = await GetTokenAsync();
+        using var client = new HttpClient
         {
-            ms.Position = 0;
-            ms.CopyTo(stream);
-            stream.Position = 0;
-            var image = Image.Load(stream);
+            BaseAddress = new Uri(_config.GetSection("SevenFourSevenAPIs:InkMeLive:BaseUrl").Value!)
+        };
 
-            return image;
-        }
+        if (!string.IsNullOrWhiteSpace(token.AuthToken))
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AuthToken);
+
+        using var formContent = new MultipartFormDataContent("NKdKd9Yk");
+        var fileName = $"{playerAgreementRequest.PlayerUserName}.Agreement.{DateTime.UtcNow:yyyyMMdd_hhmmss}{playerAgreementRequest.AgreementFileExtension}";
+        formContent.Add(new ByteArrayContent(playerAgreementRequest.Agreement), "agreement", fileName);
+
+        var playerAgreementPath = _config.GetRequiredSection("SevenFourSevenAPIs:InkMeLive:PlayerAgreement").Value;
+        var playerAgreementPathWithQueryParameters = $"{playerAgreementPath}?playerUserName={playerAgreementRequest.PlayerUserName}";
+
+        var response = await client.PostAsync(playerAgreementPathWithQueryParameters, formContent);
+
+        return response.IsSuccessStatusCode
+            ? await response.Content.ReadFromJsonAsync<InkMeLiveApiResponse>() ?? default!
+            : default!;
     }
 }
