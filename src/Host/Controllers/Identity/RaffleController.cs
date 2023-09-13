@@ -24,7 +24,8 @@ public class RaffleController : VersionNeutralApiController
     }
 
     [HttpPost("get-entries")]
-    [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    // [MustHavePermission(RAFFLEAction.View, RAFFLEResource.Raffles)]
+    [AllowAnonymous]
     [OpenApiOperation("Get raffle system entries.", "")]
     public async Task<GetEntriesResponse> GetRaffleEntriesAsync([FromBody] GetEntriesRequest getEntriesRequest)
     {
